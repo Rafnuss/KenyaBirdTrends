@@ -10,7 +10,7 @@ const path = require('path');
 module.exports = {
     runtimeCompiler:true,
     publicPath: process.env.NODE_ENV === 'production'
-    ? '/global-rare-ebird/'
+    ? '/kba_target/'
     : '/',
     /*entry: './src/main.js',
     output: {
