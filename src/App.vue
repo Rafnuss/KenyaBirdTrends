@@ -76,6 +76,11 @@
         :options="options"
         @click="clickGeoJsonFunction"
         ></l-geo-json>
+
+        <l-control position="bottomleft" class="leaflet-control-layers leaflet-control-layers-expanded leaflet-control">
+   <label for="range-1">Opacity</label>
+    <b-form-input id="range-1" v-model="range_value" type="range" min="0" max="1" step="0.01"></b-form-input>
+        </l-control>
       </l-map>
       </b-col>
     </b-row>
@@ -116,7 +121,7 @@ import chroma from "chroma-js"
 import grid_target0 from "./assets/grid_target.json"
 import sp_old0 from "./assets/sp_old.json"
 
-var grid_target = grid_target0;
+const grid_target = grid_target0;
 grid_target.features = grid_target0.features.map(x => {
   x.properties.SEQ_new = Array.isArray(x.properties.SEQ_new) ? x.properties.SEQ_new : [x.properties.SEQ_new];
   x.properties.SEQ_old = Array.isArray(x.properties.SEQ_old) ? x.properties.SEQ_old : [x.properties.SEQ_old];
@@ -133,7 +138,7 @@ grid_target.features = grid_target0.features.map(x => {
     return x
   })
 
-var sp_old = sp_old0.map(sp => {
+const sp_old = sp_old0.map(sp => {
   sp.lost=0;
   sp.gained=0;
   sp.kept=0;
@@ -212,6 +217,7 @@ export default {
             "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community",
         },
       ],
+      range_value:0.3
     };
   },
   methods: {
@@ -263,7 +269,7 @@ export default {
 
       }
       if (this.filter_selected=="Taxonomy"){
-        sp_old_tmp = sp_old_tmp
+        sp_old_tmp = sp_old_tmp.sort((a,b) => a.SEQ - b.SEQ);
       } else if (this.filter_selected=="Lost"){
         sp_old_tmp = sp_old_tmp.sort((a,b) => b.lost- a.lost);
       } else if (this.filter_selected=="Gained"){
@@ -285,14 +291,15 @@ export default {
       return col
     },
     styleFunction() {
+      var opa = this.range_value
       return (feature, layer) => {
         //console.log(c(1))
         return {
-          weight: 2,
-          color: "#ECEFF1",
-          opacity: 1,
+          weight: 0,
+          //color: "#ECEFF1",
+          opacity: opa,
           fillColor: this.colorscale(feature.properties.diff),
-          fillOpacity: 1
+          fillOpacity: opa
         };
       };
     },
