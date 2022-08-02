@@ -84,16 +84,12 @@
                 <b-row>
                   <b-col cols="auto">Filter: </b-col>
                   <b-col cols="auto">
-                    <b-form-checkbox
-                      id="checkbox-lost"
-                      v-model="checkbox_lost"
+                    <b-form-checkbox id="checkbox-lost" v-model="checkbox_lost"
                       >Lost</b-form-checkbox
                     ></b-col
                   >
                   <b-col cols="auto">
-                    <b-form-checkbox
-                      id="checkbox-kept"
-                      v-model="checkbox_kept"
+                    <b-form-checkbox id="checkbox-kept" v-model="checkbox_kept"
                       >Kept</b-form-checkbox
                     ></b-col
                   >
@@ -108,20 +104,22 @@
               </b-col>
               <b-col v-if="gridFilter == ''" cols="12">
                 <div>
-  <b-alert show variant="info" dismissible>
-    <h4 class="alert-heading">Welcome!</h4>
-    <p>
-      Explore the change of bird distribution between 1980 and 2020!
-    </p>
-    <p>
-      You can explore by <code>Grid</code> or <code>Species</code>
-    </p>
-    <hr>
-    <p class="mb-0">
-      For <code>Grid</code> exploration, click on the map!
-    </p>
-  </b-alert>
-</div>
+                  <b-alert show variant="info" dismissible>
+                    <h4 class="alert-heading">Welcome!</h4>
+                    <p>
+                      Explore the change of bird distribution between 1980 and
+                      2020!
+                    </p>
+                    <p>
+                      You can explore by <code>Grid</code> or
+                      <code>Species</code>
+                    </p>
+                    <hr />
+                    <p class="mb-0">
+                      For <code>Grid</code> exploration, click on the map!
+                    </p>
+                  </b-alert>
+                </div>
               </b-col>
               <b-col v-else>
                 <b-row>
@@ -132,7 +130,7 @@
                         :key="i.Id"
                         class="d-flex btn-sm py-1 px-3"
                       >
-                        {{ u + 1 }}.  <b class="ml-1">{{ i.CommonName }}</b>
+                        {{ u + 1 }}. <b class="ml-1">{{ i.CommonName }}</b>
                         <div
                           class="box box-sm"
                           :class="{
@@ -154,9 +152,13 @@
                   :options="species_options"
                   :reduce="(x) => x.SEQ"
                   label="CommonName"
+                  placeholder="Select a species"
                 ></v-select>
               </b-col>
               <b-col cols="12">
+                
+              </b-col>
+             <!-- <b-col cols="12">
                 <b-form-select
                   v-model="filter_selected"
                   :options="filter_options"
@@ -200,7 +202,7 @@
                     </div>
                   </b-list-group-item>
                 </b-list-group>
-              </b-col>
+              </b-col>-->
             </b-row>
           </b-card-body>
         </b-card>
