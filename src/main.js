@@ -5,6 +5,8 @@ import { BootstrapVue , BootstrapVueIcons} from 'bootstrap-vue'
 Vue.use(BootstrapVue)
 Vue.use(BootstrapVueIcons)
 
+import vSelect from 'vue-select'
+Vue.component('v-select', vSelect)
 
 //Vue.config.productionTip = false
 
