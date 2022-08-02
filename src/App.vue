@@ -22,56 +22,117 @@
           </b-card-header>
           <b-card-body>
             <b-row v-if="mode_selected == 'Grid'">
-              <b-col v-if="gridFilter == ''">
-                <p>Explore the difference in species number per grid square</p>
-                <p>Click on the map</p>
+              <b-col cols="12" class="alert alert-dark">
+                <b-row>
+                  <b-col>
+                    <div class="kept d-flex w-100 p-0">
+                      <div
+                        class="p-2 lost"
+                        :style="{
+                          width:
+                            (grid_lkg[0] /
+                              (grid_lkg[0] + grid_lkg[1] + grid_lkg[2])) *
+                              100 +
+                            '%',
+                        }"
+                      ></div>
+                      <div
+                        class="gained p-2 ml-auto"
+                        :style="{
+                          width:
+                            (grid_lkg[2] /
+                              (grid_lkg[0] + grid_lkg[1] + grid_lkg[2])) *
+                              100 +
+                            '%',
+                        }"
+                      ></div>
+                    </div>
+                    <b-row>
+                      <b-col class="d-flex align-items-center">
+                        <div class="box-sm lost mr-1"></div>
+                        {{ grid_lkg[0] }}
+                      </b-col>
+                      <b-col class="d-flex align-items-center">
+                        <div class="box-sm kept mr-1"></div>
+                        {{ grid_lkg[1] }}
+                      </b-col>
+                      <b-col class="d-flex align-items-center">
+                        <div class="box-sm gained mr-1"></div>
+                        {{ grid_lkg[2] }}
+                      </b-col>
+                    </b-row>
+                  </b-col>
+                  <b-col v-if="gridFilter != ''" cols="auto">
+                    <h4>
+                      <b-badge
+                        variant="primary"
+                        class="d-flex align-items-center"
+                        >{{ gridFilter }}
+                        <b-button
+                          class="close ml-1 text-white primary"
+                          aria-label="Close"
+                          @click="gridFilter = ''"
+                        >
+                          <span aria-hidden="true">&times;</span>
+                        </b-button>
+                      </b-badge>
+                    </h4>
+                  </b-col>
+                </b-row>
+              </b-col>
+              <b-col cols="12" class="mb-3">
+                <b-row>
+                  <b-col cols="auto">Filter: </b-col>
+                  <b-col cols="auto">
+                    <b-form-checkbox
+                      id="checkbox-lost"
+                      v-model="checkbox_lost"
+                      >Lost</b-form-checkbox
+                    ></b-col
+                  >
+                  <b-col cols="auto">
+                    <b-form-checkbox
+                      id="checkbox-kept"
+                      v-model="checkbox_kept"
+                      >Kept</b-form-checkbox
+                    ></b-col
+                  >
+                  <b-col cols="auto">
+                    <b-form-checkbox
+                      id="checkbox-gained"
+                      v-model="checkbox_gained"
+                      >Gained</b-form-checkbox
+                    ></b-col
+                  >
+                </b-row>
+              </b-col>
+              <b-col v-if="gridFilter == ''" cols="12">
+                <div>
+  <b-alert show variant="info" dismissible>
+    <h4 class="alert-heading">Welcome!</h4>
+    <p>
+      Explore the change of bird distribution between 1980 and 2020!
+    </p>
+    <p>
+      You can explore by <code>Grid</code> or <code>Species</code>
+    </p>
+    <hr>
+    <p class="mb-0">
+      For <code>Grid</code> exploration, click on the map!
+    </p>
+  </b-alert>
+</div>
               </b-col>
               <b-col v-else>
                 <b-row>
-                  <b-col cols="12">
-                    <h3 v-if="gridFilter != ''">
-                      <b-badge variant="primary"
-                        >{{ gridFilter }}
-                        <b-button pill size="sm" @click="gridFilter = ''"
-                          >x</b-button
-                        ></b-badge
-                      >
-                    </h3>
-                  </b-col>
-                  <b-col cols="12">
-                    <b-row>
-                      <b-col cols="auto">Filter: </b-col>
-                      <b-col cols="auto">
-                        <b-form-checkbox
-                          id="checkbox-lost"
-                          v-model="checkbox_lost"
-                          >Lost</b-form-checkbox
-                        ></b-col
-                      >
-                      <b-col cols="auto">
-                        <b-form-checkbox
-                          id="checkbox-kept"
-                          v-model="checkbox_kept"
-                          >Kept</b-form-checkbox
-                        ></b-col
-                      >
-                      <b-col cols="auto">
-                        <b-form-checkbox
-                          id="checkbox-gained"
-                          v-model="checkbox_gained"
-                          >Gained</b-form-checkbox
-                        ></b-col
-                      >
-                    </b-row>
-                  </b-col>
                   <b-col cols="12">
                     <b-list-group class="h-100">
                       <b-list-group-item
                         v-for="(i, u) in gridList"
                         :key="i.Id"
-                        class="d-flex btn-sm py-1 px-2"
+                        class="d-flex btn-sm py-1 px-3"
                       >
-                        {{ u + 1 }}. <b>{{ i.CommonName }}</b>
+                        {{ u + 1 }}.  <b class="ml-1">{{ i.CommonName }}</b>
                         <div
                           class="box box-sm"
                           :class="{
@@ -284,9 +345,19 @@ const sp_old = sp_old0
       }
     });
     sp.diff = sp.gained - sp.lost;
-
     return sp;
   });
+
+let init_grid_lkg = sp_old.reduce(
+  (acc, sp) => {
+    console.log(sp);
+    acc[0] = acc[0] + sp.lost;
+    acc[1] = acc[1] + sp.kept;
+    acc[2] = acc[2] + sp.gained;
+    return acc;
+  },
+  [0, 0, 0]
+);
 
 let min = geojson.features.reduce(
   (acc, x) => Math.min(x.properties.diff, acc),
@@ -363,6 +434,17 @@ export default {
   },
   methods: {},
   computed: {
+    grid_lkg() {
+      if (this.gridFilter == "") {
+        return init_grid_lkg;
+      } else {
+        let f = geojson.features.filter((y) => {
+          return y.properties.Sq == this.gridFilter;
+        });
+        let prop = f[0].properties;
+        return [prop.lost, prop.kept, prop.gained];
+      }
+    },
     gridList() {
       let f = geojson.features.filter((y) => {
         return y.properties.Sq == this.gridFilter;
