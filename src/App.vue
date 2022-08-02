@@ -67,7 +67,7 @@
                   <b-col cols="12">
                     <b-list-group class="h-100">
                       <b-list-group-item
-                        v-for="(i, u) in displayList"
+                        v-for="(i, u) in gridList"
                         :key="i.Id"
                         class="d-flex btn-sm py-1 px-2"
                       >
@@ -88,6 +88,14 @@
             </b-row>
             <b-row v-else>
               <b-col cols="12">
+                <v-select
+                  v-model="species_selected"
+                  :options="species_options"
+                  :reduce="(x) => x.SEQ"
+                  label="CommonName"
+                ></v-select>
+              </b-col>
+              <b-col cols="12">
                 <b-form-select
                   v-model="filter_selected"
                   :options="filter_options"
@@ -96,7 +104,7 @@
               <b-col cols="12">
                 <b-list-group class="h-100">
                   <b-list-group-item
-                    v-for="(i, u) in displayList"
+                    v-for="(i, u) in speciesList"
                     :key="i.Id"
                     class="d-flex btn-sm py-1 px-2"
                   >
@@ -148,14 +156,6 @@
             layer-type="base"
           />
           <l-control-layers />
-
-          <l-geo-json
-            :geojson="grid_target"
-            :options-style="styleFunction"
-            :options="options"
-            @click="clickGeoJsonFunction"
-          ></l-geo-json>
-
           <l-control
             position="bottomleft"
             class="
@@ -174,6 +174,20 @@
               step="0.01"
             ></b-form-input>
           </l-control>
+
+          <l-geo-json
+            v-if="mode_selected == 'Grid'"
+            :geojson="geojson"
+            :options-style="geojson_grid_styleFunction"
+            :options="geojson_grid_options"
+            @click="geojson_grid_clickGeoJsonFunction"
+          ></l-geo-json>
+          <l-geo-json
+            v-if="mode_selected == 'Species'"
+            :geojson="geojson"
+            :options-style="geojson_species_styleFunction"
+            :options="geojson_species_options"
+          ></l-geo-json>
         </l-map>
       </b-col>
     </b-row>
@@ -188,6 +202,8 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
+
+import "vue-select/dist/vue-select.css";
 
 const RdYlGn = [
   "#a50026",
@@ -222,12 +238,11 @@ import Vue2LeafletMarkerCluster from "vue2-leaflet-markercluster";
 import "leaflet-defaulticon-compatibility/";
 
 import chroma from "chroma-js";
-
-import grid_target0 from "./assets/grid_target.json";
+import geojson0 from "./assets/grid_target.json";
 import sp_old0 from "./assets/sp_old.json";
 
-const grid_target = grid_target0;
-grid_target.features = grid_target0.features.map((x) => {
+const geojson = geojson0;
+geojson.features = geojson0.features.map((x) => {
   x.properties.SEQ_new = Array.isArray(x.properties.SEQ_new)
     ? x.properties.SEQ_new
     : [x.properties.SEQ_new];
@@ -257,7 +272,7 @@ const sp_old = sp_old0
     sp.lost = 0;
     sp.gained = 0;
     sp.kept = 0;
-    grid_target.features.forEach((x) => {
+    geojson.features.forEach((x) => {
       var id_new = x.properties.SEQ_new.includes(sp.SEQ);
       var id_old = x.properties.SEQ_old.includes(sp.SEQ);
       if (id_new & id_old) {
@@ -272,6 +287,16 @@ const sp_old = sp_old0
 
     return sp;
   });
+
+let min = geojson.features.reduce(
+  (acc, x) => Math.min(x.properties.diff, acc),
+  10000
+);
+let max = geojson.features.reduce(
+  (acc, x) => Math.max(x.properties.diff, acc),
+  -10000
+);
+const colorscale_grid = chroma.scale("RdYlGn").domain([min, max]);
 
 export default {
   components: {
@@ -295,6 +320,8 @@ export default {
       checkbox_lost: true,
       checkbox_kept: true,
       checkbox_gained: true,
+      species_options: sp_old,
+      species_selected: "",
       filter_options: ["Taxonomy", "Lost", "Gained", "Kept", "Gained-Lost"],
       filter_selected: "Taxonomy",
       gridFilter: "",
@@ -302,7 +329,7 @@ export default {
         [5.615985, 43.50585],
         [-5.353521, 32.958984],
       ]),
-      grid_target: grid_target,
+      geojson: geojson,
       tileProviders: [
         {
           name: "Mapbox.Streets",
@@ -336,7 +363,44 @@ export default {
   },
   methods: {},
   computed: {
-    options() {
+    gridList() {
+      let f = geojson.features.filter((y) => {
+        return y.properties.Sq == this.gridFilter;
+      });
+      let sp_old_returned = sp_old.map((y) => {
+        var n = f[0].properties.SEQ_new.includes(y.SEQ);
+        let o = f[0].properties.SEQ_old.includes(y.SEQ);
+        y.cat = n & o ? "kept" : n ? "gained" : o ? "lost" : "";
+        return y;
+      });
+      return sp_old_returned.filter((y) => {
+        if (y.cat == "lost") {
+          return this.checkbox_lost;
+        } else if (y.cat == "kept") {
+          return this.checkbox_kept;
+        } else if (y.cat == "gained") {
+          return this.checkbox_gained;
+        } else {
+          return false;
+        }
+      });
+    },
+    speciesList() {
+      let sp_old_returned = sp_old;
+      if (this.filter_selected == "Taxonomy") {
+        sp_old_returned = sp_old_returned.sort((a, b) => a.SEQ - b.SEQ);
+      } else if (this.filter_selected == "Lost") {
+        sp_old_returned = sp_old_returned.sort((a, b) => b.lost - a.lost);
+      } else if (this.filter_selected == "Gained") {
+        sp_old_returned = sp_old_returned.sort((a, b) => b.gained - a.gained);
+      } else if (this.filter_selected == "Kept") {
+        sp_old_returned = sp_old_returned.sort((a, b) => b.kept - a.kept);
+      } else if (this.filter_selected == "Gained-Lost") {
+        sp_old_returned = sp_old_returned.sort((a, b) => b.diff - a.diff);
+      }
+      return sp_old_returned;
+    },
+    geojson_grid_options() {
       return {
         onEachFeature: (feature, layer) => {
           let prop = feature.properties;
@@ -360,79 +424,21 @@ export default {
         },
       };
     },
-    displayList() {
-      let sp_old_tmp = sp_old;
-      if (this.gridFilter != "") {
-        let f = this.grid_target.features.filter((y) => {
-          return y.properties.Sq == this.gridFilter;
-        });
-        if (f.length == 1) {
-          // console.log(f[0])
-          sp_old_tmp = sp_old_tmp.map((y) => {
-            var n = f[0].properties.SEQ_new.includes(y.SEQ);
-            let o = f[0].properties.SEQ_old.includes(y.SEQ);
-            y.cat = n & o ? "kept" : n ? "gained" : o ? "lost" : "";
-            return y;
-          });
-          //console.log(sp_old_tmp)
-
-          sp_old_tmp = sp_old_tmp.filter((y) => {
-            if (y.cat == "lost") {
-              return this.checkbox_lost;
-            } else if (y.cat == "kept") {
-              return this.checkbox_kept;
-            } else if (y.cat == "gained") {
-              return this.checkbox_gained;
-            } else {
-              return false;
-            }
-          });
-        }
-      }
-      if (this.filter_selected == "Taxonomy") {
-        sp_old_tmp = sp_old_tmp.sort((a, b) => a.SEQ - b.SEQ);
-      } else if (this.filter_selected == "Lost") {
-        sp_old_tmp = sp_old_tmp.sort((a, b) => b.lost - a.lost);
-      } else if (this.filter_selected == "Gained") {
-        sp_old_tmp = sp_old_tmp.sort((a, b) => b.gained - a.gained);
-      } else if (this.filter_selected == "Kept") {
-        sp_old_tmp = sp_old_tmp.sort((a, b) => b.kept - a.kept);
-      } else if (this.filter_selected == "Gained-Lost") {
-        sp_old_tmp = sp_old_tmp.sort((a, b) => b.diff - a.diff);
-      }
-      return sp_old_tmp;
-    },
-    colorscale() {
-      var min = this.grid_target.features.reduce(
-        (acc, x) => Math.min(x.properties.diff, acc),
-        10000
-      );
-      var max = this.grid_target.features.reduce(
-        (acc, x) => Math.max(x.properties.diff, acc),
-        -10000
-      );
-      let col = chroma.scale("RdYlGn").domain([min, max]);
-      return col;
-    },
-    styleFunction() {
+    geojson_grid_styleFunction() {
       let opa = this.opacity_value;
-      let sq = this.gridFilter
+      let sq = this.gridFilter;
       return (feature, layer) => {
-        //console.log(c(1))
-        let fillColor = this.colorscale(feature.properties.diff)
-        let weight = 0
-        if (this.gridFilter != ''){
-          if (this.gridFilter != feature.properties.Sq){
+        let fillColor = colorscale_grid(feature.properties.diff);
+        if (this.gridFilter != "") {
+          if (this.gridFilter != feature.properties.Sq) {
             //fillColor = fillColor.darken(2)
-            opa = parseFloat(this.opacity_value)/3
-            console.log(opa)
+            opa = parseFloat(this.opacity_value) / 3;
           } else {
-//weight = 3
-opa=1
+            opa = 1;
           }
         }
         return {
-          weight: weight,
+          weight: 0,
           color: "#FFFFFF",
           opacity: opa,
           fillColor: fillColor,
@@ -440,10 +446,48 @@ opa=1
         };
       };
     },
-    clickGeoJsonFunction() {
+    geojson_grid_clickGeoJsonFunction() {
       return (e) => {
-        let Sq = e.sourceTarget.feature.properties.Sq;
-        this.gridFilter = this.gridFilter == Sq ? "" : Sq;
+        if (this.mode_selected == "Grid") {
+          let Sq = e.sourceTarget.feature.properties.Sq;
+          this.gridFilter = this.gridFilter == Sq ? "" : Sq;
+        }
+      };
+    },
+    geojson_species_styleFunction() {
+      let opa = this.opacity_value;
+      let sp = this.species_selected;
+      return (feature, layer) => {
+        let n = feature.properties.SEQ_new.includes(sp);
+        let o = feature.properties.SEQ_old.includes(sp);
+        let fillColor = o ? (n ? "#d9ef8b" : "#d73027") : "#1a9850";
+        return {
+          weight: 0,
+          color: "#FFFFFF",
+          opacity: !n & !o ? 0 : opa,
+          fillColor: fillColor,
+          fillOpacity: !n & !o ? 0 : opa,
+        };
+      };
+    },
+    geojson_species_options() {
+      let sp = this.species_selected;
+      return {
+        onEachFeature: (feature, layer) => {
+          let n = feature.properties.SEQ_new.includes(sp);
+          let o = feature.properties.SEQ_old.includes(sp);
+          let status = o ? (n ? "kept" : "lost") : "gained";
+          if (n | o) {
+            layer.bindTooltip(
+              "<b>grid:</b> " +
+                feature.properties.Sq +
+                "<br>" +
+                "<b>Status:</b> " +
+                status,
+              { permanent: false, sticky: true }
+            );
+          }
+        },
       };
     },
   },
