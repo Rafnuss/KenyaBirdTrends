@@ -138,7 +138,7 @@ grid_target.features = grid_target0.features.map(x => {
     return x
   })
 
-const sp_old = sp_old0.map(sp => {
+const sp_old = sp_old0.filter(sp=>sp.SEQ!=null).map(sp => {
   sp.lost=0;
   sp.gained=0;
   sp.kept=0;
@@ -157,7 +157,6 @@ const sp_old = sp_old0.map(sp => {
   
   return sp
 })
-
 
 export default {
   components: {
