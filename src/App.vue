@@ -23,58 +23,62 @@
           <b-card-body>
             <b-row v-if="mode_selected == 'Grid'">
               <b-col cols="12">
-                 <b-row class="alert-dark px-0 pb-2 pt-3">
-                <b-col>
-                <div class="kept d-flex w-100 p-0">
-                  <div
-                    class="p-2 lost"
-                    :style="{
-                      width:
-                        (nb_lkgd[0] / (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) *
-                          100 +
-                        '%',
-                    }"
-                  ></div>
-                  <div
-                    class="gained p-2 ml-auto"
-                    :style="{
-                      width:
-                        (nb_lkgd[2] / (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) *
-                          100 +
-                        '%',
-                    }"
-                  ></div>
-                </div>
-                <b-row>
-                  <b-col class="d-flex align-items-center">
-                    <div class="box-sm lost mr-1"></div>
-                    {{ nb_lkgd[0] }}
+                <b-row class="alert-dark px-0 pb-2 pt-3">
+                  <b-col>
+                    <div class="kept d-flex w-100 p-0">
+                      <div
+                        class="lost py-2"
+                        :style="{
+                          width:
+                            (nb_lkgd[0] /
+                              (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) *
+                              100 +
+                            '%',
+                        }"
+                      ></div>
+                      <div
+                        class="gained py-2 ml-auto"
+                        :style="{
+                          width:
+                            (nb_lkgd[2] /
+                              (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) *
+                              100 +
+                            '%',
+                        }"
+                      ></div>
+                    </div>
+                    <b-row>
+                      <b-col class="d-flex align-items-center">
+                        <div class="box-sm lost mr-1"></div>
+                        {{ nb_lkgd[0] }}
+                      </b-col>
+                      <b-col class="d-flex align-items-center">
+                        <div class="box-sm kept mr-1"></div>
+                        {{ nb_lkgd[1] }}
+                      </b-col>
+                      <b-col class="d-flex align-items-center">
+                        <div class="box-sm gained mr-1"></div>
+                        {{ nb_lkgd[2] }}
+                      </b-col>
+                    </b-row>
                   </b-col>
-                  <b-col class="d-flex align-items-center">
-                    <div class="box-sm kept mr-1"></div>
-                    {{ nb_lkgd[1] }}
-                  </b-col>
-                  <b-col class="d-flex align-items-center">
-                    <div class="box-sm gained mr-1"></div>
-                    {{ nb_lkgd[2] }}
+                  <b-col v-if="gridFilter != ''" cols="auto">
+                    <h4>
+                      <b-badge
+                        variant="primary"
+                        class="d-flex align-items-center"
+                        >{{ gridFilter }}
+                        <b-button
+                          class="close ml-1 text-white primary"
+                          aria-label="Close"
+                          @click="gridFilter = ''"
+                        >
+                          <span aria-hidden="true">&times;</span>
+                        </b-button>
+                      </b-badge>
+                    </h4>
                   </b-col>
                 </b-row>
-              </b-col>
-              <b-col v-if="gridFilter != ''" cols="auto">
-                <h4>
-                  <b-badge variant="primary" class="d-flex align-items-center"
-                    >{{ gridFilter }}
-                    <b-button
-                      class="close ml-1 text-white primary"
-                      aria-label="Close"
-                      @click="gridFilter = ''"
-                    >
-                      <span aria-hidden="true">&times;</span>
-                    </b-button>
-                  </b-badge>
-                </h4>
-              </b-col>
-              </b-row>
               </b-col>
               <b-col cols="12" class="mb-3">
                 <b-row>
@@ -120,13 +124,13 @@
               <b-col v-else>
                 <b-row>
                   <b-col cols="12">
-                    <b-list-group class="h-100">
+                    <b-list-group class="small h-100">
                       <b-list-group-item
                         v-for="(i, u) in gridList"
                         :key="i.Id"
-                        class="d-flex btn-sm py-1 px-3"
+                        class="d-flex align-items-center py-1 px-3"
                       >
-                        {{ u + 1 }}. <b class="ml-1">{{ i.CommonName }}</b>
+                        {{ i.SEQ + 1 }}. <b class="ml-1">{{ i.CommonName }}</b>
                         <div
                           class="box box-sm"
                           :class="{
@@ -331,14 +335,8 @@ export default {
     LTileLayer,
     LControlLayers,
     LControl,
-    LControlZoom,
-    LMarker,
     LPopup,
-    LIcon,
-    LCircle,
-    LCircleMarker,
     LGeoJson,
-    "v-marker-cluster": Vue2LeafletMarkerCluster,
   },
   data() {
     return {
@@ -541,7 +539,7 @@ body {
   margin: 0;
 }
 .card-body {
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 .box-legend {
   width: 20px;
