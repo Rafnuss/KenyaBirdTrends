@@ -22,63 +22,59 @@
           </b-card-header>
           <b-card-body>
             <b-row v-if="mode_selected == 'Grid'">
-              <b-col cols="12" class="alert alert-dark">
+              <b-col cols="12">
+                 <b-row class="alert-dark px-0 pb-2 pt-3">
+                <b-col>
+                <div class="kept d-flex w-100 p-0">
+                  <div
+                    class="p-2 lost"
+                    :style="{
+                      width:
+                        (nb_lkgd[0] / (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) *
+                          100 +
+                        '%',
+                    }"
+                  ></div>
+                  <div
+                    class="gained p-2 ml-auto"
+                    :style="{
+                      width:
+                        (nb_lkgd[2] / (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) *
+                          100 +
+                        '%',
+                    }"
+                  ></div>
+                </div>
                 <b-row>
-                  <b-col>
-                    <div class="kept d-flex w-100 p-0">
-                      <div
-                        class="p-2 lost"
-                        :style="{
-                          width:
-                            (grid_lkg[0] /
-                              (grid_lkg[0] + grid_lkg[1] + grid_lkg[2])) *
-                              100 +
-                            '%',
-                        }"
-                      ></div>
-                      <div
-                        class="gained p-2 ml-auto"
-                        :style="{
-                          width:
-                            (grid_lkg[2] /
-                              (grid_lkg[0] + grid_lkg[1] + grid_lkg[2])) *
-                              100 +
-                            '%',
-                        }"
-                      ></div>
-                    </div>
-                    <b-row>
-                      <b-col class="d-flex align-items-center">
-                        <div class="box-sm lost mr-1"></div>
-                        {{ grid_lkg[0] }}
-                      </b-col>
-                      <b-col class="d-flex align-items-center">
-                        <div class="box-sm kept mr-1"></div>
-                        {{ grid_lkg[1] }}
-                      </b-col>
-                      <b-col class="d-flex align-items-center">
-                        <div class="box-sm gained mr-1"></div>
-                        {{ grid_lkg[2] }}
-                      </b-col>
-                    </b-row>
+                  <b-col class="d-flex align-items-center">
+                    <div class="box-sm lost mr-1"></div>
+                    {{ nb_lkgd[0] }}
                   </b-col>
-                  <b-col v-if="gridFilter != ''" cols="auto">
-                    <h4>
-                      <b-badge
-                        variant="primary"
-                        class="d-flex align-items-center"
-                        >{{ gridFilter }}
-                        <b-button
-                          class="close ml-1 text-white primary"
-                          aria-label="Close"
-                          @click="gridFilter = ''"
-                        >
-                          <span aria-hidden="true">&times;</span>
-                        </b-button>
-                      </b-badge>
-                    </h4>
+                  <b-col class="d-flex align-items-center">
+                    <div class="box-sm kept mr-1"></div>
+                    {{ nb_lkgd[1] }}
+                  </b-col>
+                  <b-col class="d-flex align-items-center">
+                    <div class="box-sm gained mr-1"></div>
+                    {{ nb_lkgd[2] }}
                   </b-col>
                 </b-row>
+              </b-col>
+              <b-col v-if="gridFilter != ''" cols="auto">
+                <h4>
+                  <b-badge variant="primary" class="d-flex align-items-center"
+                    >{{ gridFilter }}
+                    <b-button
+                      class="close ml-1 text-white primary"
+                      aria-label="Close"
+                      @click="gridFilter = ''"
+                    >
+                      <span aria-hidden="true">&times;</span>
+                    </b-button>
+                  </b-badge>
+                </h4>
+              </b-col>
+              </b-row>
               </b-col>
               <b-col cols="12" class="mb-3">
                 <b-row>
@@ -155,10 +151,8 @@
                   placeholder="Select a species"
                 ></v-select>
               </b-col>
+              <b-col cols="12"> Ta </b-col>
               <b-col cols="12">
-                
-              </b-col>
-             <!-- <b-col cols="12">
                 <b-form-select
                   v-model="filter_selected"
                   :options="filter_options"
@@ -176,18 +170,20 @@
                       class="bar kept"
                       v-b-tooltip.right.hover.html="
                         '<b>Lost:</b> ' +
-                        i.lost +
+                        i.nb_lkgd[0] +
                         '<br><b>Kept:</b> ' +
-                        i.kept +
+                        i.nb_lkgd[1] +
                         '<br><b>Gained:</b> ' +
-                        i.gained
+                        i.nb_lkgd[2]
                       "
                     >
                       <div
                         class="bar-left lost"
                         :style="{
                           width:
-                            (i.lost / (i.lost + i.kept + i.gained)) * 100 +
+                            (i.nb_lkgd[0] /
+                              (i.nb_lkgd[0] + i.nb_lkgd[1] + i.nb_lkgd[2])) *
+                              100 +
                             'px',
                         }"
                       ></div>
@@ -195,14 +191,16 @@
                         class="bar-right gained"
                         :style="{
                           width:
-                            (i.gained / (i.lost + i.kept + i.gained)) * 100 +
+                            (i.nb_lkgd[2] /
+                              (i.nb_lkgd[0] + i.nb_lkgd[1] + i.nb_lkgd[2])) *
+                              100 +
                             'px',
                         }"
                       ></div>
                     </div>
                   </b-list-group-item>
                 </b-list-group>
-              </b-col>-->
+              </b-col>
             </b-row>
           </b-card-body>
         </b-card>
@@ -301,72 +299,28 @@ import Vue2LeafletMarkerCluster from "vue2-leaflet-markercluster";
 import "leaflet-defaulticon-compatibility/";
 
 import chroma from "chroma-js";
-import geojson0 from "./assets/grid_target.json";
+import geojson from "./assets/grid_target.json";
 import sp_old0 from "./assets/sp_old.json";
 
-const geojson = geojson0;
-geojson.features = geojson0.features.map((x) => {
-  x.properties.SEQ_new = Array.isArray(x.properties.SEQ_new)
-    ? x.properties.SEQ_new
-    : [x.properties.SEQ_new];
-  x.properties.SEQ_old = Array.isArray(x.properties.SEQ_old)
-    ? x.properties.SEQ_old
-    : [x.properties.SEQ_old];
+const sp_old = sp_old0.filter((sp) => sp.SEQ != null);
 
-  var old_unique = x.properties.SEQ_old.filter(
-    (y) => !x.properties.SEQ_new.includes(y)
-  );
-
-  var new_unique = x.properties.SEQ_new.filter(
-    (y) => !x.properties.SEQ_old.includes(y)
-  );
-
-  x.properties.gained = new_unique.length;
-  x.properties.kept = x.properties.SEQ_new.length - new_unique.length;
-  x.properties.lost = old_unique.length;
-  x.properties.diff = x.properties.gained - x.properties.lost;
-  x.properties.Sq = x.properties.SqN + x.properties.SqL;
-  return x;
-});
-
-const sp_old = sp_old0
-  .filter((sp) => sp.SEQ != null)
-  .map((sp) => {
-    sp.lost = 0;
-    sp.gained = 0;
-    sp.kept = 0;
-    geojson.features.forEach((x) => {
-      var id_new = x.properties.SEQ_new.includes(sp.SEQ);
-      var id_old = x.properties.SEQ_old.includes(sp.SEQ);
-      if (id_new & id_old) {
-        sp.kept = sp.kept + 1;
-      } else if (id_new & !id_old) {
-        sp.gained = sp.gained + 1;
-      } else if (!id_new & id_old) {
-        sp.lost = sp.lost + 1;
-      }
-    });
-    sp.diff = sp.gained - sp.lost;
-    return sp;
-  });
-
-let init_grid_lkg = sp_old.reduce(
+let init_lkgd = sp_old.reduce(
   (acc, sp) => {
-    console.log(sp);
-    acc[0] = acc[0] + sp.lost;
-    acc[1] = acc[1] + sp.kept;
-    acc[2] = acc[2] + sp.gained;
+    acc[0] = acc[0] + sp.nb_lkgd[0];
+    acc[1] = acc[1] + sp.nb_lkgd[1];
+    acc[2] = acc[2] + sp.nb_lkgd[2];
+    acc[3] = acc[3] + sp.nb_lkgd[3];
     return acc;
   },
-  [0, 0, 0]
+  [0, 0, 0, 0]
 );
 
 let min = geojson.features.reduce(
-  (acc, x) => Math.min(x.properties.diff, acc),
+  (acc, x) => Math.min(x.properties.nb_lkgd[3], acc),
   10000
 );
 let max = geojson.features.reduce(
-  (acc, x) => Math.max(x.properties.diff, acc),
+  (acc, x) => Math.max(x.properties.nb_lkgd[3], acc),
   -10000
 );
 const colorscale_grid = chroma.scale("RdYlGn").domain([min, max]);
@@ -436,15 +390,16 @@ export default {
   },
   methods: {},
   computed: {
-    grid_lkg() {
+    nb_lkgd() {
       if (this.gridFilter == "") {
-        return init_grid_lkg;
+        return init_lkgd;
       } else {
         let f = geojson.features.filter((y) => {
           return y.properties.Sq == this.gridFilter;
         });
-        let prop = f[0].properties;
-        return [prop.lost, prop.kept, prop.gained];
+        //let prop = f[0].properties.nb_lkgd;
+        //return [prop.lost, prop.kept, prop.gained];
+        return f[0].properties.nb_lkgd;
       }
     },
     gridList() {
@@ -493,16 +448,16 @@ export default {
               prop.Sq +
               "<br>" +
               "<b>lost:</b> " +
-              prop.lost +
+              prop.nb_lkgd[0] +
               "<br>" +
               "<b>kept:</b> " +
-              prop.kept +
+              prop.nb_lkgd[1] +
               "<br>" +
               "<b>gained:</b> " +
-              prop.gained +
+              prop.nb_lkgd[2] +
               "<br>" +
               "<b>difference:</b> " +
-              prop.diff,
+              prop.nb_lkgd[3],
             { permanent: false, sticky: true }
           );
         },
@@ -512,9 +467,9 @@ export default {
       let opa = this.opacity_value;
       let sq = this.gridFilter;
       return (feature, layer) => {
-        let fillColor = colorscale_grid(feature.properties.diff);
-        if (this.gridFilter != "") {
-          if (this.gridFilter != feature.properties.Sq) {
+        let fillColor = colorscale_grid(feature.properties.nb_lkgd[3]);
+        if (sq != "") {
+          if (sq != feature.properties.Sq) {
             //fillColor = fillColor.darken(2)
             opa = parseFloat(this.opacity_value) / 3;
           } else {
@@ -563,7 +518,7 @@ export default {
           let status = o ? (n ? "kept" : "lost") : "gained";
           if (n | o) {
             layer.bindTooltip(
-              "<b>grid:</b> " +
+              "<b>Grid:</b> " +
                 feature.properties.Sq +
                 "<br>" +
                 "<b>Status:</b> " +
