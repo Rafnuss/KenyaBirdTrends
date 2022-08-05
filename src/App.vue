@@ -23,8 +23,9 @@
           <b-card-body>
             <b-row v-if="mode_selected == 'Grid'">
               <b-col cols="12">
-                <b-row class="alert-dark px-0 pb-2 pt-3">
+                <b-row class="alert-dark px-0 pb-2 pt-2">
                   <b-col>
+                    Number of {{ gridFilter == '' ? 'square-' : '' }}species
                     <div class="kept d-flex w-100 p-0">
                       <div
                         class="lost py-2"
@@ -50,15 +51,15 @@
                     <b-row>
                       <b-col class="d-flex align-items-center">
                         <div class="box-sm lost mr-1"></div>
-                        {{ nb_lkgd[0] }}
+                        {{ numberWithCommas(nb_lkgd[0]) }}
                       </b-col>
                       <b-col class="d-flex align-items-center">
                         <div class="box-sm kept mr-1"></div>
-                        {{ nb_lkgd[1] }}
+                        {{ numberWithCommas(nb_lkgd[1]) }}
                       </b-col>
                       <b-col class="d-flex align-items-center">
                         <div class="box-sm gained mr-1"></div>
-                        {{ nb_lkgd[2] }}
+                        {{ numberWithCommas(nb_lkgd[2]) }}
                       </b-col>
                     </b-row>
                   </b-col>
@@ -107,14 +108,14 @@
                   <b-alert show variant="info" dismissible>
                     <h4 class="alert-heading">Welcome!</h4>
                     <p>
-                      Explore the change of bird distribution between 1980 and
-                      2020!
-                    </p>
-                    <p>
-                      You can explore by <code>Grid</code> or
-                      <code>Species</code>
+                      The Kenyan Bird Atlas Viz will let you explore the change of bird distribution between 1980 and
+                      2020! The distributions are retrieved from <a href="https://doi.org/10.1201/9781315136264" target="_blank">"A Bird Atlas of Kenya"</a>, <a href="https://ebird.org/region/KE" target="_blank">eBird</a> and <a href="https://kenya.birdmap.africa/" target="_blank">Kenyan Bird Map</a>.
                     </p>
                     <hr />
+                    <p>
+                      You can explore the changes by <b-button :variant="mode_selected=='Grid' ? 'primary' : 'outline-primary'" size="sm">Grid</b-button> or
+                      <b-button :variant="mode_selected=='Species' ? 'primary' : 'outline-primary'" size="sm" @click="mode_selected='Species'">Species</b-button>
+                    </p>
                     <p class="mb-0">
                       For <code>Grid</code> exploration, click on the map!
                     </p>
@@ -126,11 +127,11 @@
                   <b-col cols="12">
                     <b-list-group class="small h-100">
                       <b-list-group-item
-                        v-for="(i, u) in gridList"
+                        v-for="i in gridList"
                         :key="i.Id"
                         class="d-flex align-items-center py-1 px-3"
                       >
-                        {{ i.SEQ + 1 }}. <b class="ml-1">{{ i.CommonName }}</b>
+                        {{ i.SEQ }}. <b class="ml-1">{{ i.CommonName }}</b>
                         <div
                           class="box box-sm"
                           :class="{
@@ -147,29 +148,96 @@
             </b-row>
             <b-row v-else>
               <b-col cols="12">
+                <b-row class="alert-dark px-0 pb-2 pt-2">
+                  <b-col>
+                    Number of square{{ species_selected == '' ? '-species' : '' }}
+                    <div class="kept d-flex w-100 p-0">
+                      <div
+                        class="lost py-2"
+                        :style="{
+                          width:
+                            (nb_lkgd[0] /
+                              (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) *
+                              100 +
+                            '%',
+                        }"
+                      ></div>
+                      <div
+                        class="gained py-2 ml-auto"
+                        :style="{
+                          width:
+                            (nb_lkgd[2] /
+                              (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) *
+                              100 +
+                            '%',
+                        }"
+                      ></div>
+                    </div>
+                    <b-row>
+                      <b-col class="d-flex align-items-center">
+                        <div class="box-sm lost mr-1"></div>
+                        {{ numberWithCommas(nb_lkgd[0]) }}
+                      </b-col>
+                      <b-col class="d-flex align-items-center">
+                        <div class="box-sm kept mr-1"></div>
+                        {{ numberWithCommas(nb_lkgd[1]) }}
+                      </b-col>
+                      <b-col class="d-flex align-items-center">
+                        <div class="box-sm gained mr-1"></div>
+                        {{ numberWithCommas(nb_lkgd[2]) }}
+                      </b-col>
+                    </b-row>
+                  </b-col>
+                  <b-col v-if="gridFilter != ''" cols="auto">
+                    <h4>
+                      <b-badge
+                        variant="primary"
+                        class="d-flex align-items-center"
+                        >{{ gridFilter }}
+                        <b-button
+                          class="close ml-1 text-white primary"
+                          aria-label="Close"
+                          @click="gridFilter = ''"
+                        >
+                          <span aria-hidden="true">&times;</span>
+                        </b-button>
+                      </b-badge>
+                    </h4>
+                  </b-col>
+                </b-row>
+              </b-col>
+              <b-col cols="12" class="my-2">
                 <v-select
                   v-model="species_selected"
                   :options="species_options"
                   :reduce="(x) => x.SEQ"
                   label="CommonName"
-                  placeholder="Select a species"
+                  placeholder="Select a species by name"
                 ></v-select>
               </b-col>
-              <b-col cols="12"> Ta </b-col>
-              <b-col cols="12">
+              <hr>
+              <b-col cols="12" class="text-center my-1">
+                --Or explore species in table--
+              </b-col>
+              <b-col cols="8" class="text-right pr-0">
+                <small>Sort by:</small>
+              </b-col>
+              <b-col cols="4" class="pl-1">
                 <b-form-select
                   v-model="filter_selected"
                   :options="filter_options"
+                  size="sm"
                 ></b-form-select>
               </b-col>
-              <b-col cols="12">
-                <b-list-group class="h-100">
-                  <b-list-group-item
-                    v-for="(i, u) in speciesList"
-                    :key="i.Id"
-                    class="d-flex btn-sm py-1 px-2"
-                  >
-                    {{ u + 1 }}. <b>{{ i.CommonName }}</b>
+              <b-col cols="12" class="mt-2">
+                  <b-list-group class="small h-100">
+                      <b-list-group-item
+                        v-for="i in speciesList"
+                        :key="i.Id"
+                        class="d-flex align-items-center py-1 px-3"
+                      >
+                    {{ i.SEQ }}. <b class="ml-1">{{ i.CommonName }}</b> 
+                        <b-form-radio v-model="species_selected" :value="i.SEQ" class="ml-1"></b-form-radio>
                     <div
                       class="bar kept"
                       v-b-tooltip.right.hover.html="
@@ -264,9 +332,6 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 
 import "leaflet/dist/leaflet.css";
-import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css";
-import "leaflet.markercluster/dist/MarkerCluster.css";
-import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 
 import "vue-select/dist/vue-select.css";
 
@@ -285,22 +350,15 @@ const RdYlGn = [
 ];
 
 import { latLngBounds } from "leaflet";
+
 import {
   LMap,
   LTileLayer,
   LControlLayers,
   LControl,
-  LControlZoom,
-  LMarker,
   LPopup,
-  LIcon,
-  LCircle,
-  LCircleMarker,
   LGeoJson,
 } from "vue2-leaflet";
-import Vue2LeafletMarkerCluster from "vue2-leaflet-markercluster";
-
-import "leaflet-defaulticon-compatibility/";
 
 import chroma from "chroma-js";
 import geojson from "./assets/grid_target.json";
@@ -386,18 +444,25 @@ export default {
       opacity_value: 0.8,
     };
   },
-  methods: {},
+  methods: {
+     numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+  },
   computed: {
     nb_lkgd() {
-      if (this.gridFilter == "") {
-        return init_lkgd;
-      } else {
+      if (this.mode_selected=="Grid" & this.gridFilter != "") {
         let f = geojson.features.filter((y) => {
           return y.properties.Sq == this.gridFilter;
         });
-        //let prop = f[0].properties.nb_lkgd;
-        //return [prop.lost, prop.kept, prop.gained];
         return f[0].properties.nb_lkgd;
+      } else if(this.mode_selected=="Species" & this.species_selected != ""){
+        let sp = sp_old.filter((y) => {
+          return y.SEQ == this.species_selected;
+        });
+        return sp[0].nb_lkgd;
+      } else {
+        return init_lkgd
       }
     },
     gridList() {
@@ -427,14 +492,15 @@ export default {
       if (this.filter_selected == "Taxonomy") {
         sp_old_returned = sp_old_returned.sort((a, b) => a.SEQ - b.SEQ);
       } else if (this.filter_selected == "Lost") {
-        sp_old_returned = sp_old_returned.sort((a, b) => b.lost - a.lost);
+        sp_old_returned = sp_old_returned.sort((a, b) => b.nb_lkgd[0] - a.nb_lkgd[0]);
       } else if (this.filter_selected == "Gained") {
-        sp_old_returned = sp_old_returned.sort((a, b) => b.gained - a.gained);
+        sp_old_returned = sp_old_returned.sort((a, b) => b.nb_lkgd[2] - a.nb_lkgd[2]);
       } else if (this.filter_selected == "Kept") {
-        sp_old_returned = sp_old_returned.sort((a, b) => b.kept - a.kept);
+        sp_old_returned = sp_old_returned.sort((a, b) => b.nb_lkgd[1] - a.nb_lkgd[1]);
       } else if (this.filter_selected == "Gained-Lost") {
-        sp_old_returned = sp_old_returned.sort((a, b) => b.diff - a.diff);
+        sp_old_returned = sp_old_returned.sort((a, b) => b.nb_lkgd[2]-b.nb_lkgd[0] - a.nb_lkgd[2]-a.nb_lkgd[0]);
       }
+      console.log(sp_old_returned)
       return sp_old_returned;
     },
     geojson_grid_options() {
