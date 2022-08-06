@@ -188,21 +188,10 @@
                       </b-col>
                     </b-row>
                   </b-col>
-                  <b-col v-if="gridFilter != ''" cols="auto">
-                    <h4>
-                      <b-badge
-                        variant="primary"
-                        class="d-flex align-items-center"
-                        >{{ gridFilter }}
-                        <b-button
-                          class="close ml-1 text-white primary"
-                          aria-label="Close"
-                          @click="gridFilter = ''"
-                        >
-                          <span aria-hidden="true">&times;</span>
-                        </b-button>
-                      </b-badge>
-                    </h4>
+                  <b-col v-if="species_selected != ''" cols="12"><small>
+                    SEQ: {{sp_selected.SEQ}} | 
+                    eBird: <span v-for="(i,u) in sp_selected.ebird" :key="'sp_selected-ebird-'+u" class="pr-1"><a :href="i" target="_blank">link {{u+1}}</a></span> | 
+                    KBM: <span v-for="(i,u) in sp_selected.kbm" :key="'sp_selected-kbm-'+u" class="pr-1"><a :href="i" target="_blank">link {{u+1}}</a></span></small>
                   </b-col>
                 </b-row>
               </b-col>
@@ -235,9 +224,12 @@
                         v-for="i in speciesList"
                         :key="i.Id"
                         class="d-flex align-items-center py-1 px-3"
+                        :active="i.SEQ==species_selected"
+                        @click="species_selected=i.SEQ"
+                        :action="true"
                       >
                     {{ i.SEQ }}. <b class="ml-1">{{ i.CommonName }}</b> 
-                        <b-form-radio v-model="species_selected" :value="i.SEQ" class="ml-1"></b-form-radio>
+                        <!--<b-form-radio v-model="species_selected" :value="i.SEQ" class="ml-1"></b-form-radio>-->
                     <div
                       class="bar kept"
                       v-b-tooltip.right.hover.html="
@@ -364,7 +356,11 @@ import chroma from "chroma-js";
 import geojson from "./assets/grid_target.json";
 import sp_old0 from "./assets/sp_old.json";
 
-const sp_old = sp_old0.filter((sp) => sp.SEQ != null);
+const sp_old = sp_old0.filter((sp) => sp.SEQ != null).map(x=>{
+  x.ebird = x.ebird==null ? [] : x.ebird.split(",")
+  x.kbm = x.kbm==null ? [] : x.kbm.split(",")
+  return x
+});
 
 let init_lkgd = sp_old.reduce(
   (acc, sp) => {
@@ -405,7 +401,7 @@ export default {
       checkbox_gained: true,
       species_options: sp_old,
       species_selected: "",
-      filter_options: ["Taxonomy", "Lost", "Gained", "Kept", "Gained-Lost"],
+      filter_options: ["Taxonomy", "#Lost", "#Gained", "#Kept", "#Difference", "%Lost", "%Gained", "%Kept", "%Difference"],
       filter_selected: "Taxonomy",
       gridFilter: "",
       bounds: latLngBounds([
@@ -489,19 +485,36 @@ export default {
     },
     speciesList() {
       let sp_old_returned = sp_old;
+      if (this.filter_selected.includes("%")){
+        sp_old_returned = sp_old.map(x => {
+          let sum = x.nb_lkgd[0]+x.nb_lkgd[1]+x.nb_lkgd[2]
+          x.nb_lkgd[0] = x.nb_lkgd[0] / sum
+          x.nb_lkgd[1] = x.nb_lkgd[1] / sum
+          x.nb_lkgd[2] = x.nb_lkgd[2] / sum
+          x.nb_lkgd[3] = x.nb_lkgd[3] / sum
+          return x
+        });
+      }
       if (this.filter_selected == "Taxonomy") {
         sp_old_returned = sp_old_returned.sort((a, b) => a.SEQ - b.SEQ);
-      } else if (this.filter_selected == "Lost") {
+      } else if (this.filter_selected.includes("Lost")) {
         sp_old_returned = sp_old_returned.sort((a, b) => b.nb_lkgd[0] - a.nb_lkgd[0]);
-      } else if (this.filter_selected == "Gained") {
+      } else if (this.filter_selected.includes("Gained")) {
         sp_old_returned = sp_old_returned.sort((a, b) => b.nb_lkgd[2] - a.nb_lkgd[2]);
-      } else if (this.filter_selected == "Kept") {
+      } else if (this.filter_selected.includes("Kept")) {
         sp_old_returned = sp_old_returned.sort((a, b) => b.nb_lkgd[1] - a.nb_lkgd[1]);
-      } else if (this.filter_selected == "Gained-Lost") {
-        sp_old_returned = sp_old_returned.sort((a, b) => b.nb_lkgd[2]-b.nb_lkgd[0] - a.nb_lkgd[2]-a.nb_lkgd[0]);
+      } else if (this.filter_selected.includes("Difference")) {
+        sp_old_returned = sp_old_returned.sort((a, b) => b.nb_lkgd[3] - a.nb_lkgd[3]);
       }
-      console.log(sp_old_returned)
       return sp_old_returned;
+    },
+    sp_selected(){
+      let sp = sp_old.filter(x=>x.SEQ==this.species_selected)[0]
+      return {
+        SEQ : sp.SEQ,
+        ebird : sp.ebird.map(x=> "https://ebird.org/species/"+x+"/KE"),
+        kbm : sp.kbm.map(x=> "https://kenya.birdmap.africa/species/"+x)
+      }
     },
     geojson_grid_options() {
       return {
