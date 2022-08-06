@@ -6,7 +6,7 @@
           <b-card-header header-tag="nav">
             <b-row align-v="center">
               <b-col md="auto">
-                <h2>Kenya Bird Atlas</h2>
+                <h2>Kenya Bird Atlas Viz</h2>
               </b-col>
               <b-col>
                 <b-form-radio-group
@@ -25,7 +25,7 @@
               <b-col cols="12">
                 <b-row class="alert-dark px-0 pb-2 pt-2">
                   <b-col>
-                    Number of {{ gridFilter == '' ? 'square-' : '' }}species
+                    Number of {{ gridFilter == "" ? "square-" : "" }}species
                     <div class="kept d-flex w-100 p-0">
                       <div
                         class="lost py-2"
@@ -108,13 +108,45 @@
                   <b-alert show variant="info" dismissible>
                     <h4 class="alert-heading">Welcome!</h4>
                     <p>
-                      The Kenyan Bird Atlas Viz will let you explore the change of bird distribution between 1980 and
-                      2020! The distributions are retrieved from <a href="https://doi.org/10.1201/9781315136264" target="_blank">"A Bird Atlas of Kenya"</a>, <a href="https://ebird.org/region/KE" target="_blank">eBird</a> and <a href="https://kenya.birdmap.africa/" target="_blank">Kenyan Bird Map</a>.
+                      The Kenyan Bird Atlas Viz will let you explore the change
+                      of bird distribution between 1980 and 2020! The
+                      distributions are retrieved from
+                      <a
+                        href="https://doi.org/10.1201/9781315136264"
+                        target="_blank"
+                        >"A Bird Atlas of Kenya"</a
+                      >,
+                      <a href="https://ebird.org/region/KE" target="_blank"
+                        >eBird</a
+                      >
+                      and
+                      <a href="https://kenya.birdmap.africa/" target="_blank"
+                        >Kenyan Bird Map</a
+                      >.
                     </p>
                     <hr />
                     <p>
-                      You can explore the changes by <b-button :variant="mode_selected=='Grid' ? 'primary' : 'outline-primary'" size="sm">Grid</b-button> or
-                      <b-button :variant="mode_selected=='Species' ? 'primary' : 'outline-primary'" size="sm" @click="mode_selected='Species'">Species</b-button>
+                      You can explore the changes by
+                      <b-button
+                        :variant="
+                          mode_selected == 'Grid'
+                            ? 'primary'
+                            : 'outline-primary'
+                        "
+                        size="sm"
+                        >Grid</b-button
+                      >
+                      or
+                      <b-button
+                        :variant="
+                          mode_selected == 'Species'
+                            ? 'primary'
+                            : 'outline-primary'
+                        "
+                        size="sm"
+                        @click="mode_selected = 'Species'"
+                        >Species</b-button
+                      >
                     </p>
                     <p class="mb-0">
                       For <code>Grid</code> exploration, click on the map!
@@ -150,7 +182,9 @@
               <b-col cols="12">
                 <b-row class="alert-dark px-0 pb-2 pt-2">
                   <b-col>
-                    Number of square{{ species_selected == '' ? '-species' : '' }}
+                    Number of square{{
+                      species_selected == "" ? "-species" : ""
+                    }}
                     <div class="kept d-flex w-100 p-0">
                       <div
                         class="lost py-2"
@@ -188,10 +222,23 @@
                       </b-col>
                     </b-row>
                   </b-col>
-                  <b-col v-if="species_selected != ''" cols="12"><small>
-                    SEQ: {{sp_selected.SEQ}} | 
-                    eBird: <span v-for="(i,u) in sp_selected.ebird" :key="'sp_selected-ebird-'+u" class="pr-1"><a :href="i" target="_blank">link {{u+1}}</a></span> | 
-                    KBM: <span v-for="(i,u) in sp_selected.kbm" :key="'sp_selected-kbm-'+u" class="pr-1"><a :href="i" target="_blank">link {{u+1}}</a></span></small>
+                  <b-col v-if="species_selected != ''" cols="12"
+                    ><small>
+                      SEQ: {{ sp_selected.SEQ }} | eBird:
+                      <span
+                        v-for="(i, u) in sp_selected.ebird"
+                        :key="'sp_selected-ebird-' + u"
+                        class="pr-1"
+                        ><a :href="i" target="_blank">link {{ u + 1 }}</a></span
+                      >
+                      | KBM:
+                      <span
+                        v-for="(i, u) in sp_selected.kbm"
+                        :key="'sp_selected-kbm-' + u"
+                        class="pr-1"
+                        ><a :href="i" target="_blank">link {{ u + 1 }}</a></span
+                      ></small
+                    >
                   </b-col>
                 </b-row>
               </b-col>
@@ -204,7 +251,7 @@
                   placeholder="Select a species by name"
                 ></v-select>
               </b-col>
-              <hr>
+              <hr />
               <b-col cols="12" class="text-center my-1">
                 --Or explore species in table--
               </b-col>
@@ -219,17 +266,17 @@
                 ></b-form-select>
               </b-col>
               <b-col cols="12" class="mt-2">
-                  <b-list-group class="small h-100">
-                      <b-list-group-item
-                        v-for="i in speciesList"
-                        :key="i.Id"
-                        class="d-flex align-items-center py-1 px-3"
-                        :active="i.SEQ==species_selected"
-                        @click="species_selected=i.SEQ"
-                        :action="true"
-                      >
-                    {{ i.SEQ }}. <b class="ml-1">{{ i.CommonName }}</b> 
-                        <!--<b-form-radio v-model="species_selected" :value="i.SEQ" class="ml-1"></b-form-radio>-->
+                <b-list-group class="small h-100">
+                  <b-list-group-item
+                    v-for="i in speciesList"
+                    :key="i.Id"
+                    class="d-flex align-items-center py-1 px-3"
+                    :active="i.SEQ == species_selected"
+                    @click="species_selected = i.SEQ"
+                    :action="true"
+                  >
+                    {{ i.SEQ }}. <b class="ml-1">{{ i.CommonName }}</b>
+                    <!--<b-form-radio v-model="species_selected" :value="i.SEQ" class="ml-1"></b-form-radio>-->
                     <div
                       class="bar kept"
                       v-b-tooltip.right.hover.html="
@@ -356,11 +403,13 @@ import chroma from "chroma-js";
 import geojson from "./assets/grid_target.json";
 import sp_old0 from "./assets/sp_old.json";
 
-const sp_old = sp_old0.filter((sp) => sp.SEQ != null).map(x=>{
-  x.ebird = x.ebird==null ? [] : x.ebird.split(",")
-  x.kbm = x.kbm==null ? [] : x.kbm.split(",")
-  return x
-});
+const sp_old = sp_old0
+  .filter((sp) => sp.SEQ != null)
+  .map((x) => {
+    x.ebird = x.ebird == null ? [] : x.ebird.split(",");
+    x.kbm = x.kbm == null ? [] : x.kbm.split(",");
+    return x;
+  });
 
 let init_lkgd = sp_old.reduce(
   (acc, sp) => {
@@ -401,7 +450,17 @@ export default {
       checkbox_gained: true,
       species_options: sp_old,
       species_selected: "",
-      filter_options: ["Taxonomy", "#Lost", "#Gained", "#Kept", "#Difference", "%Lost", "%Gained", "%Kept", "%Difference"],
+      filter_options: [
+        "Taxonomy",
+        "#Lost",
+        "#Gained",
+        "#Kept",
+        "#Difference",
+        "%Lost",
+        "%Gained",
+        "%Kept",
+        "%Difference",
+      ],
       filter_selected: "Taxonomy",
       gridFilter: "",
       bounds: latLngBounds([
@@ -441,24 +500,27 @@ export default {
     };
   },
   methods: {
-     numberWithCommas(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
+    numberWithCommas(x) {
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
   },
   computed: {
     nb_lkgd() {
-      if (this.mode_selected=="Grid" & this.gridFilter != "") {
+      if ((this.mode_selected == "Grid") & (this.gridFilter != "")) {
         let f = geojson.features.filter((y) => {
           return y.properties.Sq == this.gridFilter;
         });
         return f[0].properties.nb_lkgd;
-      } else if(this.mode_selected=="Species" & this.species_selected != ""){
+      } else if (
+        (this.mode_selected == "Species") &
+        (this.species_selected != "")
+      ) {
         let sp = sp_old.filter((y) => {
           return y.SEQ == this.species_selected;
         });
         return sp[0].nb_lkgd;
       } else {
-        return init_lkgd
+        return init_lkgd;
       }
     },
     gridList() {
@@ -485,35 +547,47 @@ export default {
     },
     speciesList() {
       let sp_old_returned = sp_old;
-      if (this.filter_selected.includes("%")){
-        sp_old_returned = sp_old.map(x => {
-          let sum = x.nb_lkgd[0]+x.nb_lkgd[1]+x.nb_lkgd[2]
-          x.nb_lkgd[0] = x.nb_lkgd[0] / sum
-          x.nb_lkgd[1] = x.nb_lkgd[1] / sum
-          x.nb_lkgd[2] = x.nb_lkgd[2] / sum
-          x.nb_lkgd[3] = x.nb_lkgd[3] / sum
-          return x
+      if (this.filter_selected.includes("%")) {
+        sp_old_returned = sp_old.map((x) => {
+          let sum = x.nb_lkgd[0] + x.nb_lkgd[1] + x.nb_lkgd[2];
+          x.nb_lkgd[0] = x.nb_lkgd[0] / sum;
+          x.nb_lkgd[1] = x.nb_lkgd[1] / sum;
+          x.nb_lkgd[2] = x.nb_lkgd[2] / sum;
+          x.nb_lkgd[3] = x.nb_lkgd[3] / sum;
+          return x;
         });
       }
       if (this.filter_selected == "Taxonomy") {
         sp_old_returned = sp_old_returned.sort((a, b) => a.SEQ - b.SEQ);
       } else if (this.filter_selected.includes("Lost")) {
-        sp_old_returned = sp_old_returned.sort((a, b) => b.nb_lkgd[0] - a.nb_lkgd[0]);
+        sp_old_returned = sp_old_returned.sort(
+          (a, b) => b.nb_lkgd[0] - a.nb_lkgd[0]
+        );
       } else if (this.filter_selected.includes("Gained")) {
-        sp_old_returned = sp_old_returned.sort((a, b) => b.nb_lkgd[2] - a.nb_lkgd[2]);
+        sp_old_returned = sp_old_returned.sort(
+          (a, b) => b.nb_lkgd[2] - a.nb_lkgd[2]
+        );
       } else if (this.filter_selected.includes("Kept")) {
-        sp_old_returned = sp_old_returned.sort((a, b) => b.nb_lkgd[1] - a.nb_lkgd[1]);
+        sp_old_returned = sp_old_returned.sort(
+          (a, b) => b.nb_lkgd[1] - a.nb_lkgd[1]
+        );
       } else if (this.filter_selected.includes("Difference")) {
-        sp_old_returned = sp_old_returned.sort((a, b) => b.nb_lkgd[3] - a.nb_lkgd[3]);
+        sp_old_returned = sp_old_returned.sort(
+          (a, b) => b.nb_lkgd[3] - a.nb_lkgd[3]
+        );
       }
       return sp_old_returned;
     },
-    sp_selected(){
-      let sp = sp_old.filter(x=>x.SEQ==this.species_selected)[0]
-      return {
-        SEQ : sp.SEQ,
-        ebird : sp.ebird.map(x=> "https://ebird.org/species/"+x+"/KE"),
-        kbm : sp.kbm.map(x=> "https://kenya.birdmap.africa/species/"+x)
+    sp_selected() {
+      if (this.species_selected == "") {
+        return null;
+      } else {
+        let sp = sp_old.filter((x) => x.SEQ == this.species_selected)[0];
+        return {
+          SEQ: sp.SEQ,
+          ebird: sp.ebird.map((x) => "https://ebird.org/species/" + x + "/KE"),
+          kbm: sp.kbm.map((x) => "https://kenya.birdmap.africa/species/" + x),
+        };
       }
     },
     geojson_grid_options() {

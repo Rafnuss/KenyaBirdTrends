@@ -1,5 +1,5 @@
 {
-  "name": "kba_target",
+  "name": "kenya_bird_atlas_viz",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -17,7 +17,7 @@
     "core-js": "^3.24.1",
     "leaflet": "^1.8.0",
     "leaflet-defaulticon-compatibility": "^0.1.1",
-    "vue": "^2.6.12",
+    "vue": "^2.7.8",
     "vue-select": "^3.20.0",
     "vue2-leaflet": "^2.7.1",
     "vue2-leaflet-markercluster": "^3.1.0"
@@ -25,10 +25,10 @@
   "devDependencies": {
     "@vue/cli-service": "~5.0.8"
   },
-  "homepage": "http://zoziologie.raphaelnussbaumer.com/kba_target/",
+  "homepage": "http://zoziologie.raphaelnussbaumer.com/kenya_bird_atlas_viz/",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zoziologie/kba_target.git"
+    "url": "git+https://github.com/zoziologie/kenya_bird_atlas_viz.git"
   },
   "title": "Kenya Bird Atlas Target"
 }
