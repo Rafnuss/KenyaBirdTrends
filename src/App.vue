@@ -5,8 +5,9 @@
         <b-card class="h-100" no-body>
           <b-card-header header-tag="nav">
             <b-row align-v="center" class="no-gutters">
-              <b-col md="auto">
-                <h2>Kenya Bird Atlas Viz</h2>
+              <b-col cols="auto">
+                <h2 class="d-none d-lg-block">Kenya Bird Atlas Viz</h2>
+                <h2 class="d-lg-none">KBAViz</h2>
               </b-col>
               <b-col>
                 <b-form-radio-group
@@ -23,9 +24,10 @@
           <b-card-body>
             <b-row v-if="mode_selected == 'Grid'">
               <b-col cols="12">
-                <b-row class="alert-dark px-0 pb-2 pt-2">
+                <b-row class="alert-dark px-0 pb-2 pt-2" align-v="center">
                   <b-col>
-                    Number of {{ gridFilter == "" ? "square-" : "" }}species
+                    Number of
+                    {{ gridFilter == "" ? "squares for  all " : "" }}species
                     <div class="kept d-flex w-100 p-0">
                       <div
                         class="lost py-2"
@@ -49,15 +51,21 @@
                       ></div>
                     </div>
                     <b-row>
-                      <b-col class="d-flex align-items-center">
+                      <b-col
+                        class="d-flex align-items-center justify-content-center"
+                      >
                         <div class="box-sm lost mr-1"></div>
                         {{ numberWithCommas(nb_lkgd[0]) }}
                       </b-col>
-                      <b-col class="d-flex align-items-center">
+                      <b-col
+                        class="d-flex align-items-center justify-content-center"
+                      >
                         <div class="box-sm kept mr-1"></div>
                         {{ numberWithCommas(nb_lkgd[1]) }}
                       </b-col>
-                      <b-col class="d-flex align-items-center">
+                      <b-col
+                        class="d-flex align-items-center justify-content-center"
+                      >
                         <div class="box-sm gained mr-1"></div>
                         {{ numberWithCommas(nb_lkgd[2]) }}
                       </b-col>
@@ -105,12 +113,11 @@
               </b-col>
               <b-col v-if="gridFilter == ''" cols="12">
                 <div>
-                  <b-alert show variant="info" dismissible>
+                  <b-alert show variant="info">
                     <h4 class="alert-heading">Welcome!</h4>
                     <p>
-                      The Kenyan Bird Atlas Viz will let you explore the change
-                      of bird distribution between 1980 and 2020! The
-                      distributions are retrieved from
+                      Discover the change in bird distribution between 1980 and
+                      2020! The distributions are retrieved from
                       <a
                         href="https://doi.org/10.1201/9781315136264"
                         target="_blank"
@@ -125,32 +132,36 @@
                       >.
                     </p>
                     <hr />
-                    <p>
-                      You can explore the changes by
-                      <b-button
-                        :variant="
-                          mode_selected == 'Grid'
-                            ? 'primary'
-                            : 'outline-primary'
-                        "
-                        size="sm"
-                        >Grid</b-button
-                      >
-                      or
-                      <b-button
-                        :variant="
-                          mode_selected == 'Species'
-                            ? 'primary'
-                            : 'outline-primary'
-                        "
-                        size="sm"
-                        @click="mode_selected = 'Species'"
-                        >Species</b-button
-                      >
-                    </p>
-                    <p class="mb-0">
-                      For <code>Grid</code> exploration, click on the map!
-                    </p>
+                    <p>You can explore the changes with these two views:</p>
+                    <ul>
+                      <li>
+                        <b-button
+                          :variant="
+                            mode_selected == 'Grid'
+                              ? 'primary'
+                              : 'outline-primary'
+                          "
+                          size="sm"
+                          >Grid</b-button
+                        >
+                        Click a square on the map to see the change in species
+                        diversity.
+                      </li>
+                      <li>
+                        <b-button
+                          :variant="
+                            mode_selected == 'Species'
+                              ? 'primary'
+                              : 'outline-primary'
+                          "
+                          size="sm"
+                          @click="mode_selected = 'Species'"
+                          >Species</b-button
+                        >
+                        Select a species to view the changes in its
+                        distribution.
+                      </li>
+                    </ul>
                   </b-alert>
                 </div>
               </b-col>
@@ -165,7 +176,7 @@
                       >
                         {{ i.SEQ }}. <b class="ml-1">{{ i.CommonName }}</b>
                         <div
-                          class="box box-sm"
+                          class="box box-sm ml-auto"
                           :class="{
                             kept: i.cat == 'kept',
                             gained: i.cat == 'gained',
@@ -182,8 +193,8 @@
               <b-col cols="12">
                 <b-row class="alert-dark px-0 pb-2 pt-2">
                   <b-col>
-                    Number of square{{
-                      species_selected == null ? "-species" : ""
+                    Number of squares{{
+                      species_selected == null ? " for  all species" : ""
                     }}
                     <div class="kept d-flex w-100 p-0">
                       <div
@@ -208,15 +219,21 @@
                       ></div>
                     </div>
                     <b-row>
-                      <b-col class="d-flex align-items-center">
+                      <b-col
+                        class="d-flex align-items-center justify-content-center"
+                      >
                         <div class="box-sm lost mr-1"></div>
                         {{ numberWithCommas(nb_lkgd[0]) }}
                       </b-col>
-                      <b-col class="d-flex align-items-center">
+                      <b-col
+                        class="d-flex align-items-center justify-content-center"
+                      >
                         <div class="box-sm kept mr-1"></div>
                         {{ numberWithCommas(nb_lkgd[1]) }}
                       </b-col>
-                      <b-col class="d-flex align-items-center">
+                      <b-col
+                        class="d-flex align-items-center justify-content-center"
+                      >
                         <div class="box-sm gained mr-1"></div>
                         {{ numberWithCommas(nb_lkgd[2]) }}
                       </b-col>
@@ -248,13 +265,13 @@
                   :options="species_options"
                   :reduce="(x) => x.SEQ"
                   label="CommonName"
-                  placeholder="Select a species by name"
+                  placeholder="Select a species"
                 ></v-select>
               </b-col>
-              <hr />
-              <b-col cols="12" class="text-center my-1">
-                --Or explore species in table--
-              </b-col>
+              <!--<b-col cols="12"><hr /></b-col>
+             <b-col cols="12" class="text-center my-1 grey">
+                <small>--Or explore species in this table--</small>
+              </b-col>-->
               <b-col cols="8" class="text-right pr-0">
                 <small>Sort by:</small>
               </b-col>
@@ -274,6 +291,7 @@
                     :active="i.SEQ == species_selected"
                     @click="species_selected = i.SEQ"
                     :action="true"
+                    role="button"
                   >
                     {{ i.SEQ }}. <b class="ml-1">{{ i.CommonName }}</b>
                     <!--<b-form-radio v-model="species_selected" :value="i.SEQ" class="ml-1"></b-form-radio>-->
@@ -405,6 +423,7 @@ import sp_old0 from "./assets/sp_old.json";
 
 const sp_old = sp_old0
   .filter((sp) => sp.SEQ != null)
+  .filter((sp) => sp.MergedSEQ == null)
   .map((x) => {
     x.ebird = x.ebird == null ? [] : x.ebird.split(",");
     x.kbm = x.kbm == null ? [] : x.kbm.split(",");
@@ -459,14 +478,14 @@ export default {
       species_selected: null,
       filter_options: [
         "Taxonomy",
-        "#Lost",
-        "#Gained",
-        "#Kept",
-        "#Difference",
-        "%Lost",
-        "%Gained",
-        "%Kept",
-        "%Difference",
+        "# Lost",
+        "# Gained",
+        "# Kept",
+        "# Difference",
+        "% Lost",
+        "% Gained",
+        "% Kept",
+        "% Difference",
       ],
       filter_selected: "Taxonomy",
       gridFilter: "",
@@ -590,23 +609,25 @@ export default {
       return {
         onEachFeature: (feature, layer) => {
           let prop = feature.properties;
-          layer.bindTooltip(
-            "<b>grid:</b> " +
-              prop.Sq +
+          /*layer.bindTooltip(
+            "<b>Grid:</b> " +
+              prop.Sq
               "<br>" +
-              "<b>lost:</b> " +
+              "<br>" +
+              "Number of species:" +
+              "<b>Lost:</b> " +
               prop.nb_lkgd[0] +
               "<br>" +
-              "<b>kept:</b> " +
+              "<b>Kept:</b> " +
               prop.nb_lkgd[1] +
               "<br>" +
-              "<b>gained:</b> " +
+              "<b>Gained:</b> " +
               prop.nb_lkgd[2] +
               "<br>" +
-              "<b>difference:</b> " +
+              "<b>Difference:</b> " +
               prop.nb_lkgd[3],
             { permanent: false, sticky: true }
-          );
+          );*/
         },
       };
     },
@@ -699,7 +720,6 @@ body {
 .box-sm {
   width: 0.875rem;
   height: 0.875rem;
-  margin-left: auto;
   border: 1px solid rgba(0, 0, 0, 0.2);
 }
 .bar {
