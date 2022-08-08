@@ -10,7 +10,7 @@ const path = require('path');
 module.exports = {
     runtimeCompiler:true,
     publicPath: process.env.NODE_ENV === 'production'
-    ? '/kenya_bird_atlas_viz/'
+    ? '/KenyaBirdAtlasViz/'
     : '/',
     /*entry: './src/main.js',
     output: {
