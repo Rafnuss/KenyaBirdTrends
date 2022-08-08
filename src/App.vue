@@ -4,7 +4,7 @@
       <b-col md="4" fluid="md" class="vh-100">
         <b-card class="h-100" no-body>
           <b-card-header header-tag="nav">
-            <b-row align-v="center">
+            <b-row align-v="center" class="no-gutters">
               <b-col md="auto">
                 <h2>Kenya Bird Atlas Viz</h2>
               </b-col>
@@ -183,7 +183,7 @@
                 <b-row class="alert-dark px-0 pb-2 pt-2">
                   <b-col>
                     Number of square{{
-                      species_selected == "" ? "-species" : ""
+                      species_selected == null ? "-species" : ""
                     }}
                     <div class="kept d-flex w-100 p-0">
                       <div
@@ -222,7 +222,7 @@
                       </b-col>
                     </b-row>
                   </b-col>
-                  <b-col v-if="species_selected != ''" cols="12"
+                  <b-col v-if="species_selected != null" cols="12"
                     ><small>
                       SEQ: {{ sp_selected.SEQ }} | eBird:
                       <span
@@ -408,10 +408,17 @@ const sp_old = sp_old0
   .map((x) => {
     x.ebird = x.ebird == null ? [] : x.ebird.split(",");
     x.kbm = x.kbm == null ? [] : x.kbm.split(",");
+    let sum = x.nb_lkgd[0] + x.nb_lkgd[1] + x.nb_lkgd[2];
+    x.per_lkgd = [
+      x.nb_lkgd[0] / sum,
+      x.nb_lkgd[1] / sum,
+      x.nb_lkgd[2] / sum,
+      x.nb_lkgd[3] / sum,
+    ];
     return x;
   });
 
-let init_lkgd = sp_old.reduce(
+const init_lkgd = sp_old.reduce(
   (acc, sp) => {
     acc[0] = acc[0] + sp.nb_lkgd[0];
     acc[1] = acc[1] + sp.nb_lkgd[1];
@@ -449,7 +456,7 @@ export default {
       checkbox_kept: true,
       checkbox_gained: true,
       species_options: sp_old,
-      species_selected: "",
+      species_selected: null,
       filter_options: [
         "Taxonomy",
         "#Lost",
@@ -513,7 +520,7 @@ export default {
         return f[0].properties.nb_lkgd;
       } else if (
         (this.mode_selected == "Species") &
-        (this.species_selected != "")
+        (this.species_selected != null)
       ) {
         let sp = sp_old.filter((y) => {
           return y.SEQ == this.species_selected;
@@ -527,7 +534,11 @@ export default {
       let f = geojson.features.filter((y) => {
         return y.properties.Sq == this.gridFilter;
       });
-      let sp_old_returned = sp_old.map((y) => {
+      if (f.length == 0) {
+        return [];
+      }
+      let sp_old_returned = [...sp_old];
+      sp_old_returned = sp_old_returned.map((y) => {
         var n = f[0].properties.SEQ_new.includes(y.SEQ);
         let o = f[0].properties.SEQ_old.includes(y.SEQ);
         y.cat = n & o ? "kept" : n ? "gained" : o ? "lost" : "";
@@ -546,40 +557,25 @@ export default {
       });
     },
     speciesList() {
-      let sp_old_returned = sp_old;
-      if (this.filter_selected.includes("%")) {
-        sp_old_returned = sp_old.map((x) => {
-          let sum = x.nb_lkgd[0] + x.nb_lkgd[1] + x.nb_lkgd[2];
-          x.nb_lkgd[0] = x.nb_lkgd[0] / sum;
-          x.nb_lkgd[1] = x.nb_lkgd[1] / sum;
-          x.nb_lkgd[2] = x.nb_lkgd[2] / sum;
-          x.nb_lkgd[3] = x.nb_lkgd[3] / sum;
-          return x;
-        });
-      }
+      let disp_lkgd = this.filter_selected.includes("%")
+        ? "per_lkgd"
+        : "nb_lkgd";
       if (this.filter_selected == "Taxonomy") {
-        sp_old_returned = sp_old_returned.sort((a, b) => a.SEQ - b.SEQ);
+        return sp_old.sort((a, b) => a.SEQ - b.SEQ);
       } else if (this.filter_selected.includes("Lost")) {
-        sp_old_returned = sp_old_returned.sort(
-          (a, b) => b.nb_lkgd[0] - a.nb_lkgd[0]
-        );
+        return sp_old.sort((a, b) => b[disp_lkgd][0] - a[disp_lkgd][0]);
       } else if (this.filter_selected.includes("Gained")) {
-        sp_old_returned = sp_old_returned.sort(
-          (a, b) => b.nb_lkgd[2] - a.nb_lkgd[2]
-        );
+        return sp_old.sort((a, b) => b[disp_lkgd][2] - a[disp_lkgd][2]);
       } else if (this.filter_selected.includes("Kept")) {
-        sp_old_returned = sp_old_returned.sort(
-          (a, b) => b.nb_lkgd[1] - a.nb_lkgd[1]
-        );
+        return sp_old.sort((a, b) => b[disp_lkgd][1] - a[disp_lkgd][1]);
       } else if (this.filter_selected.includes("Difference")) {
-        sp_old_returned = sp_old_returned.sort(
-          (a, b) => b.nb_lkgd[3] - a.nb_lkgd[3]
-        );
+        return sp_old.sort((a, b) => b[disp_lkgd][3] - a[disp_lkgd][3]);
+      } else {
+        return sp_old;
       }
-      return sp_old_returned;
     },
     sp_selected() {
-      if (this.species_selected == "") {
+      if (this.species_selected == null) {
         return null;
       } else {
         let sp = sp_old.filter((x) => x.SEQ == this.species_selected)[0];
