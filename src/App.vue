@@ -21,244 +21,235 @@
               </b-col>
             </b-row>
           </b-card-header>
-          <b-card-body>
-            <b-row v-if="mode_selected == 'Grid'">
-              <b-col cols="12">
-                <b-row class="alert-dark px-0 pb-2 pt-2" align-v="center">
-                  <b-col>
-                    Number of
-                    {{ gridFilter == "" ? "squares for  all " : "" }}species
-                    <div class="kept d-flex w-100 p-0">
-                      <div
-                        class="lost py-2"
-                        :style="{
-                          width:
-                            (nb_lkgd[0] /
-                              (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) *
-                              100 +
-                            '%',
-                        }"
-                      ></div>
-                      <div
-                        class="gained py-2 ml-auto"
-                        :style="{
-                          width:
-                            (nb_lkgd[2] /
-                              (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) *
-                              100 +
-                            '%',
-                        }"
-                      ></div>
-                    </div>
-                    <b-row>
-                      <b-col
-                        class="d-flex align-items-center justify-content-center"
-                      >
-                        <div class="box-sm lost mr-1"></div>
-                        {{ numberWithCommas(nb_lkgd[0]) }}
-                      </b-col>
-                      <b-col
-                        class="d-flex align-items-center justify-content-center"
-                      >
-                        <div class="box-sm kept mr-1"></div>
-                        {{ numberWithCommas(nb_lkgd[1]) }}
-                      </b-col>
-                      <b-col
-                        class="d-flex align-items-center justify-content-center"
-                      >
-                        <div class="box-sm gained mr-1"></div>
-                        {{ numberWithCommas(nb_lkgd[2]) }}
-                      </b-col>
-                    </b-row>
-                  </b-col>
-                  <b-col v-if="gridFilter != ''" cols="auto">
-                    <h4>
-                      <b-badge
-                        variant="primary"
-                        class="d-flex align-items-center"
-                        >{{ gridFilter }}
-                        <b-button
-                          class="close ml-1 text-white primary"
-                          aria-label="Close"
-                          @click="gridFilter = ''"
-                        >
-                          <span aria-hidden="true">&times;</span>
-                        </b-button>
-                      </b-badge>
-                    </h4>
-                  </b-col>
-                </b-row>
-              </b-col>
-              <b-col cols="12" class="mb-3">
-                <b-row>
-                  <b-col cols="auto">Filter: </b-col>
-                  <b-col cols="auto">
-                    <b-form-checkbox id="checkbox-lost" v-model="checkbox_lost"
-                      >Lost</b-form-checkbox
-                    ></b-col
-                  >
-                  <b-col cols="auto">
-                    <b-form-checkbox id="checkbox-kept" v-model="checkbox_kept"
-                      >Kept</b-form-checkbox
-                    ></b-col
-                  >
-                  <b-col cols="auto">
-                    <b-form-checkbox
-                      id="checkbox-gained"
-                      v-model="checkbox_gained"
-                      >Gained</b-form-checkbox
-                    ></b-col
-                  >
-                </b-row>
-              </b-col>
-              <b-col v-if="gridFilter == ''" cols="12">
-                <div>
-                  <b-alert show variant="info">
-                    <h4 class="alert-heading">Welcome!</h4>
-                    <p>
-                      Discover the change in bird distribution between 1980 and
-                      2020! The distributions are retrieved from
-                      <a
-                        href="https://doi.org/10.1201/9781315136264"
-                        target="_blank"
-                        >"A Bird Atlas of Kenya"</a
-                      >,
-                      <a href="https://ebird.org/region/KE" target="_blank"
-                        >eBird</a
-                      >
-                      and
-                      <a href="https://kenya.birdmap.africa/" target="_blank"
-                        >Kenyan Bird Map</a
-                      >.
-                    </p>
-                    <hr />
-                    <p>You can explore the changes with these two views:</p>
-                    <ul>
-                      <li>
-                        <b-button
-                          :variant="
-                            mode_selected == 'Grid'
-                              ? 'primary'
-                              : 'outline-primary'
-                          "
-                          size="sm"
-                          >Grid</b-button
-                        >
-                        Click a square on the map to see the change in species
-                        diversity.
-                      </li>
-                      <li>
-                        <b-button
-                          :variant="
-                            mode_selected == 'Species'
-                              ? 'primary'
-                              : 'outline-primary'
-                          "
-                          size="sm"
-                          @click="mode_selected = 'Species'"
-                          >Species</b-button
-                        >
-                        Select a species to view the changes in its
-                        distribution.
-                      </li>
-                    </ul>
-                  </b-alert>
+          <b-card-body class="flex-column d-flex">
+            <b-row
+              v-if="mode_selected == 'Grid'"
+              class="alert-dark px-0 pb-2 pt-2"
+              align-v="center"
+            >
+              <b-col>
+                Number of
+                {{ gridFilter == "" ? "squares for  all " : "" }}species
+                <div class="kept d-flex w-100 p-0">
+                  <div
+                    class="lost py-2"
+                    :style="{
+                      width:
+                        (nb_lkgd[0] / (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) *
+                          100 +
+                        '%',
+                    }"
+                  ></div>
+                  <div
+                    class="gained py-2 ml-auto"
+                    :style="{
+                      width:
+                        (nb_lkgd[2] / (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) *
+                          100 +
+                        '%',
+                    }"
+                  ></div>
                 </div>
-              </b-col>
-              <b-col v-else>
                 <b-row>
-                  <b-col cols="12">
-                    <b-list-group class="small h-100">
-                      <b-list-group-item
-                        v-for="i in gridList"
-                        :key="i.Id"
-                        class="d-flex align-items-center py-1 px-3"
-                      >
-                        {{ i.SEQ }}. <b class="ml-1">{{ i.CommonName }}</b>
-                        <div
-                          class="box box-sm ml-auto"
-                          :class="{
-                            kept: i.cat == 'kept',
-                            gained: i.cat == 'gained',
-                            lost: i.cat == 'lost',
-                          }"
-                        ></div>
-                      </b-list-group-item>
-                    </b-list-group>
+                  <b-col
+                    class="d-flex align-items-center justify-content-center"
+                  >
+                    <div class="box-sm lost mr-1"></div>
+                    {{ numberWithCommas(nb_lkgd[0]) }}
+                  </b-col>
+                  <b-col
+                    class="d-flex align-items-center justify-content-center"
+                  >
+                    <div class="box-sm kept mr-1"></div>
+                    {{ numberWithCommas(nb_lkgd[1]) }}
+                  </b-col>
+                  <b-col
+                    class="d-flex align-items-center justify-content-center"
+                  >
+                    <div class="box-sm gained mr-1"></div>
+                    {{ numberWithCommas(nb_lkgd[2]) }}
                   </b-col>
                 </b-row>
+              </b-col>
+              <b-col v-if="gridFilter != ''" cols="auto">
+                <h4>
+                  <b-badge variant="primary" class="d-flex align-items-center"
+                    >{{ gridFilter }}
+                    <b-button
+                      class="close ml-1 text-white primary"
+                      aria-label="Close"
+                      @click="gridFilter = ''"
+                    >
+                      <span aria-hidden="true">&times;</span>
+                    </b-button>
+                  </b-badge>
+                </h4>
               </b-col>
             </b-row>
-            <b-row v-else>
+            <b-row v-if="mode_selected == 'Grid'">
+              <b-col cols="auto">Filter: </b-col>
+              <b-col cols="auto">
+                <b-form-checkbox id="checkbox-lost" v-model="checkbox_lost"
+                  >Lost</b-form-checkbox
+                ></b-col
+              >
+              <b-col cols="auto">
+                <b-form-checkbox id="checkbox-kept" v-model="checkbox_kept"
+                  >Kept</b-form-checkbox
+                ></b-col
+              >
+              <b-col cols="auto">
+                <b-form-checkbox id="checkbox-gained" v-model="checkbox_gained"
+                  >Gained</b-form-checkbox
+                ></b-col
+              >
+            </b-row>
+            <b-row v-if="(mode_selected == 'Grid') & (gridFilter == '')">
               <b-col cols="12">
-                <b-row class="alert-dark px-0 pb-2 pt-2">
-                  <b-col>
-                    Number of squares{{
-                      species_selected == null ? " for  all species" : ""
-                    }}
-                    <div class="kept d-flex w-100 p-0">
-                      <div
-                        class="lost py-2"
-                        :style="{
-                          width:
-                            (nb_lkgd[0] /
-                              (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) *
-                              100 +
-                            '%',
-                        }"
-                      ></div>
-                      <div
-                        class="gained py-2 ml-auto"
-                        :style="{
-                          width:
-                            (nb_lkgd[2] /
-                              (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) *
-                              100 +
-                            '%',
-                        }"
-                      ></div>
-                    </div>
-                    <b-row>
-                      <b-col
-                        class="d-flex align-items-center justify-content-center"
-                      >
-                        <div class="box-sm lost mr-1"></div>
-                        {{ numberWithCommas(nb_lkgd[0]) }}
-                      </b-col>
-                      <b-col
-                        class="d-flex align-items-center justify-content-center"
-                      >
-                        <div class="box-sm kept mr-1"></div>
-                        {{ numberWithCommas(nb_lkgd[1]) }}
-                      </b-col>
-                      <b-col
-                        class="d-flex align-items-center justify-content-center"
-                      >
-                        <div class="box-sm gained mr-1"></div>
-                        {{ numberWithCommas(nb_lkgd[2]) }}
-                      </b-col>
-                    </b-row>
-                  </b-col>
-                  <b-col v-if="species_selected != null" cols="12"
-                    ><small>
-                      SEQ: {{ sp_selected.SEQ }} | eBird:
-                      <span
-                        v-for="(i, u) in sp_selected.ebird"
-                        :key="'sp_selected-ebird-' + u"
-                        class="pr-1"
-                        ><a :href="i" target="_blank">link {{ u + 1 }}</a></span
-                      >
-                      | KBM:
-                      <span
-                        v-for="(i, u) in sp_selected.kbm"
-                        :key="'sp_selected-kbm-' + u"
-                        class="pr-1"
-                        ><a :href="i" target="_blank">link {{ u + 1 }}</a></span
-                      ></small
+                <b-alert show variant="info">
+                  <h4 class="alert-heading">Welcome!</h4>
+                  <p>
+                    Discover the change in bird distribution between 1980 and
+                    2020! The distributions are retrieved from
+                    <a
+                      href="https://doi.org/10.1201/9781315136264"
+                      target="_blank"
+                      >"A Bird Atlas of Kenya"</a
+                    >,
+                    <a href="https://ebird.org/region/KE" target="_blank"
+                      >eBird</a
                     >
+                    and
+                    <a href="https://kenya.birdmap.africa/" target="_blank"
+                      >Kenyan Bird Map</a
+                    >.
+                  </p>
+                  <hr />
+                  <p>You can explore the changes with these two views:</p>
+                  <ul>
+                    <li>
+                      <b-button
+                        :variant="
+                          mode_selected == 'Grid'
+                            ? 'primary'
+                            : 'outline-primary'
+                        "
+                        size="sm"
+                        >Grid</b-button
+                      >
+                      Click a square on the map to see the change in species
+                      diversity.
+                    </li>
+                    <li>
+                      <b-button
+                        :variant="
+                          mode_selected == 'Species'
+                            ? 'primary'
+                            : 'outline-primary'
+                        "
+                        size="sm"
+                        @click="mode_selected = 'Species'"
+                        >Species</b-button
+                      >
+                      Select a species to view the changes in its distribution.
+                    </li>
+                  </ul>
+                </b-alert>
+              </b-col>
+            </b-row>
+            <b-row
+              v-if="(mode_selected == 'Grid') & (gridFilter != '')"
+              class="overflow-auto"
+            >
+              <b-col cols="12">
+                <b-list-group class="small h-100">
+                  <b-list-group-item
+                    v-for="i in gridList"
+                    :key="i.Id"
+                    class="d-flex align-items-center py-1 px-3"
+                  >
+                    {{ i.SEQ }}. <b class="ml-1">{{ i.CommonName }}</b>
+                    <div
+                      class="box box-sm ml-auto"
+                      :class="{
+                        kept: i.cat == 'kept',
+                        gained: i.cat == 'gained',
+                        lost: i.cat == 'lost',
+                      }"
+                    ></div>
+                  </b-list-group-item>
+                </b-list-group>
+              </b-col>
+            </b-row>
+            <b-row
+              class="alert-dark px-0 pb-2 pt-2"
+              v-if="mode_selected == 'Species'"
+            >
+              <b-col>
+                Number of squares{{
+                  species_selected == null ? " for  all species" : ""
+                }}
+                <div class="kept d-flex w-100 p-0">
+                  <div
+                    class="lost py-2"
+                    :style="{
+                      width:
+                        (nb_lkgd[0] / (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) *
+                          100 +
+                        '%',
+                    }"
+                  ></div>
+                  <div
+                    class="gained py-2 ml-auto"
+                    :style="{
+                      width:
+                        (nb_lkgd[2] / (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) *
+                          100 +
+                        '%',
+                    }"
+                  ></div>
+                </div>
+                <b-row>
+                  <b-col
+                    class="d-flex align-items-center justify-content-center"
+                  >
+                    <div class="box-sm lost mr-1"></div>
+                    {{ numberWithCommas(nb_lkgd[0]) }}
+                  </b-col>
+                  <b-col
+                    class="d-flex align-items-center justify-content-center"
+                  >
+                    <div class="box-sm kept mr-1"></div>
+                    {{ numberWithCommas(nb_lkgd[1]) }}
+                  </b-col>
+                  <b-col
+                    class="d-flex align-items-center justify-content-center"
+                  >
+                    <div class="box-sm gained mr-1"></div>
+                    {{ numberWithCommas(nb_lkgd[2]) }}
                   </b-col>
                 </b-row>
               </b-col>
+              <b-col v-if="species_selected != null" cols="12"
+                ><small>
+                  SEQ: {{ sp_selected.SEQ }} | eBird:
+                  <span
+                    v-for="(i, u) in sp_selected.ebird"
+                    :key="'sp_selected-ebird-' + u"
+                    class="pr-1"
+                    ><a :href="i" target="_blank">link {{ u + 1 }}</a></span
+                  >
+                  | KBM:
+                  <span
+                    v-for="(i, u) in sp_selected.kbm"
+                    :key="'sp_selected-kbm-' + u"
+                    class="pr-1"
+                    ><a :href="i" target="_blank">link {{ u + 1 }}</a></span
+                  ></small
+                >
+              </b-col>
+            </b-row>
+            <b-row v-if="mode_selected == 'Species'">
               <b-col cols="12" class="my-2">
                 <v-select
                   v-model="species_selected"
@@ -272,6 +263,8 @@
              <b-col cols="12" class="text-center my-1 grey">
                 <small>--Or explore species in this table--</small>
               </b-col>-->
+            </b-row>
+            <b-row v-if="mode_selected == 'Species'">
               <b-col cols="8" class="text-right pr-0">
                 <small>Sort by:</small>
               </b-col>
@@ -282,6 +275,8 @@
                   size="sm"
                 ></b-form-select>
               </b-col>
+            </b-row>
+            <b-row v-if="mode_selected == 'Species'" class="overflow-auto">
               <b-col cols="12" class="mt-2">
                 <b-list-group class="small h-100">
                   <b-list-group-item
@@ -707,9 +702,6 @@ html,
 body {
   height: 100%;
   margin: 0;
-}
-.card-body {
-  overflow-y: auto;
 }
 .box-legend {
   width: 20px;
