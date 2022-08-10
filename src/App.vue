@@ -232,19 +232,19 @@
               </b-col>
               <b-col v-if="species_selected != null" cols="12"
                 ><small>
-                  SEQ: {{ sp_selected.SEQ }} | eBird:
+                  SEQ: {{ sp_selected.SEQ }} |
                   <span
                     v-for="(i, u) in sp_selected.ebird"
                     :key="'sp_selected-ebird-' + u"
                     class="pr-1"
-                    ><a :href="i" target="_blank">link {{ u + 1 }}</a></span
+                    ><a :href="i" target="_blank">eBird {{ sp_selected.ebird.length>1 ? u + 1 : "" }}</a></span
                   >
-                  | KBM:
+                  |
                   <span
                     v-for="(i, u) in sp_selected.kbm"
                     :key="'sp_selected-kbm-' + u"
                     class="pr-1"
-                    ><a :href="i" target="_blank">link {{ u + 1 }}</a></span
+                    ><a :href="i" target="_blank">KBM {{ sp_selected.kbm.length>1 ? u + 1 : ""}}</a></span
                   ></small
                 >
               </b-col>
@@ -640,7 +640,7 @@ export default {
           }
         }
         return {
-          weight: 0,
+          weight: 1,
           color: "#FFFFFF",
           opacity: opa,
           fillColor: fillColor,
@@ -664,7 +664,7 @@ export default {
         let o = feature.properties.SEQ_old.includes(sp);
         let fillColor = o ? (n ? "#d9ef8b" : "#d73027") : "#1a9850";
         return {
-          weight: 0,
+          weight: 1,
           color: "#FFFFFF",
           opacity: !n & !o ? 0 : opa,
           fillColor: fillColor,
