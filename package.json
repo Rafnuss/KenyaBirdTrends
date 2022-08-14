@@ -7,9 +7,6 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.36",
-    "@fortawesome/free-solid-svg-icons": "^5.15.4",
-    "@fortawesome/vue-fontawesome": "^2.0.8",
     "@vue/cli": "^5.0.8",
     "bootstrap": "^4.6.1",
     "bootstrap-vue": "^2.22.0",
@@ -30,5 +27,5 @@
     "type": "git",
     "url": "git+https://github.com/zoziologie/kenya_bird_atlas_viz.git"
   },
-  "title": "Kenya Bird Atlas Target"
+  "title": "Kenya Bird Atlas Viz"
 }

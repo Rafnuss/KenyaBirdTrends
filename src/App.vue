@@ -5,9 +5,10 @@
         <b-card class="h-100" no-body>
           <b-card-header header-tag="nav">
             <b-row align-v="center" class="no-gutters">
-              <b-col cols="auto">
+              <b-col cols="auto" class="d-flex">
                 <h2 class="d-none d-lg-block">Kenya Bird Atlas Viz</h2>
                 <h2 class="d-lg-none">KBAViz</h2>
+                <b-icon-info-circle-fill v-b-modal.modal-1 role="button"></b-icon-info-circle-fill>
               </b-col>
               <b-col>
                 <b-form-radio-group
@@ -376,6 +377,34 @@
         </l-map>
       </b-col>
     </b-row>
+    <b-modal id="modal-1" size="lg" ok-only>
+    <p>Welcome on the vizualization tools for the Kenya bird atlas comparison. This website illustrates the results of the comparison of the bird distribution map difference between 1970s-1980s and 2000s-2010s.</p>
+
+    <h4>Introduction</h4>
+    <p>to be written</p>
+
+    <h4>Data</h4>
+    <p>Three sources of data are used for this comparison:</p>
+    <ul>
+      <li>
+        <b>A Bird Atlas of Kenya (<a href="https://doi.org/10.1201/9781315136264">Lewis & Pomeroy, 1989</a>)</b> is the standard atlas book describing the status and distribution of 1065 species of bird in Kenya in 1970-1984. We first digitaized the quarter square degree (QSD) maps (Larsen et al. 2009) of each species as a GBIF repository 
+        <a href="https://doi.org/10.15468/2ga3wk"><img src="https://zenodo.org/badge/DOI/10.15468/2ga3wk.svg" alt="DOI:10.15468/2ga3wk"></a>.
+      </li>
+      <li>
+        <b>Kenya Bird Map</b> (<a href="https://kenya.birdmap.africa/">kenya.birdmap.africa</a>) is 
+      </li>
+      <li>
+        <b>eBird</b> (<a href="https://ebird.org/region/KE">ebird.org</a>) is 
+      </li>
+    </ul>
+
+    <h4>Method</h4>
+
+    <h4>Vizualization</h4>
+    <p>How to use?</p>
+    <h4>Acknoledgemnt</h4>
+    
+  </b-modal>
   </b-container>
 </template>
 
