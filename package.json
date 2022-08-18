@@ -1,5 +1,5 @@
 {
-  "name": "kenya_bird_atlas_viz",
+  "name": "KenyaBirdAtlasViz",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -22,10 +22,10 @@
   "devDependencies": {
     "@vue/cli-service": "~5.0.8"
   },
-  "homepage": "http://zoziologie.raphaelnussbaumer.com/kenya_bird_atlas_viz/",
+  "homepage": "http://zoziologie.raphaelnussbaumer.com/KenyaBirdAtlasViz/",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zoziologie/kenya_bird_atlas_viz.git"
+    "url": "git+https://github.com/zoziologie/KenyaBirdAtlasViz.git"
   },
   "title": "Kenya Bird Atlas Viz"
 }

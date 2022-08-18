@@ -8,7 +8,10 @@
               <b-col cols="auto" class="d-flex">
                 <h2 class="d-none d-lg-block">Kenya Bird Atlas Viz</h2>
                 <h2 class="d-lg-none">KBAViz</h2>
-                <b-icon-info-circle-fill v-b-modal.modal-1 role="button"></b-icon-info-circle-fill>
+                <b-icon-info-circle-fill
+                  v-b-modal.modal-1
+                  role="button"
+                ></b-icon-info-circle-fill>
               </b-col>
               <b-col>
                 <b-form-radio-group
@@ -238,14 +241,18 @@
                     v-for="(i, u) in sp_selected.ebird"
                     :key="'sp_selected-ebird-' + u"
                     class="pr-1"
-                    ><a :href="i" target="_blank">eBird {{ sp_selected.ebird.length>1 ? u + 1 : "" }}</a></span
+                    ><a :href="i" target="_blank"
+                      >eBird-{{ sp_selected.ebird.length > 1 ? u + 1 : "" }}</a
+                    ></span
                   >
                   |
                   <span
                     v-for="(i, u) in sp_selected.kbm"
                     :key="'sp_selected-kbm-' + u"
                     class="pr-1"
-                    ><a :href="i" target="_blank">KBM {{ sp_selected.kbm.length>1 ? u + 1 : ""}}</a></span
+                    ><a :href="i" target="_blank"
+                      >KBM {{ sp_selected.kbm.length > 1 ? u + 1 : "" }}</a
+                    ></span
                   ></small
                 >
               </b-col>
@@ -378,33 +385,85 @@
       </b-col>
     </b-row>
     <b-modal id="modal-1" size="lg" ok-only>
-    <p>Welcome on the vizualization tools for the Kenya bird atlas comparison. This website illustrates the results of the comparison of the bird distribution map difference between 1970s-1980s and 2000s-2010s.</p>
+      <p>
+        Welcome to this vizualisation tool for the Kenya bird atlas comparison.
+        This website illustrates the differences in bird distribution between
+        1970s-1980s and 2000s-2010s.
+      </p>
 
-    <h4>Introduction</h4>
-    <p>to be written</p>
+      <h4>
+        <b-icon-clipboard-data class="pr-1"></b-icon-clipboard-data>Data sources
+      </h4>
+      <ul>
+        <li>
+          <b>1970s-1980s</b> A Bird Atlas of Kenya (<a
+            href="https://doi.org/10.1201/9781315136264"
+            target="_blank"
+            >Lewis & Pomeroy, 1989</a
+          >), the reference book describing the status and distribution of 1 065
+          species of birds in Kenya for the period 1970-1984 at the quarter
+          square degree spatial resolution. We digitized the data for each
+          species maps (see
+          <a href="https://doi.org/10.15468/2ga3wk" target="_blank"
+            ><img
+              src="https://zenodo.org/badge/DOI/10.15468/2ga3wk.svg"
+              alt="DOI:10.15468/2ga3wk" /></a
+          >).
+        </li>
+        <li>
+          <b>2000s-2010s</b>
+          <ol>
+            <li>
+              Kenya Bird Map (KBM -
+              <a href="https://kenya.birdmap.africa/" target="_blank"
+                >kenya.birdmap.africa</a
+              >), leading the current efforts to establish a new bird atlas from
+              citizen scientists. We extracted presence information (in full or
+              add-hoc protocol) for each species at the pentad level and
+              upscaled each species map at the QSD resolution.
+            </li>
+            <li>
+              eBird (<a href="https://ebird.org/region/KE" target="_blank"
+                >ebird.org</a
+              >), the largest online bird database. We used all data entered in
+              Kenya since 2000 to produce species map presence at the QSD
+              resolution.
+            </li>
+          </ol>
+        </li>
+      </ul>
 
-    <h4>Data</h4>
-    <p>Three sources of data are used for this comparison:</p>
-    <ul>
-      <li>
-        <b>A Bird Atlas of Kenya (<a href="https://doi.org/10.1201/9781315136264">Lewis & Pomeroy, 1989</a>)</b> is the standard atlas book describing the status and distribution of 1065 species of bird in Kenya in 1970-1984. We first digitaized the quarter square degree (QSD) maps (Larsen et al. 2009) of each species as a GBIF repository 
-        <a href="https://doi.org/10.15468/2ga3wk"><img src="https://zenodo.org/badge/DOI/10.15468/2ga3wk.svg" alt="DOI:10.15468/2ga3wk"></a>.
-      </li>
-      <li>
-        <b>Kenya Bird Map</b> (<a href="https://kenya.birdmap.africa/">kenya.birdmap.africa</a>) is 
-      </li>
-      <li>
-        <b>eBird</b> (<a href="https://ebird.org/region/KE">ebird.org</a>) is 
-      </li>
-    </ul>
+      <h4><b-icon-map class="pr-1"></b-icon-map>How to read these maps</h4>
 
-    <h4>Method</h4>
+      <p>
+        Take care when interpreting these maps! Only presence is considered, so
+        there is no difference between the square holding 1 or 10 000
+        invididuals. This means that where there used to be multiple breeding
+        pairs in the past, even if there is only one juvenile seen today, the
+        territory is considered "kept".
+      </p>
+      <p>
+        Also note that coverage is not consistent across all years, so lost
+        species could be due to the absence of observers in this square.
+      </p>
 
-    <h4>Vizualization</h4>
-    <p>How to use?</p>
-    <h4>Acknoledgemnt</h4>
-    
-  </b-modal>
+      <h4><b-icon-binoculars class="pr-1"></b-icon-binoculars>Go birding!</h4>
+      <p>
+        Help us extend today's coverage - a wide number of squares have not been
+        birded in recent years... To target those areas, go to Grid mode, and
+        check out the squares that have most lost species!
+      </p>
+      <p></p>
+      <h4><b-icon-envelope class="pr-1"></b-icon-envelope>Contact</h4>
+      <p>
+        This work was done by Raphaël Nussbaumer , Sidney Shema, Sikenykeny
+        Kennedy and Colin Jackson.
+      </p>
+      <a href="https://github.com/Zoziologie/KenyaBirdAtlasViz" target="_blank"
+        ><b-icon-github class="h5 mb-0 pr-1"></b-icon-github
+        >/Zoziologie/KenyaBirdAtlasViz</a
+      >
+    </b-modal>
   </b-container>
 </template>
 
