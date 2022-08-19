@@ -242,7 +242,7 @@
                     :key="'sp_selected-ebird-' + u"
                     class="pr-1"
                     ><a :href="i" target="_blank"
-                      >eBird-{{ sp_selected.ebird.length > 1 ? u + 1 : "" }}</a
+                      >eBird{{ sp_selected.ebird.length > 1 ? "-" + u + 1 : "" }}</a
                     ></span
                   >
                   |
