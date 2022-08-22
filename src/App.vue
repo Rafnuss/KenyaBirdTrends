@@ -386,9 +386,13 @@
     </b-row>
     <b-modal id="modal-1" size="lg" ok-only>
       <p>
-        Welcome to this vizualisation tool for the Kenya bird atlas comparison.
-        This website illustrates the differences in bird distribution between
-        1970s-1980s and 2000s-2010s.
+        Welcome to the vizualisation tool for the
+        <a
+          href="https://github.com/Rafnuss/KenyaAtlasComparison"
+          target="_blank"
+          >Kenya bird atlas comparison project</a
+        >. This project is studying the differences in bird distribution between
+        the periods 1970s-1980s and 2000s-2010s.
       </p>
 
       <h4>
@@ -400,15 +404,15 @@
             href="https://doi.org/10.1201/9781315136264"
             target="_blank"
             >Lewis & Pomeroy, 1989</a
-          >), the reference book describing the status and distribution of 1 065
-          species of birds in Kenya for the period 1970-1984 at the quarter
-          square degree spatial resolution. We digitized the data for each
-          species maps (see
+          >) is the reference book describing the status and distribution of 1
+          065 species of birds in Kenya for the period 1970-1984 at the quarter
+          square degree spatial resolution. This digitized version of the book
+          is published as GBIF dataset
           <a href="https://doi.org/10.15468/2ga3wk" target="_blank"
             ><img
               src="https://zenodo.org/badge/DOI/10.15468/2ga3wk.svg"
               alt="DOI:10.15468/2ga3wk" /></a
-          >).
+          >.
         </li>
         <li>
           <b>2000s-2010s</b>
@@ -417,16 +421,16 @@
               Kenya Bird Map (KBM -
               <a href="https://kenya.birdmap.africa/" target="_blank"
                 >kenya.birdmap.africa</a
-              >), leading the current efforts to establish a new bird atlas from
+              >) leads the current efforts to establish a new bird atlas from
               citizen scientists. We extracted presence information (in full or
-              add-hoc protocol) for each species at the pentad level and
-              upscaled each species map at the QSD resolution.
+              ad-hoc protocol) for each species at the pentad level and upscaled
+              each species map at the QSD resolution.
             </li>
             <li>
               eBird (<a href="https://ebird.org/region/KE" target="_blank"
                 >ebird.org</a
-              >), the largest online bird database. We used all data entered in
-              Kenya since 2000 to produce species map presence at the QSD
+              >) is the largest online bird database. We used all data entered
+              in Kenya since 2000 to produce species map presence at the QSD
               resolution.
             </li>
           </ol>
@@ -443,8 +447,8 @@
         territory is considered "kept".
       </p>
       <p>
-        Also note that coverage is not consistent across all years, so lost
-        species could be due to the absence of observers in this square.
+        Also note that coverage is not consistent between the two periods, so
+        species lost could be due to the absence of observers in this square.
       </p>
 
       <h4><b-icon-binoculars class="pr-1"></b-icon-binoculars>Go birding!</h4>
