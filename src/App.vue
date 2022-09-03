@@ -1,7 +1,7 @@
 <template>
   <b-container fluid class="h-100 d-flex flex-column p-0">
     <b-row class="flex-grow-1 no-gutters">
-      <b-col md="4" fluid="md" class="vh-100">
+      <b-col md="4" fluid="md" class="vh-100" v-if="sidebar">
         <b-card class="h-100" no-body>
           <b-card-header header-tag="nav">
             <b-row align-v="center" class="no-gutters">
@@ -13,15 +13,22 @@
                   role="button"
                 ></b-icon-info-circle-fill>
               </b-col>
-              <b-col>
+              <b-col class="text-right">
                 <b-form-radio-group
                   v-model="mode_selected"
                   :options="mode_options"
                   buttons
                   button-variant="outline-primary"
                   size="sm"
-                  class="float-right"
                 ></b-form-radio-group>
+                <b-button
+                  size="sm"
+                  variant="primary"
+                  class="ml-2 d-lg-none"
+                  @click="sidebar = false"
+                >
+                  <b-icon icon="map-fill"></b-icon>
+                </b-button>
               </b-col>
             </b-row>
           </b-card-header>
@@ -242,7 +249,9 @@
                     :key="'sp_selected-ebird-' + u"
                     class="pr-1"
                     ><a :href="i" target="_blank"
-                      >eBird{{ sp_selected.ebird.length > 1 ? "-" + u + 1 : "" }}</a
+                      >eBird{{
+                        sp_selected.ebird.length > 1 ? "-" + u + 1 : ""
+                      }}</a
                     ></span
                   >
                   |
@@ -337,7 +346,7 @@
           </b-card-body>
         </b-card>
       </b-col>
-      <b-col class="flex-grow-1">
+      <b-col class="flex-grow-1" @shown="reloadMap()">
         <l-map :bounds="bounds" ref="map">
           <l-tile-layer
             v-for="tileProvider in tileProviders"
@@ -349,6 +358,11 @@
             layer-type="base"
           />
           <l-control-layers />
+          <l-control position="topleft" class="d-lg-none">
+            <b-button size="sm" variant="primary" @click="sidebar = true">
+              <b-icon icon="list"></b-icon>
+            </b-button>
+          </l-control>
           <l-control
             position="bottomleft"
             class="
@@ -556,6 +570,7 @@ export default {
   },
   data() {
     return {
+      sidebar: true,
       mode_options: ["Grid", "Species"],
       mode_selected: "Grid",
       checkbox_lost: true,
@@ -787,6 +802,22 @@ export default {
   },
   mounted() {},
   created() {},
+  watch: {
+    sidebar: function (val) {
+      if (!val) {
+        setTimeout(() => {
+          this.$refs.map.mapObject.invalidateSize();
+
+          this.$refs.map.mapObject.fitBounds(
+            latLngBounds([
+              [5.615985, 43.50585],
+              [-5.353521, 32.958984],
+            ])
+          );
+        }, "10");
+      }
+    },
+  },
 };
 </script>
 <style>
