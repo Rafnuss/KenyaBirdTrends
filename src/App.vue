@@ -15,7 +15,7 @@
               </b-col>
               <b-col class="text-right">
                 <b-form-radio-group
-                  v-model="mode_selected"
+                  v-model="mode"
                   :options="mode_options"
                   buttons
                   button-variant="outline-primary"
@@ -34,13 +34,13 @@
           </b-card-header>
           <b-card-body class="flex-column d-flex">
             <b-row
-              v-if="mode_selected == 'Grid'"
+              v-if="mode == 'Grid'"
               class="alert-dark px-0 pb-2 pt-2"
               align-v="center"
             >
               <b-col>
                 Number of
-                {{ gridFilter == "" ? "squares for  all " : "" }}species
+                {{ grid == "" ? "squares for  all " : "" }}species
                 <div class="kept d-flex w-100 p-0">
                   <div
                     class="lost py-2"
@@ -82,14 +82,14 @@
                   </b-col>
                 </b-row>
               </b-col>
-              <b-col v-if="gridFilter != ''" cols="auto">
+              <b-col v-if="grid != ''" cols="auto">
                 <h4>
                   <b-badge variant="primary" class="d-flex align-items-center"
-                    >{{ gridFilter }}
+                    >{{ grid }}
                     <b-button
                       class="close ml-1 text-white primary"
                       aria-label="Close"
-                      @click="gridFilter = ''"
+                      @click="grid = ''"
                     >
                       <span aria-hidden="true">&times;</span>
                     </b-button>
@@ -97,7 +97,7 @@
                 </h4>
               </b-col>
             </b-row>
-            <b-row v-if="mode_selected == 'Grid'">
+            <b-row v-if="mode == 'Grid'">
               <b-col cols="auto">Filter: </b-col>
               <b-col cols="auto">
                 <b-form-checkbox id="checkbox-lost" v-model="checkbox_lost"
@@ -115,7 +115,7 @@
                 ></b-col
               >
             </b-row>
-            <b-row v-if="(mode_selected == 'Grid') & (gridFilter == '')">
+            <b-row v-if="(mode == 'Grid') & (grid == '')">
               <b-col cols="12">
                 <b-alert show variant="info">
                   <h4 class="alert-heading">Welcome!</h4>
@@ -141,9 +141,7 @@
                     <li>
                       <b-button
                         :variant="
-                          mode_selected == 'Grid'
-                            ? 'primary'
-                            : 'outline-primary'
+                          mode == 'Grid' ? 'primary' : 'outline-primary'
                         "
                         size="sm"
                         >Grid</b-button
@@ -154,12 +152,10 @@
                     <li>
                       <b-button
                         :variant="
-                          mode_selected == 'Species'
-                            ? 'primary'
-                            : 'outline-primary'
+                          mode == 'Species' ? 'primary' : 'outline-primary'
                         "
                         size="sm"
-                        @click="mode_selected = 'Species'"
+                        @click="mode = 'Species'"
                         >Species</b-button
                       >
                       Select a species to view the changes in its distribution.
@@ -168,10 +164,7 @@
                 </b-alert>
               </b-col>
             </b-row>
-            <b-row
-              v-if="(mode_selected == 'Grid') & (gridFilter != '')"
-              class="overflow-auto"
-            >
+            <b-row v-if="(mode == 'Grid') & (grid != '')" class="overflow-auto">
               <b-col cols="12">
                 <b-list-group class="small h-100">
                   <b-list-group-item
@@ -192,13 +185,10 @@
                 </b-list-group>
               </b-col>
             </b-row>
-            <b-row
-              class="alert-dark px-0 pb-2 pt-2"
-              v-if="mode_selected == 'Species'"
-            >
+            <b-row class="alert-dark px-0 pb-2 pt-2" v-if="mode == 'Species'">
               <b-col>
                 Number of squares{{
-                  species_selected == null ? " for  all species" : ""
+                  species == null ? " for  all species" : ""
                 }}
                 <div class="kept d-flex w-100 p-0">
                   <div
@@ -241,7 +231,7 @@
                   </b-col>
                 </b-row>
               </b-col>
-              <b-col v-if="species_selected != null" cols="12"
+              <b-col v-if="species != null" cols="12"
                 ><small>
                   SEQ: {{ sp_selected.SEQ }} |
                   <span
@@ -250,7 +240,7 @@
                     class="pr-1"
                     ><a :href="i" target="_blank"
                       >eBird{{
-                        sp_selected.ebird.length > 1 ? "-" + u + 1 : ""
+                        sp_selected.ebird.length > 1 ? "-" + (u + 1) : ""
                       }}</a
                     ></span
                   >
@@ -266,10 +256,10 @@
                 >
               </b-col>
             </b-row>
-            <b-row v-if="mode_selected == 'Species'">
+            <b-row v-if="mode == 'Species'">
               <b-col cols="12" class="my-2">
                 <v-select
-                  v-model="species_selected"
+                  v-model="species"
                   :options="species_options"
                   :reduce="(x) => x.SEQ"
                   label="CommonName"
@@ -281,7 +271,7 @@
                 <small>--Or explore species in this table--</small>
               </b-col>-->
             </b-row>
-            <b-row v-if="mode_selected == 'Species'">
+            <b-row v-if="mode == 'Species'">
               <b-col cols="8" class="text-right pr-0">
                 <small>Sort by:</small>
               </b-col>
@@ -293,20 +283,20 @@
                 ></b-form-select>
               </b-col>
             </b-row>
-            <b-row v-if="mode_selected == 'Species'" class="overflow-auto">
+            <b-row v-if="mode == 'Species'" class="overflow-auto">
               <b-col cols="12" class="mt-2">
                 <b-list-group class="small h-100">
                   <b-list-group-item
                     v-for="i in speciesList"
                     :key="i.Id"
                     class="d-flex align-items-center py-1 px-3"
-                    :active="i.SEQ == species_selected"
-                    @click="species_selected = i.SEQ"
+                    :active="i.SEQ == species"
+                    @click="species = i.SEQ"
                     :action="true"
                     role="button"
                   >
                     {{ i.SEQ }}. <b class="ml-1">{{ i.CommonName }}</b>
-                    <!--<b-form-radio v-model="species_selected" :value="i.SEQ" class="ml-1"></b-form-radio>-->
+                    <!--<b-form-radio v-model="species" :value="i.SEQ" class="ml-1"></b-form-radio>-->
                     <div
                       class="bar kept"
                       v-b-tooltip.right.hover.html="
@@ -365,11 +355,7 @@
           </l-control>
           <l-control
             position="bottomleft"
-            class="
-              leaflet-control-layers
-              leaflet-control-layers-expanded
-              leaflet-control
-            "
+            class="leaflet-control-layers leaflet-control-layers-expanded leaflet-control"
           >
             <label for="range-1">Opacity</label>
             <b-form-input
@@ -383,14 +369,14 @@
           </l-control>
 
           <l-geo-json
-            v-if="mode_selected == 'Grid'"
+            v-if="mode == 'Grid'"
             :geojson="geojson"
             :options-style="geojson_grid_styleFunction"
             :options="geojson_grid_options"
             @click="geojson_grid_clickGeoJsonFunction"
           ></l-geo-json>
           <l-geo-json
-            v-if="mode_selected == 'Species'"
+            v-if="mode == 'Species'"
             :geojson="geojson"
             :options-style="geojson_species_styleFunction"
             :options="geojson_species_options"
@@ -572,12 +558,12 @@ export default {
     return {
       sidebar: true,
       mode_options: ["Grid", "Species"],
-      mode_selected: "Grid",
+      mode: "Grid",
       checkbox_lost: true,
       checkbox_kept: true,
       checkbox_gained: true,
       species_options: sp_old,
-      species_selected: null,
+      species: null,
       filter_options: [
         "Taxonomy",
         "# Lost",
@@ -590,7 +576,7 @@ export default {
         "% Difference",
       ],
       filter_selected: "Taxonomy",
-      gridFilter: "",
+      grid: "",
       bounds: latLngBounds([
         [5.615985, 43.50585],
         [-5.353521, 32.958984],
@@ -631,20 +617,24 @@ export default {
     numberWithCommas(x) {
       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
+    updateURL() {
+      let qp = new URLSearchParams();
+      if (this.species !== "") qp.set("species", this.species);
+      if (this.mode !== "") qp.set("mode", this.mode);
+      if (this.grid !== "") qp.set("grid", this.grid);
+      history.replaceState(null, null, "?" + qp.toString());
+    },
   },
   computed: {
     nb_lkgd() {
-      if ((this.mode_selected == "Grid") & (this.gridFilter != "")) {
+      if ((this.mode == "Grid") & (this.grid != "")) {
         let f = geojson.features.filter((y) => {
-          return y.properties.Sq == this.gridFilter;
+          return y.properties.Sq == this.grid;
         });
         return f[0].properties.nb_lkgd;
-      } else if (
-        (this.mode_selected == "Species") &
-        (this.species_selected != null)
-      ) {
+      } else if ((this.mode == "Species") & (this.species != null)) {
         let sp = sp_old.filter((y) => {
-          return y.SEQ == this.species_selected;
+          return y.SEQ == this.species;
         });
         return sp[0].nb_lkgd;
       } else {
@@ -652,8 +642,9 @@ export default {
       }
     },
     gridList() {
+      this.updateURL();
       let f = geojson.features.filter((y) => {
-        return y.properties.Sq == this.gridFilter;
+        return y.properties.Sq == this.grid;
       });
       if (f.length == 0) {
         return [];
@@ -696,10 +687,11 @@ export default {
       }
     },
     sp_selected() {
-      if (this.species_selected == null) {
+      this.updateURL();
+      if (this.species == null) {
         return null;
       } else {
-        let sp = sp_old.filter((x) => x.SEQ == this.species_selected)[0];
+        let sp = sp_old.filter((x) => x.SEQ == this.species)[0];
         return {
           SEQ: sp.SEQ,
           ebird: sp.ebird.map((x) => "https://ebird.org/species/" + x + "/KE"),
@@ -735,7 +727,7 @@ export default {
     },
     geojson_grid_styleFunction() {
       let opa = this.opacity_value;
-      let sq = this.gridFilter;
+      let sq = this.grid;
       return (feature, layer) => {
         let fillColor = colorscale_grid(feature.properties.nb_lkgd[3]);
         if (sq != "") {
@@ -757,15 +749,15 @@ export default {
     },
     geojson_grid_clickGeoJsonFunction() {
       return (e) => {
-        if (this.mode_selected == "Grid") {
+        if (this.mode == "Grid") {
           let Sq = e.sourceTarget.feature.properties.Sq;
-          this.gridFilter = this.gridFilter == Sq ? "" : Sq;
+          this.grid = this.grid == Sq ? "" : Sq;
         }
       };
     },
     geojson_species_styleFunction() {
       let opa = this.opacity_value;
-      let sp = this.species_selected;
+      let sp = this.species;
       return (feature, layer) => {
         let n = feature.properties.SEQ_new.includes(sp);
         let o = feature.properties.SEQ_old.includes(sp);
@@ -780,7 +772,7 @@ export default {
       };
     },
     geojson_species_options() {
-      let sp = this.species_selected;
+      let sp = this.species;
       return {
         onEachFeature: (feature, layer) => {
           let n = feature.properties.SEQ_new.includes(sp);
@@ -801,7 +793,15 @@ export default {
     },
   },
   mounted() {},
-  created() {},
+  created() {
+    let qp = new URLSearchParams(window.location.search);
+    let species = qp.get("species");
+    if (species) this.species = species;
+    let mode = qp.get("mode");
+    if (mode) this.mode = mode;
+    let grid = qp.get("grid");
+    if (grid) this.grid = grid;
+  },
   watch: {
     sidebar: function (val) {
       if (!val) {
