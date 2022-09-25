@@ -9,7 +9,5 @@ import vSelect from 'vue-select'
 Vue.component('v-select', vSelect)
 
 new Vue({
-    el: '#app',
-    template: '<App/>',
-    components: { App },
-})
+    render: (h) => h(App),
+}).$mount("#app");
