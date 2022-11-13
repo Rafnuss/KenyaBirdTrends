@@ -816,7 +816,7 @@ export default {
   created() {
     let qp = new URLSearchParams(window.location.search);
     let species = qp.get("species");
-    if (species) this.species = species;
+    if (species) this.species = Number(species);
     let mode = qp.get("mode");
     if (mode) this.mode = mode;
     let grid = qp.get("grid");
