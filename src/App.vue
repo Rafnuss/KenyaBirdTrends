@@ -371,15 +371,6 @@
             position="bottomleft"
             class="leaflet-control-layers leaflet-control-layers-expanded leaflet-control"
           >
-            <label for="range-1">Opacity</label>
-            <b-form-input
-              id="range-1"
-              v-model="opacity_value"
-              type="range"
-              min="0"
-              max="1"
-              step="0.01"
-            ></b-form-input>
           </l-control>
 
           <!--<l-geo-json
@@ -645,7 +636,6 @@ export default {
             "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community",
         },*/,
       ],
-      opacity_value: 0.9,
     };
   },
   methods: {
@@ -745,7 +735,7 @@ export default {
         )
         .map((x) => {
           x.style = {};
-          x.style.fillOpacity = parseFloat(this.opacity_value);
+          x.style.fillOpacity = 0.9;
           x.style.visible = true;
           let sz_dir = 1;
           if (this.mode == "Grid") {
@@ -771,7 +761,6 @@ export default {
               x.style.opacity = 0.2;
               sz_dir = -1;
             }
-            //x.style.fillOpacity = !n & !o ? 0 : parseFloat(this.opacity_value);
           }
           x.style.opacity = x.style.fillOpacity;
           x.style.radius = (40000 / 2) * (1 + sz_dir * 3 * x.properties.corr);
