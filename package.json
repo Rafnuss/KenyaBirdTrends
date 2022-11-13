@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "bootstrap": "^4.6.1",
-    "bootstrap-vue": "^2.22.0",
+    "bootstrap-vue": "^2.23.1",
     "chroma-js": "^2.4.2",
     "leaflet": "^1.8.0",
     "vue": "^2.7.10",
