@@ -246,7 +246,9 @@
                     :key="'sp_selected-kbm-' + u"
                     class="pr-1"
                     ><a :href="i" target="_blank"
-                      >KBM {{ sp_selected.kbm.length > 1 ? u + 1 : "" }}</a
+                      >KBM{{
+                        sp_selected.kbm.length > 1 ? "-" + (u + 1) : ""
+                      }}</a
                     ></span
                   ></small
                 >
