@@ -382,7 +382,7 @@
             ></b-form-input>
           </l-control>
 
-          <l-geo-json
+          <!--<l-geo-json
             v-if="mode == 'Grid'"
             :geojson="geojson"
             :options-style="geojson_grid_styleFunction"
@@ -394,7 +394,21 @@
             :geojson="geojson"
             :options-style="geojson_species_styleFunction"
             :options="geojson_species_options"
-          ></l-geo-json>
+          ></l-geo-json>-->
+          <l-circle
+            v-for="c in map_data_filtered"
+            :key="c.properties.Sq"
+            :lat-lng="c.geometry.coordinates"
+            :radius="c.style.radius"
+            :color="c.style.color"
+            :opacity="c.style.opacity"
+            :fillColor="c.style.fillColor"
+            :fillOpacity="c.style.fillOpacity"
+            :weight="c.style.weight"
+            :visible="c.style.visible"
+            :options="{ Sq: c.properties.Sq }"
+            @click="clickCircle"
+          />
         </l-map>
       </b-col>
     </b-row>
@@ -515,13 +529,14 @@ import {
   LControlLayers,
   LControl,
   LPopup,
-  LGeoJson,
+  LCircle,
 } from "vue2-leaflet";
 
 import chroma from "chroma-js";
-import geojson from "./assets/grid_target.json";
-import sp_old0 from "./assets/sp_old.json";
+import map_data from "./assets/map_data.json";
+import sp_old from "./assets/sp_old.json";
 
+/*
 const sp_old = sp_old0
   .filter((sp) => sp.SEQ != null)
   .filter((sp) => sp.MergedSEQ == null)
@@ -536,7 +551,7 @@ const sp_old = sp_old0
       x.nb_lkgd[3] / sum,
     ];
     return x;
-  });
+  });*/
 
 const init_lkgd = sp_old.reduce(
   (acc, sp) => {
@@ -549,11 +564,11 @@ const init_lkgd = sp_old.reduce(
   [0, 0, 0, 0]
 );
 
-let min = geojson.features.reduce(
+let min = map_data.features.reduce(
   (acc, x) => Math.min(x.properties.nb_lkgd[3], acc),
   10000
 );
-let max = geojson.features.reduce(
+let max = map_data.features.reduce(
   (acc, x) => Math.max(x.properties.nb_lkgd[3], acc),
   -10000
 );
@@ -566,7 +581,7 @@ export default {
     LControlLayers,
     LControl,
     LPopup,
-    LGeoJson,
+    LCircle,
   },
   data() {
     return {
@@ -595,7 +610,7 @@ export default {
         [5.615985, 43.50585],
         [-5.353521, 32.958984],
       ]),
-      geojson: geojson,
+      map_data: map_data.features,
       tileProviders: [
         {
           name: "Mapbox.Streets",
@@ -630,7 +645,7 @@ export default {
             "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community",
         },*/,
       ],
-      opacity_value: 0.8,
+      opacity_value: 0.9,
     };
   },
   methods: {
@@ -648,7 +663,7 @@ export default {
   computed: {
     nb_lkgd() {
       if ((this.mode == "Grid") & (this.grid != "")) {
-        let f = geojson.features.filter((y) => {
+        let f = this.map_data.filter((y) => {
           return y.properties.Sq == this.grid;
         });
         return f[0].properties.nb_lkgd;
@@ -663,7 +678,7 @@ export default {
     },
     gridList() {
       this.updateURL();
-      let f = geojson.features.filter((y) => {
+      let f = this.map_data.filter((y) => {
         return y.properties.Sq == this.grid;
       });
       if (f.length == 0) {
@@ -719,76 +734,60 @@ export default {
         };
       }
     },
-    geojson_grid_options() {
-      return {
-        onEachFeature: (feature, layer) => {
-          let prop = feature.properties;
-          /*layer.bindTooltip(
-            "<b>Grid:</b> " +
-              prop.Sq
-              "<br>" +
-              "<br>" +
-              "Number of species:" +
-              "<b>Lost:</b> " +
-              prop.nb_lkgd[0] +
-              "<br>" +
-              "<b>Kept:</b> " +
-              prop.nb_lkgd[1] +
-              "<br>" +
-              "<b>Gained:</b> " +
-              prop.nb_lkgd[2] +
-              "<br>" +
-              "<b>Difference:</b> " +
-              prop.nb_lkgd[3],
-            { permanent: false, sticky: true }
-          );*/
-        },
-      };
-    },
-    geojson_grid_styleFunction() {
-      let opa = this.opacity_value;
-      let sq = this.grid;
-      return (feature, layer) => {
-        let fillColor = colorscale_grid(feature.properties.nb_lkgd[3]);
-        if (sq != "") {
-          if (sq != feature.properties.Sq) {
-            //fillColor = fillColor.darken(2)
-            opa = parseFloat(this.opacity_value) / 3;
-          } else {
-            opa = 1;
+    map_data_filtered() {
+      let m = this.map_data
+        .filter(
+          (x) =>
+            !(
+              (x.properties.coverage_old == "0") &
+              (x.properties.coverage_new == 0)
+            )
+        )
+        .map((x) => {
+          x.style = {};
+          x.style.fillOpacity = parseFloat(this.opacity_value);
+          x.style.visible = true;
+          let sz_dir = 1;
+          if (this.mode == "Grid") {
+            x.style.fillColor = colorscale_grid(x.properties.nb_lkgd[3]).hex();
+            if (this.grid) {
+              x.style.fillOpacity = this.grid == x.properties.Sq ? 1 : 0.3;
+            }
+          } else if (this.mode == "Species") {
+            let sp = this.species;
+            let n = x.properties.SEQ_new.includes(sp);
+            let o = x.properties.SEQ_old.includes(sp);
+            if (o & n) {
+              x.style.fillColor = "#d9ef8b";
+            } else if (o & !n) {
+              x.style.fillColor = "#d73027";
+              sz_dir = -1;
+            } else if (!o & n) {
+              x.style.fillColor = "#1a9850";
+            } else {
+              x.style.visible = x.properties.mask;
+              x.style.fillColor = "#000000";
+              x.style.fillOpacity = 0.2;
+              x.style.opacity = 0.2;
+              sz_dir = -1;
+            }
+            //x.style.fillOpacity = !n & !o ? 0 : parseFloat(this.opacity_value);
           }
-        }
-        return {
-          weight: 1,
-          color: "#FFFFFF",
-          opacity: opa,
-          fillColor: fillColor,
-          fillOpacity: opa,
-        };
-      };
+          x.style.opacity = x.style.fillOpacity;
+          x.style.radius = (40000 / 2) * (1 + sz_dir * 3 * x.properties.corr);
+          x.style.radius = x.properties.mask ? x.style.radius : 7000;
+          x.style.color = "#2e2e2e";
+          x.style.weight = 1;
+          return x;
+        });
+      return m;
     },
-    geojson_grid_clickGeoJsonFunction() {
+    clickCircle() {
       return (e) => {
         if (this.mode == "Grid") {
-          let Sq = e.sourceTarget.feature.properties.Sq;
+          let Sq = e.sourceTarget.options.Sq;
           this.grid = this.grid == Sq ? "" : Sq;
         }
-      };
-    },
-    geojson_species_styleFunction() {
-      let opa = this.opacity_value;
-      let sp = this.species;
-      return (feature, layer) => {
-        let n = feature.properties.SEQ_new.includes(sp);
-        let o = feature.properties.SEQ_old.includes(sp);
-        let fillColor = o ? (n ? "#d9ef8b" : "#d73027") : "#1a9850";
-        return {
-          weight: 1,
-          color: "#FFFFFF",
-          opacity: !n & !o ? 0 : opa,
-          fillColor: fillColor,
-          fillOpacity: !n & !o ? 0 : opa,
-        };
       };
     },
     geojson_species_options() {
