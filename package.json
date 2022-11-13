@@ -19,7 +19,7 @@
     "bootstrap-vue": "^2.22.0",
     "chroma-js": "^2.4.2",
     "leaflet": "^1.8.0",
-    "vue": "^2.7.10",
+    "vue": "^2.7.14",
     "vue-select": "^3.20.0",
     "vue2-leaflet": "^2.7.1",
     "vue2-leaflet-markercluster": "^3.1.0"
