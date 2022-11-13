@@ -8,10 +8,6 @@
               <b-col cols="auto" class="d-flex">
                 <h2 class="d-none d-lg-block">Kenya Bird Atlas Viz</h2>
                 <h2 class="d-lg-none">KBAViz</h2>
-                <b-icon-info-circle-fill
-                  v-b-modal.modal-1
-                  role="button"
-                ></b-icon-info-circle-fill>
               </b-col>
               <b-col class="text-right">
                 <b-form-radio-group
@@ -334,6 +330,22 @@
               </b-col>
             </b-row>
           </b-card-body>
+          <b-card-footer>
+            <div
+              class="d-flex align-items-center w-100 justify-content-between"
+            >
+              <b-icon-info-circle-fill
+                v-b-modal.modal-1
+                role="button"
+              ></b-icon-info-circle-fill>
+              <a
+                href="https://github.com/Rafnuss/KenyaBirdAtlasViz/"
+                target="_blank"
+              >
+                <b-icon-github role="button"></b-icon-github
+              ></a>
+            </div>
+          </b-card-footer>
         </b-card>
       </b-col>
       <b-col class="flex-grow-1" @shown="reloadMap()">
