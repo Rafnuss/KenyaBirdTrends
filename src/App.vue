@@ -362,9 +362,86 @@
             </b-button>
           </l-control>
           <l-control
-            position="bottomleft"
-            class="leaflet-control-layers leaflet-control-layers-expanded leaflet-control"
+            position="bottomright"
+            class="leaflet-control-layers leaflet-control-layers-expanded leaflet-control px-3 py-2"
+            style="width: 240px"
           >
+            <div v-if="mode == 'Grid'" class="mb-1">
+              <b>Change in number of species</b>
+              <div
+                class="legend-gradient"
+                style="width: 100%; height: 15px"
+              ></div>
+              <div
+                class="d-flex justify-content-between"
+                style="font-size: 9px"
+              >
+                <span>-200</span>
+                <span> 0 </span>
+                <span>200</span>
+              </div>
+            </div>
+            <div class="mb-1">
+              <b v-if="mode == 'Grid'">Change in effort</b>
+              <span v-if="mode == 'Species'">
+                <b>Confidence</b>
+                <b-button
+                  size="sm"
+                  class="p-0"
+                  variant="link"
+                  v-b-tooltip.top.hover
+                  title="Relative confidence in the change display. For instance, a red small circle indicates an unlikely loss of the species, while a large green circle indicates an very likley gain. The confidence is based on the difference of effort (i.e. time spend) between the old and new atlas. Thus, for instance, a likely gain is determined by a gain of the species while the effort on this grid square has reduced."
+                  ><b-icon-question-circle-fill> </b-icon-question-circle-fill>
+                </b-button>
+              </span>
+              <div class="d-flex align-items-center justify-content-between">
+                <CircleTemplate size="12" />
+                <CircleTemplate size="15" />
+                <CircleTemplate size="18" />
+                <CircleTemplate size="21" />
+                <CircleTemplate size="24" />
+              </div>
+              <div
+                v-if="mode == 'Grid'"
+                class="d-flex justify-content-between"
+                style="font-size: 9px"
+              >
+                <span>Reduced</span>
+                <span>Increased</span>
+              </div>
+              <div
+                v-if="mode == 'Species'"
+                class="d-flex justify-content-between"
+                style="font-size: 9px"
+              >
+                <span>Low</span>
+                <span>High</span>
+              </div>
+            </div>
+
+            <div class="d-flex align-items-center">
+              <CircleTemplate size="7" opacity="0.7" />
+              <span class="ml-1">Poor coverage </span>
+              <b-checkbox
+                class="ml-1"
+                v-model="displayPoorCoverage"
+                switch
+              ></b-checkbox>
+              <b-button
+                size="sm"
+                class="p-0 ml-1"
+                variant="link"
+                v-b-tooltip.top.hover
+                title="Grid square with either a coverage <30% in the old atlas or <24hr cummulative duration of observation in the new atlas"
+                ><b-icon-question-circle-fill> </b-icon-question-circle-fill
+              ></b-button>
+            </div>
+
+            <div class="d-flex align-items-center" v-if="mode == 'Species'">
+              <CircleTemplate size="18" opacity="0.3" />
+              <span class="ml-1 mr-2">Never reported</span>
+              <b-checkbox v-model="displayNeverReported" switch></b-checkbox>
+            </div>
           </l-control>
 
           <!--<l-geo-json
@@ -492,6 +569,8 @@ import "leaflet/dist/leaflet.css";
 
 import "vue-select/dist/vue-select.css";
 
+import CircleTemplate from "./circle.vue";
+
 const RdYlGn = [
   "#a50026",
   "#d73027",
@@ -549,6 +628,7 @@ const init_lkgd = sp_old.reduce(
   [0, 0, 0, 0]
 );
 
+/*
 let min = map_data.features.reduce(
   (acc, x) => Math.min(x.properties.nb_lkgd[3], acc),
   10000
@@ -557,7 +637,8 @@ let max = map_data.features.reduce(
   (acc, x) => Math.max(x.properties.nb_lkgd[3], acc),
   -10000
 );
-const colorscale_grid = chroma.scale("RdYlGn").domain([min, max]);
+*/
+const colorscale_grid = chroma.scale("RdYlGn").domain([-200, 200]);
 
 export default {
   components: {
@@ -567,6 +648,7 @@ export default {
     LControl,
     LPopup,
     LCircle,
+    CircleTemplate,
   },
   data() {
     return {
@@ -595,6 +677,8 @@ export default {
         [5.615985, 43.50585],
         [-5.353521, 32.958984],
       ]),
+      displayPoorCoverage: true,
+      displayNeverReported: true,
       map_data: map_data.features,
       tileProviders: [
         {
@@ -733,6 +817,7 @@ export default {
           x.style.visible = true;
           let sz_dir = 1;
           if (this.mode == "Grid") {
+            sz_dir = -1;
             x.style.fillColor = colorscale_grid(x.properties.nb_lkgd[3]).hex();
             if (this.grid) {
               x.style.fillOpacity = this.grid == x.properties.Sq ? 1 : 0.3;
@@ -749,7 +834,9 @@ export default {
             } else if (!o & n) {
               x.style.fillColor = "#1a9850";
             } else {
-              x.style.visible = x.properties.mask;
+              x.style.visible = this.displayNeverReported
+                ? x.properties.mask
+                : false;
               x.style.fillColor = "#000000";
               x.style.fillOpacity = 0.2;
               x.style.opacity = 0.2;
@@ -758,7 +845,14 @@ export default {
           }
           x.style.opacity = x.style.fillOpacity;
           x.style.radius = (40000 / 2) * (1 + sz_dir * 3 * x.properties.corr);
-          x.style.radius = x.properties.mask ? x.style.radius : 7000;
+          if (!x.properties.mask) {
+            x.style.visible = this.displayPoorCoverage
+              ? x.style.visible
+              : false;
+            x.style.radius = 7000;
+            x.style.opacity = 0.4;
+            x.style.fillOpacity = 0.4;
+          }
           x.style.color = "#2e2e2e";
           x.style.weight = 1;
           return x;
@@ -881,5 +975,34 @@ body {
 }
 .custom-checkbox #checkbox-gained ~ .custom-control-label::before {
   border: 1px solid #1a9850;
+}
+.legend-gradient {
+  background: linear-gradient(
+    90deg,
+    #a50026 0%,
+    #be1b27 5%,
+    #d73027 10%,
+    #f46d43 20%,
+    #f98f4e 25%,
+    #fdae61 30%,
+    #fec873 35%,
+    #fee08b 40%,
+    #ffffbf 50%,
+    #d9ef8b 60%,
+    #a6d96a 70%,
+    #66bd63 80%,
+    #45aa59 85%,
+    #1a9850 90%,
+    #006837 100%
+  );
+}
+.legend-gradient-3 {
+  background: linear-gradient(
+    90deg,
+    #a50026 34%,
+    #ffffbf 34%,
+    #ffffbf 66%,
+    #006837 66%
+  );
 }
 </style>
