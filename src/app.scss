@@ -1,0 +1,96 @@
+// Define variable defaults
+$primary: #204e4a;
+$dark: #303633;
+
+$lost: #d73027;
+$kept: #ffffbf;
+$gained: #45aa59;
+//https://coolors.co/d73027-ffffbf-45aa59-204e4a-404e7c
+
+// Then import Bootstrap and BootstrapVue SCSS files (order is important)
+@import "node_modules/bootstrap/scss/bootstrap.scss";
+@import "node_modules/bootstrap-vue/src/index.scss";
+//import "bootstrap/dist/css/bootstrap.css";
+//import "bootstrap/dist/css/bootstrap.css";
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+.box-sm {
+  width: 0.875rem;
+  height: 0.875rem;
+  border: 0.5px solid rgba(0, 0, 0, 1);
+  -webkit-border-radius: 0.875rem;
+  -moz-border-radius: 0.875rem;
+  border-radius: 0.875rem;
+}
+.sublegend {
+  margin-left: 3px;
+  font-size: 0.75rem;
+  color: #6a6a6a;
+}
+.bar {
+  width: 100px;
+  height: 0.875rem;
+  margin-left: auto;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.bar-left {
+  float: left;
+  height: 0.875rem;
+}
+.bar-right {
+  float: right;
+  height: 0.875rem;
+}
+.lost {
+  background: $lost;
+}
+.kept {
+  background: $kept;
+}
+.gained {
+  background: $gained;
+}
+.custom-checkbox #checkbox-lost:checked ~ .custom-control-label::before {
+  background-color: $lost !important;
+}
+.custom-checkbox #checkbox-lost ~ .custom-control-label::before {
+  border: 1px solid $lost;
+}
+.custom-checkbox #checkbox-kept:checked ~ .custom-control-label::before {
+  background-color: $kept !important;
+}
+.custom-checkbox #checkbox-kept ~ .custom-control-label::before {
+  border: 1px solid $kept;
+}
+.custom-checkbox #checkbox-gained:checked ~ .custom-control-label::before {
+  background-color: $gained !important;
+}
+.custom-checkbox #checkbox-gained ~ .custom-control-label::before {
+  border: 1px solid $gained;
+}
+.legend-gradient {
+  background: linear-gradient(
+    90deg,
+    #a50026 0%,
+    #be1b27 5%,
+    $lost 10%,
+    #f46d43 20%,
+    #f98f4e 25%,
+    #fdae61 30%,
+    #fec873 35%,
+    #fee08b 40%,
+    #ffffbf 50%,
+    #d9ef8b 60%,
+    #a6d96a 70%,
+    #66bd63 80%,
+    #45aa59 85%,
+    #1a9850 90%,
+    #006837 100%
+  );
+}

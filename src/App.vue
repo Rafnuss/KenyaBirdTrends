@@ -6,12 +6,13 @@
           <b-card-header header-tag="nav">
             <b-row align-v="center" class="no-gutters">
               <b-col cols="auto" class="d-flex">
-                <h2 class="d-none d-lg-block">Kenya Bird Atlas Viz</h2>
+                <h2 class="d-none d-lg-block mb-0">Kenya Bird Atlas Viz</h2>
                 <h2 class="d-lg-none">KBAViz</h2>
               </b-col>
               <b-col>
                 <b-button
                   class="ml-3"
+                  variant="outline-primary"
                   size="sm"
                   v-b-modal.modal-1
                   role="button"
@@ -73,18 +74,21 @@
                   >
                     <div class="box-sm lost mr-1"></div>
                     {{ numberWithCommas(nb_lkgd[0]) }}
+                    <span class="sublegend"> lost</span>
                   </b-col>
                   <b-col
                     class="d-flex align-items-center justify-content-center"
                   >
                     <div class="box-sm kept mr-1"></div>
                     {{ numberWithCommas(nb_lkgd[1]) }}
+                    <span class="sublegend"> kept</span>
                   </b-col>
                   <b-col
                     class="d-flex align-items-center justify-content-center"
                   >
                     <div class="box-sm gained mr-1"></div>
                     {{ numberWithCommas(nb_lkgd[2]) }}
+                    <span class="sublegend"> gained</span>
                   </b-col>
                 </b-row>
               </b-col>
@@ -123,7 +127,7 @@
             </b-row>
             <b-row v-if="(mode == 'Grid') & (grid == '')">
               <b-col cols="12">
-                <b-alert show variant="info">
+                <b-alert show variant="light" class="mt-3">
                   <h4 class="alert-heading">Welcome!</h4>
                   <p>
                     Discover the change in bird distribution between 1980 and
@@ -191,6 +195,59 @@
                 </b-list-group>
               </b-col>
             </b-row>
+            <b-row v-if="mode == 'Species'">
+              <b-col cols="12" class="my-2">
+                <v-select
+                  v-model="species"
+                  :options="species_options"
+                  :reduce="(x) => x.SEQ"
+                  label="CommonName"
+                  placeholder="Select a species"
+                ></v-select>
+              </b-col>
+            </b-row>
+            <b-row
+              class="px-0 pb-2 pt-2"
+              v-if="(mode == 'Species') & (species != null)"
+            >
+              <b-col>
+                {{ sp_selected.CommonName }} (<i>{{
+                  sp_selected.ScientificName
+                }}</i
+                >)
+                <img
+                  :src="getIUCNLogo(sp_selected.IUCN)"
+                  v-if="['CR', 'DD', 'EN', 'VU'].includes(sp_selected.IUCN)"
+                  v-bind:alt="sp_selected.IUCN"
+                  class="ml-1"
+                  style="width: 1rem"
+                />
+              </b-col>
+              <b-col> Family: {{ sp_selected.Family }} </b-col>
+              <b-col
+                >See distribution map on:
+                <span
+                  v-for="(i, u) in sp_selected.ebird"
+                  :key="'sp_selected-ebird-' + u"
+                  class="pr-1"
+                >
+                  <a :href="i" target="_blank"
+                    >eBird{{
+                      sp_selected.ebird.length > 1 ? "-" + (u + 1) : ""
+                    }}
+                  </a>
+                </span>
+                <span
+                  v-for="(i, u) in sp_selected.kbm"
+                  :key="'sp_selected-kbm-' + u"
+                  class="pr-1"
+                >
+                  <a :href="i" target="_blank"
+                    >KBM{{ sp_selected.kbm.length > 1 ? "-" + (u + 1) : "" }}
+                  </a>
+                </span>
+              </b-col>
+            </b-row>
             <b-row class="alert-dark px-0 pb-2 pt-2" v-if="mode == 'Species'">
               <b-col>
                 Number of squares{{
@@ -221,63 +278,25 @@
                     class="d-flex align-items-center justify-content-center"
                   >
                     <div class="box-sm lost mr-1"></div>
-                    {{ numberWithCommas(nb_lkgd[0]) }}
+                    {{ numberWithCommas(nb_lkgd[0])
+                    }}<span class="sublegend"> lost</span>
                   </b-col>
                   <b-col
                     class="d-flex align-items-center justify-content-center"
                   >
                     <div class="box-sm kept mr-1"></div>
-                    {{ numberWithCommas(nb_lkgd[1]) }}
+                    {{ numberWithCommas(nb_lkgd[1])
+                    }}<span class="sublegend"> kept</span>
                   </b-col>
                   <b-col
                     class="d-flex align-items-center justify-content-center"
                   >
                     <div class="box-sm gained mr-1"></div>
-                    {{ numberWithCommas(nb_lkgd[2]) }}
+                    {{ numberWithCommas(nb_lkgd[2])
+                    }}<span class="sublegend"> gained</span>
                   </b-col>
                 </b-row>
               </b-col>
-              <b-col v-if="species != null" cols="12"
-                ><small>
-                  SEQ: {{ sp_selected.SEQ }} |
-                  <span
-                    v-for="(i, u) in sp_selected.ebird"
-                    :key="'sp_selected-ebird-' + u"
-                    class="pr-1"
-                    ><a :href="i" target="_blank"
-                      >eBird{{
-                        sp_selected.ebird.length > 1 ? "-" + (u + 1) : ""
-                      }}</a
-                    ></span
-                  >
-                  |
-                  <span
-                    v-for="(i, u) in sp_selected.kbm"
-                    :key="'sp_selected-kbm-' + u"
-                    class="pr-1"
-                    ><a :href="i" target="_blank"
-                      >KBM{{
-                        sp_selected.kbm.length > 1 ? "-" + (u + 1) : ""
-                      }}</a
-                    ></span
-                  ></small
-                >
-              </b-col>
-            </b-row>
-            <b-row v-if="mode == 'Species'">
-              <b-col cols="12" class="my-2">
-                <v-select
-                  v-model="species"
-                  :options="species_options"
-                  :reduce="(x) => x.SEQ"
-                  label="CommonName"
-                  placeholder="Select a species"
-                ></v-select>
-              </b-col>
-              <!--<b-col cols="12"><hr /></b-col>
-             <b-col cols="12" class="text-center my-1 grey">
-                <small>--Or explore species in this table--</small>
-              </b-col>-->
             </b-row>
             <b-row v-if="mode == 'Species'">
               <b-col cols="8" class="text-right pr-0">
@@ -304,7 +323,13 @@
                     role="button"
                   >
                     {{ i.SEQ }}. <b class="ml-1">{{ i.CommonName }}</b>
-                    <!--<b-form-radio v-model="species" :value="i.SEQ" class="ml-1"></b-form-radio>-->
+                    <img
+                      :src="getIUCNLogo(i.IUCN)"
+                      v-if="['CR', 'DD', 'EN', 'VU'].includes(i.IUCN)"
+                      v-bind:alt="i.IUCN"
+                      class="ml-1"
+                      style="width: 1rem"
+                    />
                     <div
                       class="bar kept"
                       v-b-tooltip.right.hover.html="
@@ -382,12 +407,22 @@
               </div>
             </div>
             <div class="mb-1">
-              <b v-if="mode == 'Grid'">Change in effort</b>
+              <span v-if="mode == 'Grid'">
+                <b>Change in effort</b>
+                <!--<b-button
+                  size="sm"
+                  class="p-0 ml-1"
+                  variant="link"
+                  v-b-tooltip.top.hover
+                  title="Change in effort is estimated by "
+                  ><b-icon-question-circle-fill> </b-icon-question-circle-fill>
+                </b-button>-->
+              </span>
               <span v-if="mode == 'Species'">
                 <b>Confidence</b>
                 <b-button
                   size="sm"
-                  class="p-0"
+                  class="p-0 ml-1"
                   variant="link"
                   v-b-tooltip.top.hover
                   title="Relative confidence in the change display. For instance, a red small circle indicates an unlikely loss of the species, while a large green circle indicates an very likley gain. The confidence is based on the difference of effort (i.e. time spend) between the old and new atlas. Thus, for instance, a likely gain is determined by a gain of the species while the effort on this grid square has reduced."
@@ -429,7 +464,7 @@
               ></b-checkbox>
               <b-button
                 size="sm"
-                class="p-0 ml-1"
+                class="p-0"
                 variant="link"
                 v-b-tooltip.top.hover
                 title="Grid square with either a coverage <30% in the old atlas or <24hr cummulative duration of observation in the new atlas"
@@ -562,28 +597,14 @@
 </template>
 
 <script>
-import "bootstrap/dist/css/bootstrap.css";
-import "bootstrap-vue/dist/bootstrap-vue.css";
+//import "./app.scss";
+import "./app.scss";
 
 import "leaflet/dist/leaflet.css";
 
 import "vue-select/dist/vue-select.css";
 
 import CircleTemplate from "./circle.vue";
-
-const RdYlGn = [
-  "#a50026",
-  "#d73027",
-  "#f46d43",
-  "#fdae61",
-  "#fee08b",
-  "#ffffbf",
-  "#d9ef8b",
-  "#a6d96a",
-  "#66bd63",
-  "#1a9850",
-  "#006837",
-];
 
 import { latLngBounds } from "leaflet";
 
@@ -600,23 +621,6 @@ import chroma from "chroma-js";
 import map_data from "./assets/map_data.json";
 import sp_old from "./assets/sp_old.json";
 
-/*
-const sp_old = sp_old0
-  .filter((sp) => sp.SEQ != null)
-  .filter((sp) => sp.MergedSEQ == null)
-  .map((x) => {
-    x.ebird = x.ebird == null ? [] : x.ebird.split(",");
-    x.kbm = x.kbm == null ? [] : x.kbm.split(",");
-    let sum = x.nb_lkgd[0] + x.nb_lkgd[1] + x.nb_lkgd[2];
-    x.per_lkgd = [
-      x.nb_lkgd[0] / sum,
-      x.nb_lkgd[1] / sum,
-      x.nb_lkgd[2] / sum,
-      x.nb_lkgd[3] / sum,
-    ];
-    return x;
-  });*/
-
 const init_lkgd = sp_old.reduce(
   (acc, sp) => {
     acc[0] = acc[0] + sp.nb_lkgd[0];
@@ -628,16 +632,6 @@ const init_lkgd = sp_old.reduce(
   [0, 0, 0, 0]
 );
 
-/*
-let min = map_data.features.reduce(
-  (acc, x) => Math.min(x.properties.nb_lkgd[3], acc),
-  10000
-);
-let max = map_data.features.reduce(
-  (acc, x) => Math.max(x.properties.nb_lkgd[3], acc),
-  -10000
-);
-*/
 const colorscale_grid = chroma.scale("RdYlGn").domain([-200, 200]);
 
 export default {
@@ -717,6 +711,9 @@ export default {
     };
   },
   methods: {
+    getIUCNLogo(IUCN) {
+      return "/iucn_" + IUCN + ".png";
+    },
     numberWithCommas(x) {
       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
@@ -795,11 +792,11 @@ export default {
         return null;
       } else {
         let sp = sp_old.filter((x) => x.SEQ == this.species)[0];
-        return {
-          SEQ: sp.SEQ,
-          ebird: sp.ebird.map((x) => "https://ebird.org/species/" + x + "/KE"),
-          kbm: sp.kbm.map((x) => "https://kenya.birdmap.africa/species/" + x),
-        };
+        sp.ebird = sp.ebird.map(
+          (x) => "https://ebird.org/species/" + x + "/KE"
+        );
+        sp.kbm = sp.kbm.map((x) => "https://kenya.birdmap.africa/species/" + x);
+        return sp;
       }
     },
     map_data_filtered() {
@@ -827,12 +824,12 @@ export default {
             let n = x.properties.SEQ_new.includes(sp);
             let o = x.properties.SEQ_old.includes(sp);
             if (o & n) {
-              x.style.fillColor = "#d9ef8b";
+              x.style.fillColor = "#ffffbf";
             } else if (o & !n) {
               x.style.fillColor = "#d73027";
               sz_dir = -1;
             } else if (!o & n) {
-              x.style.fillColor = "#1a9850";
+              x.style.fillColor = "#45aa59";
             } else {
               x.style.visible = this.displayNeverReported
                 ? x.properties.mask
@@ -916,93 +913,3 @@ export default {
   },
 };
 </script>
-<style>
-html,
-body {
-  height: 100%;
-  margin: 0;
-}
-.box-legend {
-  width: 20px;
-  height: 20px;
-  margin: 5px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-}
-.box-sm {
-  width: 0.875rem;
-  height: 0.875rem;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-}
-.bar {
-  width: 100px;
-  height: 0.875rem;
-  margin-left: auto;
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-}
-.bar-left {
-  float: left;
-  height: 0.875rem;
-}
-.bar-right {
-  float: right;
-  height: 0.875rem;
-}
-.lost {
-  background: #d73027;
-}
-.kept {
-  background: #d9ef8b;
-}
-.gained {
-  background: #1a9850;
-}
-.custom-checkbox #checkbox-lost:checked ~ .custom-control-label::before {
-  background-color: #d73027 !important;
-}
-.custom-checkbox #checkbox-lost ~ .custom-control-label::before {
-  border: 1px solid #d73027;
-}
-.custom-checkbox #checkbox-kept:checked ~ .custom-control-label::before {
-  background-color: #d9ef8b !important;
-}
-.custom-checkbox #checkbox-kept ~ .custom-control-label::before {
-  border: 1px solid #d9ef8b;
-}
-.custom-checkbox #checkbox-gained:checked ~ .custom-control-label::before {
-  background-color: #1a9850 !important;
-}
-.custom-checkbox #checkbox-gained ~ .custom-control-label::before {
-  border: 1px solid #1a9850;
-}
-.legend-gradient {
-  background: linear-gradient(
-    90deg,
-    #a50026 0%,
-    #be1b27 5%,
-    #d73027 10%,
-    #f46d43 20%,
-    #f98f4e 25%,
-    #fdae61 30%,
-    #fec873 35%,
-    #fee08b 40%,
-    #ffffbf 50%,
-    #d9ef8b 60%,
-    #a6d96a 70%,
-    #66bd63 80%,
-    #45aa59 85%,
-    #1a9850 90%,
-    #006837 100%
-  );
-}
-.legend-gradient-3 {
-  background: linear-gradient(
-    90deg,
-    #a50026 34%,
-    #ffffbf 34%,
-    #ffffbf 66%,
-    #006837 66%
-  );
-}
-</style>
