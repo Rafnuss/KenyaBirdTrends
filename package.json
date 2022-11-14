@@ -20,19 +20,19 @@
     "chroma-js": "^2.4.2",
     "leaflet": "^1.8.0",
     "vue": "^2.7.10",
-    "vue-select": "^3.20.0",
+    "vue-multiselect": "^2.1.6",
     "vue2-leaflet": "^2.7.1",
     "vue2-leaflet-markercluster": "^3.1.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^1.6.1",
-    "vite": "^2.5.4",
-    "vite-plugin-vue2": "1.9.0",
     "@vue/eslint-config-prettier": "^7.0.0",
     "eslint": "^8.1.0",
-    "sass": "^1.26.5",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-vue": "^9.4.0",
-    "prettier": "^2.2.1"
+    "prettier": "^2.2.1",
+    "sass": "^1.26.5",
+    "vite": "^2.5.4",
+    "vite-plugin-vue2": "1.9.0"
   }
 }
