@@ -24,6 +24,7 @@
                 <b-form-radio-group
                   v-model="mode"
                   :options="mode_options"
+                  @change="updateURL()"
                   buttons
                   button-variant="outline-primary"
                   size="sm"
@@ -214,7 +215,7 @@
                     placeholder="Select a species"
                     :custom-label="selectLabel"
                     track-by="SEQ"
-                    @select="updateURL"
+                    @input="updateURL()"
                     :show-labels="false"
                   >
                     <template slot="option" slot-scope="props">
@@ -340,7 +341,10 @@
                       :key="i.Id"
                       class="d-flex align-items-center py-1 px-3"
                       :active="species == null ? false : i.SEQ == species.SEQ"
-                      @click="species = i"
+                      @click="
+                        species = i;
+                        updateURL();
+                      "
                       :action="true"
                       role="button"
                     >
@@ -764,9 +768,9 @@ export default {
     },
     updateURL() {
       let qp = new URLSearchParams();
-      if (this.species != null) qp.set("species", this.species.SEQ);
       if ((this.mode != "") & (this.mode != null)) qp.set("mode", this.mode);
       if ((this.grid != "") & (this.grid != null)) qp.set("grid", this.grid);
+      if (this.species != null) qp.set("species", this.species.SEQ);
       history.replaceState(null, null, "?" + qp.toString());
     },
     selectLabel({ CommonName, ScientificName }) {
