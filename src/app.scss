@@ -1,9 +1,8 @@
 // Define variable defaults
 $primary: #204e4a;
-$dark: #303633;
 
 $lost: #d73027;
-$kept: #ffffbf;
+$kept: #fee08b;
 $gained: #45aa59;
 //https://coolors.co/d73027-ffffbf-45aa59-204e4a-404e7c
 
@@ -14,7 +13,8 @@ $gained: #45aa59;
 //import "bootstrap/dist/css/bootstrap.css";
 
 html,
-body {
+body,
+.container {
   height: 100%;
   margin: 0;
 }
@@ -93,4 +93,15 @@ body {
     #1a9850 90%,
     #006837 100%
   );
+}
+.btn-xs {
+  font-size: 0.7rem;
+  padding: 0.2rem 0.3rem;
+  line-height: 1;
+}
+.multiselect__option--highlight {
+  background: $primary;
+}
+.multiselect__option--selected.multiselect__option--highlight {
+  background: #6a6a6a;
 }
