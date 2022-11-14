@@ -453,29 +453,39 @@
                 <span>High</span>
               </div>
             </div>
-
-            <div class="d-flex align-items-center">
-              <CircleTemplate size="7" opacity="0.7" />
-              <span class="ml-1">Poor coverage </span>
-              <b-checkbox
-                class="ml-1"
-                v-model="displayPoorCoverage"
-                switch
-              ></b-checkbox>
+            <div>
+              <b>Coverage</b>
               <b-button
                 size="sm"
-                class="p-0"
+                class="p-0 ml-1"
                 variant="link"
                 v-b-tooltip.top.hover
-                title="Grid square with either a coverage <30% in the old atlas or <24hr cummulative duration of observation in the new atlas"
-                ><b-icon-question-circle-fill> </b-icon-question-circle-fill
-              ></b-button>
-            </div>
+                title="Coverage is considered good only if it had a coverage of >30% in the old atlas and at least 24hr cummulative duration of observation in the new atlas."
+                ><b-icon-question-circle-fill> </b-icon-question-circle-fill>
+              </b-button>
+              <div class="d-flex align-items-center">
+                <div style="width: 25px" class="d-flex">
+                  <CircleTemplate size="7" opacity="0.7" class="m-auto" />
+                </div>
+                <span class="ml-1">Poor coverage </span>
+                <b-checkbox
+                  class="ml-1"
+                  v-model="displayPoorCoverage"
+                  switch
+                ></b-checkbox>
+              </div>
 
-            <div class="d-flex align-items-center" v-if="mode == 'Species'">
-              <CircleTemplate size="18" opacity="0.3" />
-              <span class="ml-1 mr-2">Never reported</span>
-              <b-checkbox v-model="displayNeverReported" switch></b-checkbox>
+              <div class="d-flex align-items-center" v-if="mode == 'Species'">
+                <div style="width: 25px" class="d-flex">
+                  <CircleTemplate size="18" opacity="0.3" class="m-auto" />
+                </div>
+                <span class="ml-1">Good coverage</span>
+                <b-checkbox
+                  class="ml-1"
+                  v-model="displayGoodCoverage"
+                  switch
+                ></b-checkbox>
+              </div>
             </div>
           </l-control>
 
@@ -679,7 +689,7 @@ export default {
         [-5.353521, 32.958984],
       ]),
       displayPoorCoverage: true,
-      displayNeverReported: true,
+      displayGoodCoverage: true,
       map_data: map_data.features,
       iucn: {
         CR: iucn_CR,
@@ -844,7 +854,7 @@ export default {
             } else if (!o & n) {
               x.style.fillColor = "#45aa59";
             } else {
-              x.style.visible = this.displayNeverReported
+              x.style.visible = this.displayGoodCoverage
                 ? x.properties.mask
                 : false;
               x.style.fillColor = "#000000";
