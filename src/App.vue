@@ -216,8 +216,8 @@
                 }}</i
                 >)
                 <img
-                  :src="getIUCNLogo(sp_selected.IUCN)"
                   v-if="['CR', 'DD', 'EN', 'VU'].includes(sp_selected.IUCN)"
+                  :src="iucn[sp_selected.IUCN]"
                   v-bind:alt="sp_selected.IUCN"
                   class="ml-1"
                   style="width: 1rem"
@@ -324,8 +324,8 @@
                   >
                     {{ i.SEQ }}. <b class="ml-1">{{ i.CommonName }}</b>
                     <img
-                      :src="getIUCNLogo(i.IUCN)"
                       v-if="['CR', 'DD', 'EN', 'VU'].includes(i.IUCN)"
+                      :src="iucn[i.IUCN]"
                       v-bind:alt="i.IUCN"
                       class="ml-1"
                       style="width: 1rem"
@@ -621,6 +621,13 @@ import chroma from "chroma-js";
 import map_data from "./assets/map_data.json";
 import sp_old from "./assets/sp_old.json";
 
+import iucn_CR from "./assets/iucn_CR.png";
+import iucn_VU from "./assets/iucn_VU.png";
+import iucn_DD from "./assets/iucn_DD.png";
+import iucn_EN from "./assets/iucn_EN.png";
+import iucn_NT from "./assets/iucn_NT.png";
+import iucn_LC from "./assets/iucn_LC.png";
+
 const init_lkgd = sp_old.reduce(
   (acc, sp) => {
     acc[0] = acc[0] + sp.nb_lkgd[0];
@@ -674,6 +681,14 @@ export default {
       displayPoorCoverage: true,
       displayNeverReported: true,
       map_data: map_data.features,
+      iucn: {
+        CR: iucn_CR,
+        EN: iucn_EN,
+        NT: iucn_NT,
+        LC: iucn_LC,
+        DD: iucn_DD,
+        VU: iucn_VU,
+      },
       tileProviders: [
         {
           name: "Mapbox.Streets",
@@ -711,9 +726,6 @@ export default {
     };
   },
   methods: {
-    getIUCNLogo(IUCN) {
-      return "/iucn_" + IUCN + ".png";
-    },
     numberWithCommas(x) {
       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
