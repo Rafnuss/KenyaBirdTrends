@@ -39,333 +39,356 @@
               </b-col>
             </b-row>
           </b-card-header>
-          <b-card-body class="flex-column d-flex">
-            <b-row
-              v-if="mode == 'Grid'"
-              class="alert-dark px-0 pb-2 pt-2"
-              align-v="center"
-            >
-              <b-col>
-                Number of
-                {{ grid == "" ? "squares for  all " : "" }}species
-                <div class="kept d-flex w-100 p-0">
-                  <div
-                    class="lost py-2"
-                    :style="{
-                      width:
-                        (nb_lkgd[0] / (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) *
-                          100 +
-                        '%',
-                    }"
-                  ></div>
-                  <div
-                    class="gained py-2 ml-auto"
-                    :style="{
-                      width:
-                        (nb_lkgd[2] / (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) *
-                          100 +
-                        '%',
-                    }"
-                  ></div>
-                </div>
-                <b-row>
-                  <b-col
-                    class="d-flex align-items-center justify-content-center"
-                  >
-                    <div class="box-sm lost mr-1"></div>
-                    {{ numberWithCommas(nb_lkgd[0]) }}
-                    <span class="sublegend"> lost</span>
-                  </b-col>
-                  <b-col
-                    class="d-flex align-items-center justify-content-center"
-                  >
-                    <div class="box-sm kept mr-1"></div>
-                    {{ numberWithCommas(nb_lkgd[1]) }}
-                    <span class="sublegend"> kept</span>
-                  </b-col>
-                  <b-col
-                    class="d-flex align-items-center justify-content-center"
-                  >
-                    <div class="box-sm gained mr-1"></div>
-                    {{ numberWithCommas(nb_lkgd[2]) }}
-                    <span class="sublegend"> gained</span>
-                  </b-col>
-                </b-row>
-              </b-col>
-              <b-col v-if="grid != ''" cols="auto">
-                <h4>
-                  <b-badge variant="primary" class="d-flex align-items-center"
-                    >{{ grid }}
-                    <b-button
-                      class="close ml-1 text-white primary"
-                      aria-label="Close"
-                      @click="grid = ''"
-                    >
-                      <span aria-hidden="true">&times;</span>
-                    </b-button>
-                  </b-badge>
-                </h4>
-              </b-col>
-            </b-row>
-            <b-row v-if="mode == 'Grid'">
-              <b-col cols="auto">Filter: </b-col>
-              <b-col cols="auto">
-                <b-form-checkbox id="checkbox-lost" v-model="checkbox_lost"
-                  >Lost</b-form-checkbox
-                ></b-col
-              >
-              <b-col cols="auto">
-                <b-form-checkbox id="checkbox-kept" v-model="checkbox_kept"
-                  >Kept</b-form-checkbox
-                ></b-col
-              >
-              <b-col cols="auto">
-                <b-form-checkbox id="checkbox-gained" v-model="checkbox_gained"
-                  >Gained</b-form-checkbox
-                ></b-col
-              >
-            </b-row>
-            <b-row v-if="(mode == 'Grid') & (grid == '')">
-              <b-col cols="12">
-                <b-alert show variant="light" class="mt-3">
-                  <h4 class="alert-heading">Welcome!</h4>
-                  <p>
-                    Discover the change in bird distribution between 1980 and
-                    2020! The distributions are retrieved from
-                    <a
-                      href="https://doi.org/10.1201/9781315136264"
-                      target="_blank"
-                      >"A Bird Atlas of Kenya"</a
-                    >,
-                    <a href="https://ebird.org/region/KE" target="_blank"
-                      >eBird</a
-                    >
-                    and
-                    <a href="https://kenya.birdmap.africa/" target="_blank"
-                      >Kenyan Bird Map</a
-                    >.
-                  </p>
-                  <hr />
-                  <p>You can explore the changes with these two views:</p>
-                  <ul>
-                    <li>
-                      <b-button
-                        :variant="
-                          mode == 'Grid' ? 'primary' : 'outline-primary'
-                        "
-                        size="sm"
-                        >Grid</b-button
-                      >
-                      Click a square on the map to see the change in species
-                      diversity.
-                    </li>
-                    <li>
-                      <b-button
-                        :variant="
-                          mode == 'Species' ? 'primary' : 'outline-primary'
-                        "
-                        size="sm"
-                        @click="mode = 'Species'"
-                        >Species</b-button
-                      >
-                      Select a species to view the changes in its distribution.
-                    </li>
-                  </ul>
-                </b-alert>
-              </b-col>
-            </b-row>
-            <b-row v-if="(mode == 'Grid') & (grid != '')" class="overflow-auto">
-              <b-col cols="12">
-                <b-list-group class="small h-100">
-                  <b-list-group-item
-                    v-for="i in gridList"
-                    :key="i.Id"
-                    class="d-flex align-items-center py-1 px-3"
-                  >
-                    {{ i.SEQ }}. <b class="ml-1">{{ i.CommonName }}</b>
+          <b-card-body class="px-0">
+            <b-container class="overflow-auto" v-if="mode == 'Grid'">
+              <b-row class="px-0 py-2 my-2" align-v="center">
+                <b-col>
+                  Number of
+                  {{ grid == "" ? "squares for  all " : "" }}species
+                  <div class="kept d-flex w-100 p-0">
                     <div
-                      class="box box-sm ml-auto"
-                      :class="{
-                        kept: i.cat == 'kept',
-                        gained: i.cat == 'gained',
-                        lost: i.cat == 'lost',
+                      class="lost py-2"
+                      :style="{
+                        width:
+                          (nb_lkgd[0] /
+                            (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) *
+                            100 +
+                          '%',
                       }"
                     ></div>
-                  </b-list-group-item>
-                </b-list-group>
-              </b-col>
-            </b-row>
-            <b-row v-if="mode == 'Species'">
-              <b-col cols="12" class="my-2">
-                <v-select
+                    <div
+                      class="gained py-2 ml-auto"
+                      :style="{
+                        width:
+                          (nb_lkgd[2] /
+                            (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) *
+                            100 +
+                          '%',
+                      }"
+                    ></div>
+                  </div>
+                  <b-row>
+                    <b-col
+                      class="d-flex align-items-center justify-content-center"
+                    >
+                      <div class="box-sm lost mr-1"></div>
+                      {{ numberWithCommas(nb_lkgd[0]) }}
+                      <span class="sublegend"> lost</span>
+                    </b-col>
+                    <b-col
+                      class="d-flex align-items-center justify-content-center"
+                    >
+                      <div class="box-sm kept mr-1"></div>
+                      {{ numberWithCommas(nb_lkgd[1]) }}
+                      <span class="sublegend"> kept</span>
+                    </b-col>
+                    <b-col
+                      class="d-flex align-items-center justify-content-center"
+                    >
+                      <div class="box-sm gained mr-1"></div>
+                      {{ numberWithCommas(nb_lkgd[2]) }}
+                      <span class="sublegend"> gained</span>
+                    </b-col>
+                  </b-row>
+                </b-col>
+                <b-col v-if="grid != ''" cols="auto">
+                  <h4>
+                    <b-badge variant="primary" class="d-flex align-items-center"
+                      >{{ grid }}
+                      <b-button
+                        class="close ml-1 text-white primary"
+                        aria-label="Close"
+                        @click="grid = ''"
+                      >
+                        <span aria-hidden="true">&times;</span>
+                      </b-button>
+                    </b-badge>
+                  </h4>
+                </b-col>
+              </b-row>
+              <b-row v-if="grid == ''">
+                <b-col cols="12">
+                  <b-alert show variant="light" class="mt-3">
+                    <h4 class="alert-heading">Welcome!</h4>
+                    <p>
+                      Discover the change in bird distribution between 1980 and
+                      2020! The distributions are retrieved from
+                      <a
+                        href="https://doi.org/10.1201/9781315136264"
+                        target="_blank"
+                        >"A Bird Atlas of Kenya"</a
+                      >,
+                      <a href="https://ebird.org/region/KE" target="_blank"
+                        >eBird</a
+                      >
+                      and
+                      <a href="https://kenya.birdmap.africa/" target="_blank"
+                        >Kenyan Bird Map</a
+                      >.
+                    </p>
+                    <hr />
+                    <p>You can explore the changes with these two views:</p>
+                    <ul>
+                      <li>
+                        <b-button
+                          :variant="
+                            mode == 'Grid' ? 'primary' : 'outline-primary'
+                          "
+                          size="sm"
+                          >Grid</b-button
+                        >
+                        Click a square on the map to see the change in species
+                        diversity.
+                      </li>
+                      <li>
+                        <b-button
+                          :variant="
+                            mode == 'Species' ? 'primary' : 'outline-primary'
+                          "
+                          size="sm"
+                          @click="mode = 'Species'"
+                          >Species</b-button
+                        >
+                        Select a species to view the changes in its
+                        distribution.
+                      </li>
+                    </ul>
+                  </b-alert>
+                </b-col>
+              </b-row>
+              <b-row v-if="grid != ''">
+                <b-col cols="auto">Filter: </b-col>
+                <b-col cols="auto">
+                  <b-form-checkbox id="checkbox-lost" v-model="checkbox_lost"
+                    >Lost</b-form-checkbox
+                  ></b-col
+                >
+                <b-col cols="auto">
+                  <b-form-checkbox id="checkbox-kept" v-model="checkbox_kept"
+                    >Kept</b-form-checkbox
+                  ></b-col
+                >
+                <b-col cols="auto">
+                  <b-form-checkbox
+                    id="checkbox-gained"
+                    v-model="checkbox_gained"
+                    >Gained</b-form-checkbox
+                  ></b-col
+                >
+              </b-row>
+              <b-row v-if="grid != ''" class="overflow-auto">
+                <b-col cols="12">
+                  <b-list-group class="small h-100">
+                    <b-list-group-item
+                      v-for="i in gridList"
+                      :key="i.Id"
+                      class="d-flex align-items-center py-1 px-3"
+                    >
+                      {{ i.SEQ }}. <b class="ml-1">{{ i.CommonName }}</b>
+                      <div
+                        class="box box-sm ml-auto"
+                        :class="{
+                          kept: i.cat == 'kept',
+                          gained: i.cat == 'gained',
+                          lost: i.cat == 'lost',
+                        }"
+                      ></div>
+                    </b-list-group-item>
+                  </b-list-group>
+                </b-col>
+              </b-row>
+            </b-container>
+            <b-container class="overflow-auto" v-if="mode == 'Species'">
+              <b-row>
+                <b-col cols="12">
+                  <!--<v-select
                   v-model="species"
                   :options="species_options"
                   :reduce="(x) => x.SEQ"
                   label="CommonName"
-                  placeholder="Select a species"
-                ></v-select>
-              </b-col>
-            </b-row>
-            <b-row
-              class="px-0 pb-2 pt-2"
-              v-if="(mode == 'Species') & (species != null)"
-            >
-              <b-col>
-                {{ sp_selected.CommonName }} (<i>{{
-                  sp_selected.ScientificName
-                }}</i
-                >)
-                <img
-                  v-if="['CR', 'DD', 'EN', 'VU'].includes(sp_selected.IUCN)"
-                  :src="iucn[sp_selected.IUCN]"
-                  v-bind:alt="sp_selected.IUCN"
-                  class="ml-1"
-                  style="width: 1rem"
-                />
-              </b-col>
-              <b-col> Family: {{ sp_selected.Family }} </b-col>
-              <b-col
-                >See distribution map on:
-                <span
-                  v-for="(i, u) in sp_selected.ebird"
-                  :key="'sp_selected-ebird-' + u"
-                  class="pr-1"
-                >
-                  <a :href="i" target="_blank"
-                    >eBird{{
-                      sp_selected.ebird.length > 1 ? "-" + (u + 1) : ""
-                    }}
-                  </a>
-                </span>
-                <span
-                  v-for="(i, u) in sp_selected.kbm"
-                  :key="'sp_selected-kbm-' + u"
-                  class="pr-1"
-                >
-                  <a :href="i" target="_blank"
-                    >KBM{{ sp_selected.kbm.length > 1 ? "-" + (u + 1) : "" }}
-                  </a>
-                </span>
-              </b-col>
-            </b-row>
-            <b-row class="alert-dark px-0 pb-2 pt-2" v-if="mode == 'Species'">
-              <b-col>
-                Number of squares{{
-                  species == null ? " for  all species" : ""
-                }}
-                <div class="kept d-flex w-100 p-0">
-                  <div
-                    class="lost py-2"
-                    :style="{
-                      width:
-                        (nb_lkgd[0] / (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) *
-                          100 +
-                        '%',
-                    }"
-                  ></div>
-                  <div
-                    class="gained py-2 ml-auto"
-                    :style="{
-                      width:
-                        (nb_lkgd[2] / (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) *
-                          100 +
-                        '%',
-                    }"
-                  ></div>
-                </div>
-                <b-row>
-                  <b-col
-                    class="d-flex align-items-center justify-content-center"
+                  
+                ></v-select>-->
+                  <multiselect
+                    v-model="species"
+                    :options="species_options"
+                    placeholder="Select a species"
+                    :custom-label="selectLabel"
+                    track-by="SEQ"
+                    @select="updateURL"
+                    :show-labels="false"
                   >
-                    <div class="box-sm lost mr-1"></div>
-                    {{ numberWithCommas(nb_lkgd[0])
-                    }}<span class="sublegend"> lost</span>
-                  </b-col>
-                  <b-col
-                    class="d-flex align-items-center justify-content-center"
+                    <template slot="option" slot-scope="props">
+                      {{ props.option.CommonName }}
+                      <img
+                        :src="iucn[props.option.IUCN]"
+                        v-if="
+                          ['CR', 'DD', 'EN', 'VU'].includes(props.option.IUCN)
+                        "
+                        class="ml-1"
+                        style="width: 1rem"
+                      />
+                    </template>
+                    <template slot="singleLabel" slot-scope="props">
+                      <b>{{ props.option.CommonName }}</b>
+                      <span class="sublegend ml-2"
+                        ><i>{{ props.option.ScientificName }}</i></span
+                      >
+                      <img
+                        :src="iucn[props.option.IUCN]"
+                        class="ml-2"
+                        style="width: 1rem"
+                      />
+                    </template>
+                  </multiselect>
+                </b-col>
+                <b-col v-if="species != null">
+                  <b-button
+                    squared
+                    variant="outline-primary"
+                    class="ml-1 btn-xs"
+                    size="sm"
+                    v-for="(i, u) in species.ebird"
+                    :key="'sp-ebird-' + u"
+                    :href="'https://ebird.org/species/' + i + '/KE'"
+                    target="_blank"
                   >
-                    <div class="box-sm kept mr-1"></div>
-                    {{ numberWithCommas(nb_lkgd[1])
-                    }}<span class="sublegend"> kept</span>
-                  </b-col>
-                  <b-col
-                    class="d-flex align-items-center justify-content-center"
+                    eBird-{{ species.ebird.length > 1 ? i : i[0] }}
+                  </b-button>
+                  <b-button
+                    squared
+                    variant="outline-primary"
+                    class="ml-1 btn-xs"
+                    size="sm"
+                    v-for="(i, u) in species.kbm"
+                    :key="'sp-kbm-' + u"
+                    :href="'https://kenya.birdmap.africa/species/' + i"
+                    target="_blank"
                   >
-                    <div class="box-sm gained mr-1"></div>
-                    {{ numberWithCommas(nb_lkgd[2])
-                    }}<span class="sublegend"> gained</span>
-                  </b-col>
-                </b-row>
-              </b-col>
-            </b-row>
-            <b-row v-if="mode == 'Species'">
-              <b-col cols="8" class="text-right pr-0">
-                <small>Sort by:</small>
-              </b-col>
-              <b-col cols="4" class="pl-1">
-                <b-form-select
-                  v-model="filter_selected"
-                  :options="filter_options"
-                  size="sm"
-                ></b-form-select>
-              </b-col>
-            </b-row>
-            <b-row v-if="mode == 'Species'" class="overflow-auto">
-              <b-col cols="12" class="mt-2">
-                <b-list-group class="small h-100">
-                  <b-list-group-item
-                    v-for="i in speciesList"
-                    :key="i.Id"
-                    class="d-flex align-items-center py-1 px-3"
-                    :active="i.SEQ == species"
-                    @click="species = i.SEQ"
-                    :action="true"
-                    role="button"
-                  >
-                    {{ i.SEQ }}. <b class="ml-1">{{ i.CommonName }}</b>
-                    <img
-                      v-if="['CR', 'DD', 'EN', 'VU'].includes(i.IUCN)"
-                      :src="iucn[i.IUCN]"
-                      v-bind:alt="i.IUCN"
-                      class="ml-1"
-                      style="width: 1rem"
-                    />
+                    KBM-{{ i }}
+                  </b-button>
+                </b-col>
+              </b-row>
+              <b-row class="px-0 py-2 my-2">
+                <b-col>
+                  Number of squares{{
+                    species == null ? " for  all species" : ""
+                  }}
+                  <div class="kept d-flex w-100 p-0">
                     <div
-                      class="bar kept"
-                      v-b-tooltip.right.hover.html="
-                        '<b>Lost:</b> ' +
-                        i.nb_lkgd[0] +
-                        '<br><b>Kept:</b> ' +
-                        i.nb_lkgd[1] +
-                        '<br><b>Gained:</b> ' +
-                        i.nb_lkgd[2]
-                      "
+                      class="lost py-2"
+                      :style="{
+                        width:
+                          (nb_lkgd[0] /
+                            (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) *
+                            100 +
+                          '%',
+                      }"
+                    ></div>
+                    <div
+                      class="gained py-2 ml-auto"
+                      :style="{
+                        width:
+                          (nb_lkgd[2] /
+                            (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) *
+                            100 +
+                          '%',
+                      }"
+                    ></div>
+                  </div>
+                  <b-row>
+                    <b-col
+                      class="d-flex align-items-center justify-content-center"
                     >
+                      <div class="box-sm lost mr-1"></div>
+                      {{ numberWithCommas(nb_lkgd[0])
+                      }}<span class="sublegend"> lost</span>
+                    </b-col>
+                    <b-col
+                      class="d-flex align-items-center justify-content-center"
+                    >
+                      <div class="box-sm kept mr-1"></div>
+                      {{ numberWithCommas(nb_lkgd[1])
+                      }}<span class="sublegend"> kept</span>
+                    </b-col>
+                    <b-col
+                      class="d-flex align-items-center justify-content-center"
+                    >
+                      <div class="box-sm gained mr-1"></div>
+                      {{ numberWithCommas(nb_lkgd[2])
+                      }}<span class="sublegend"> gained</span>
+                    </b-col>
+                  </b-row>
+                </b-col>
+              </b-row>
+              <b-row>
+                <b-col cols="8" class="text-right pr-0">
+                  <small>Sort by:</small>
+                </b-col>
+                <b-col cols="4" class="pl-1">
+                  <b-form-select
+                    v-model="filter_selected"
+                    :options="filter_options"
+                    size="sm"
+                  ></b-form-select>
+                </b-col>
+              </b-row>
+              <b-row class="overflow-auto">
+                <b-col cols="12" class="mt-2">
+                  <b-list-group class="small h-100">
+                    <b-list-group-item
+                      v-for="i in speciesList"
+                      :key="i.Id"
+                      class="d-flex align-items-center py-1 px-3"
+                      :active="species == null ? false : i.SEQ == species.SEQ"
+                      @click="species = i"
+                      :action="true"
+                      role="button"
+                    >
+                      {{ i.SEQ }}. <b class="ml-1">{{ i.CommonName }}</b>
+                      <img
+                        v-if="['CR', 'DD', 'EN', 'VU'].includes(i.IUCN)"
+                        :src="iucn[i.IUCN]"
+                        v-bind:alt="i.IUCN"
+                        class="ml-1"
+                        style="width: 1rem"
+                      />
                       <div
-                        class="bar-left lost"
-                        :style="{
-                          width:
-                            (i.nb_lkgd[0] /
-                              (i.nb_lkgd[0] + i.nb_lkgd[1] + i.nb_lkgd[2])) *
-                              100 +
-                            'px',
-                        }"
-                      ></div>
-                      <div
-                        class="bar-right gained"
-                        :style="{
-                          width:
-                            (i.nb_lkgd[2] /
-                              (i.nb_lkgd[0] + i.nb_lkgd[1] + i.nb_lkgd[2])) *
-                              100 +
-                            'px',
-                        }"
-                      ></div>
-                    </div>
-                  </b-list-group-item>
-                </b-list-group>
-              </b-col>
-            </b-row>
+                        class="bar kept"
+                        v-b-tooltip.right.hover.html="
+                          '<b>Lost:</b> ' +
+                          i.nb_lkgd[0] +
+                          '<br><b>Kept:</b> ' +
+                          i.nb_lkgd[1] +
+                          '<br><b>Gained:</b> ' +
+                          i.nb_lkgd[2]
+                        "
+                      >
+                        <div
+                          class="bar-left lost"
+                          :style="{
+                            width:
+                              (i.nb_lkgd[0] /
+                                (i.nb_lkgd[0] + i.nb_lkgd[1] + i.nb_lkgd[2])) *
+                                100 +
+                              'px',
+                          }"
+                        ></div>
+                        <div
+                          class="bar-right gained"
+                          :style="{
+                            width:
+                              (i.nb_lkgd[2] /
+                                (i.nb_lkgd[0] + i.nb_lkgd[1] + i.nb_lkgd[2])) *
+                                100 +
+                              'px',
+                          }"
+                        ></div>
+                      </div>
+                    </b-list-group-item>
+                  </b-list-group>
+                </b-col>
+              </b-row>
+            </b-container>
           </b-card-body>
         </b-card>
       </b-col>
@@ -409,14 +432,14 @@
             <div class="mb-1">
               <span v-if="mode == 'Grid'">
                 <b>Change in effort</b>
-                <!--<b-button
+                <b-button
                   size="sm"
                   class="p-0 ml-1"
                   variant="link"
                   v-b-tooltip.top.hover
-                  title="Change in effort is estimated by "
+                  title="Change in effort is based on the difference between estimated coverage of the old atlas and the total duration of the new atlas."
                   ><b-icon-question-circle-fill> </b-icon-question-circle-fill>
-                </b-button>-->
+                </b-button>
               </span>
               <span v-if="mode == 'Species'">
                 <b>Confidence</b>
@@ -425,7 +448,7 @@
                   class="p-0 ml-1"
                   variant="link"
                   v-b-tooltip.top.hover
-                  title="Relative confidence in the change display. For instance, a red small circle indicates an unlikely loss of the species, while a large green circle indicates an very likley gain. The confidence is based on the difference of effort (i.e. time spend) between the old and new atlas. Thus, for instance, a likely gain is determined by a gain of the species while the effort on this grid square has reduced."
+                  title="The confidence in the change is based on the difference of effort (i.e. time spent) between the old and new atlas. For example, a small red circle indicates an unlikely loss of the species, while a large green circle indicates a likely gain."
                   ><b-icon-question-circle-fill> </b-icon-question-circle-fill>
                 </b-button>
               </span>
@@ -460,7 +483,7 @@
                 class="p-0 ml-1"
                 variant="link"
                 v-b-tooltip.top.hover
-                title="Coverage is considered good only if it had a coverage of >30% in the old atlas and at least 24hr cummulative duration of observation in the new atlas."
+                title="Coverage is considered good if it had a modelled coverage >30% in the old atlas and at least 24hr of total observation time in the new atlas."
                 ><b-icon-question-circle-fill> </b-icon-question-circle-fill>
               </b-button>
               <div class="d-flex align-items-center">
@@ -479,7 +502,7 @@
                 <div style="width: 25px" class="d-flex">
                   <CircleTemplate size="18" opacity="0.3" class="m-auto" />
                 </div>
-                <span class="ml-1">Good coverage</span>
+                <span class="ml-1">Never observed</span>
                 <b-checkbox
                   class="ml-1"
                   v-model="displayGoodCoverage"
@@ -607,12 +630,11 @@
 </template>
 
 <script>
-//import "./app.scss";
+import "leaflet/dist/leaflet.css";
+import "vue-multiselect/dist/vue-multiselect.min.css";
 import "./app.scss";
 
-import "leaflet/dist/leaflet.css";
-
-import "vue-select/dist/vue-select.css";
+import Multiselect from "vue-multiselect";
 
 import CircleTemplate from "./circle.vue";
 
@@ -660,6 +682,7 @@ export default {
     LPopup,
     LCircle,
     CircleTemplate,
+    Multiselect,
   },
   data() {
     return {
@@ -741,11 +764,13 @@ export default {
     },
     updateURL() {
       let qp = new URLSearchParams();
-      if ((this.species != "") & (this.species != null))
-        qp.set("species", this.species);
+      if (this.species != null) qp.set("species", this.species.SEQ);
       if ((this.mode != "") & (this.mode != null)) qp.set("mode", this.mode);
       if ((this.grid != "") & (this.grid != null)) qp.set("grid", this.grid);
       history.replaceState(null, null, "?" + qp.toString());
+    },
+    selectLabel({ CommonName, ScientificName }) {
+      return `${CommonName} — [${ScientificName}]`;
     },
   },
   computed: {
@@ -756,10 +781,7 @@ export default {
         });
         return f[0].properties.nb_lkgd;
       } else if ((this.mode == "Species") & (this.species != null)) {
-        let sp = sp_old.filter((y) => {
-          return y.SEQ == this.species;
-        });
-        return sp[0].nb_lkgd;
+        return this.species.nb_lkgd;
       } else {
         return init_lkgd;
       }
@@ -809,19 +831,6 @@ export default {
         return sp_old;
       }
     },
-    sp_selected() {
-      this.updateURL();
-      if (this.species == null) {
-        return null;
-      } else {
-        let sp = sp_old.filter((x) => x.SEQ == this.species)[0];
-        sp.ebird = sp.ebird.map(
-          (x) => "https://ebird.org/species/" + x + "/KE"
-        );
-        sp.kbm = sp.kbm.map((x) => "https://kenya.birdmap.africa/species/" + x);
-        return sp;
-      }
-    },
     map_data_filtered() {
       let m = this.map_data
         .filter(
@@ -843,11 +852,11 @@ export default {
               x.style.fillOpacity = this.grid == x.properties.Sq ? 1 : 0.3;
             }
           } else if (this.mode == "Species") {
-            let sp = this.species;
-            let n = x.properties.SEQ_new.includes(sp);
-            let o = x.properties.SEQ_old.includes(sp);
+            let seq = this.species == null ? null : this.species.SEQ;
+            let n = x.properties.SEQ_new.includes(seq);
+            let o = x.properties.SEQ_old.includes(seq);
             if (o & n) {
-              x.style.fillColor = "#ffffbf";
+              x.style.fillColor = "#fee08b";
             } else if (o & !n) {
               x.style.fillColor = "#d73027";
               sz_dir = -1;
@@ -888,11 +897,11 @@ export default {
       };
     },
     geojson_species_options() {
-      let sp = this.species;
       return {
         onEachFeature: (feature, layer) => {
-          let n = feature.properties.SEQ_new.includes(sp);
-          let o = feature.properties.SEQ_old.includes(sp);
+          let seq = this.species == null ? null : this.species.SEQ;
+          let n = feature.properties.SEQ_new.includes(seq);
+          let o = feature.properties.SEQ_old.includes(seq);
           let status = o ? (n ? "kept" : "lost") : "gained";
           if (n | o) {
             layer.bindTooltip(
@@ -912,8 +921,9 @@ export default {
   created() {
     let qp = new URLSearchParams(window.location.search);
     let species = qp.get("species");
-    if (species & (species != "null") & (species != "NaN"))
-      this.species = Number(species);
+    if (species & (species != "null") & (species != "NaN")) {
+      this.species = sp_old.filter((x) => x.SEQ == Number(species))[0];
+    }
     let mode = qp.get("mode");
     if (mode) this.mode = mode;
     let grid = qp.get("grid");
@@ -924,7 +934,6 @@ export default {
       if (!val) {
         setTimeout(() => {
           this.$refs.map.mapObject.invalidateSize();
-
           this.$refs.map.mapObject.fitBounds(
             latLngBounds([
               [5.615985, 43.50585],
