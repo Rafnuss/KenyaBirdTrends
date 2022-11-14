@@ -731,9 +731,10 @@ export default {
     },
     updateURL() {
       let qp = new URLSearchParams();
-      if (this.species !== "") qp.set("species", this.species);
-      if (this.mode !== "") qp.set("mode", this.mode);
-      if (this.grid !== "") qp.set("grid", this.grid);
+      if ((this.species != "") & (this.species != null))
+        qp.set("species", this.species);
+      if ((this.mode != "") & (this.mode != null)) qp.set("mode", this.mode);
+      if ((this.grid != "") & (this.grid != null)) qp.set("grid", this.grid);
       history.replaceState(null, null, "?" + qp.toString());
     },
   },
@@ -901,7 +902,8 @@ export default {
   created() {
     let qp = new URLSearchParams(window.location.search);
     let species = qp.get("species");
-    if (species) this.species = Number(species);
+    if (species & (species != "null") & (species != "NaN"))
+      this.species = Number(species);
     let mode = qp.get("mode");
     if (mode) this.mode = mode;
     let grid = qp.get("grid");
