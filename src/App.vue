@@ -413,105 +413,130 @@
               <b-icon icon="list"></b-icon>
             </b-button>
           </l-control>
-          <l-control
-            position="bottomright"
-            class="leaflet-control-layers leaflet-control-layers-expanded leaflet-control px-3 py-2"
-            style="width: 240px"
-          >
-            <div v-if="mode == 'Grid'" class="mb-1">
-              <b>Change in number of species</b>
-              <div
-                class="legend-gradient"
-                style="width: 100%; height: 15px"
-              ></div>
-              <div
-                class="d-flex justify-content-between"
-                style="font-size: 9px"
-              >
-                <span>-200</span>
-                <span> 0 </span>
-                <span>200</span>
-              </div>
-            </div>
-            <div class="mb-1">
-              <span v-if="mode == 'Grid'">
-                <b>Change in effort</b>
-                <b-button
-                  size="sm"
-                  class="p-0 ml-1"
-                  variant="link"
-                  v-b-tooltip.top.hover
-                  title="Change in effort is based on the difference between estimated coverage of the old atlas and the total duration of the new atlas."
-                  ><b-icon-question-circle-fill> </b-icon-question-circle-fill>
-                </b-button>
-              </span>
-              <span v-if="mode == 'Species'">
-                <b>Confidence</b>
-                <b-button
-                  size="sm"
-                  class="p-0 ml-1"
-                  variant="link"
-                  v-b-tooltip.top.hover
-                  title="The confidence in the change is based on the difference of effort (i.e. time spent) between the old and new atlas. For example, a small red circle indicates an unlikely loss of the species, while a large green circle indicates a likely gain."
-                  ><b-icon-question-circle-fill> </b-icon-question-circle-fill>
-                </b-button>
-              </span>
-              <div class="d-flex align-items-center justify-content-between">
-                <CircleTemplate size="12" />
-                <CircleTemplate size="15" />
-                <CircleTemplate size="18" />
-                <CircleTemplate size="21" />
-                <CircleTemplate size="24" />
-              </div>
-              <div
-                v-if="mode == 'Grid'"
-                class="d-flex justify-content-between"
-                style="font-size: 9px"
-              >
-                <span>Reduced</span>
-                <span>Increased</span>
-              </div>
-              <div
-                v-if="mode == 'Species'"
-                class="d-flex justify-content-between"
-                style="font-size: 9px"
-              >
-                <span>Low</span>
-                <span>High</span>
-              </div>
-            </div>
-            <div>
-              <b>Coverage</b>
+          <l-control position="bottomright">
+            <b-button
+              size="sm"
+              variant="primary"
+              class="d-lg-none"
+              v-if="legend == false"
+              @click="legend = true"
+            >
+              <b-icon icon="question-circle-fill"></b-icon>
+            </b-button>
+            <div
+              v-if="legend"
+              class="leaflet-control-layers leaflet-control-layers-expanded px-3 py-2"
+              style="width: 240px"
+            >
               <b-button
                 size="sm"
-                class="p-0 ml-1"
-                variant="link"
-                v-b-tooltip.top.hover
-                title="Coverage is considered good if it had a modelled coverage >30% in the old atlas and at least 24hr of total observation time in the new atlas."
-                ><b-icon-question-circle-fill> </b-icon-question-circle-fill>
+                class="close d-lg-none"
+                style="
+                  margin-right: -0.6rem;
+                  margin-top: -0.5rem;
+                  font-size: 1.2rem;
+                "
+                @click="legend = false"
+              >
+                x
               </b-button>
-              <div class="d-flex align-items-center">
-                <div style="width: 25px" class="d-flex">
-                  <CircleTemplate size="7" opacity="0.7" class="m-auto" />
+              <div v-if="mode == 'Grid'" class="mb-1">
+                <b>Change in number of species</b>
+                <div
+                  class="legend-gradient"
+                  style="width: 100%; height: 15px"
+                ></div>
+                <div
+                  class="d-flex justify-content-between"
+                  style="font-size: 9px"
+                >
+                  <span>-200</span>
+                  <span> 0 </span>
+                  <span>200</span>
                 </div>
-                <span class="ml-1">Poor coverage </span>
-                <b-checkbox
-                  class="ml-1"
-                  v-model="displayPoorCoverage"
-                  switch
-                ></b-checkbox>
               </div>
-
-              <div class="d-flex align-items-center" v-if="mode == 'Species'">
-                <div style="width: 25px" class="d-flex">
-                  <CircleTemplate size="18" opacity="0.3" class="m-auto" />
+              <div class="mb-1">
+                <span v-if="mode == 'Grid'">
+                  <b>Change in effort</b>
+                  <b-button
+                    size="sm"
+                    class="p-0 ml-1"
+                    variant="link"
+                    v-b-tooltip.top.hover
+                    title="Change in effort is based on the difference between estimated coverage of the old atlas and the total duration of the new atlas."
+                    ><b-icon-question-circle-fill>
+                    </b-icon-question-circle-fill>
+                  </b-button>
+                </span>
+                <span v-if="mode == 'Species'">
+                  <b>Confidence</b>
+                  <b-button
+                    size="sm"
+                    class="p-0 ml-1"
+                    variant="link"
+                    v-b-tooltip.top.hover
+                    title="The confidence in the change is based on the difference of effort (i.e. time spent) between the old and new atlas. For example, a small red circle indicates an unlikely loss of the species, while a large green circle indicates a likely gain."
+                    ><b-icon-question-circle-fill>
+                    </b-icon-question-circle-fill>
+                  </b-button>
+                </span>
+                <div class="d-flex align-items-center justify-content-between">
+                  <CircleTemplate size="12" />
+                  <CircleTemplate size="15" />
+                  <CircleTemplate size="18" />
+                  <CircleTemplate size="21" />
+                  <CircleTemplate size="24" />
                 </div>
-                <span class="ml-1">Never observed</span>
-                <b-checkbox
-                  class="ml-1"
-                  v-model="displayGoodCoverage"
-                  switch
-                ></b-checkbox>
+                <div
+                  v-if="mode == 'Grid'"
+                  class="d-flex justify-content-between"
+                  style="font-size: 9px"
+                >
+                  <span>Reduced</span>
+                  <span>Increased</span>
+                </div>
+                <div
+                  v-if="mode == 'Species'"
+                  class="d-flex justify-content-between"
+                  style="font-size: 9px"
+                >
+                  <span>Low</span>
+                  <span>High</span>
+                </div>
+              </div>
+              <div>
+                <b>Coverage</b>
+                <b-button
+                  size="sm"
+                  class="p-0 ml-1"
+                  variant="link"
+                  v-b-tooltip.top.hover
+                  title="Coverage is considered good if it had a modelled coverage >30% in the old atlas and at least 24hr of total observation time in the new atlas."
+                  ><b-icon-question-circle-fill> </b-icon-question-circle-fill>
+                </b-button>
+                <div class="d-flex align-items-center">
+                  <div style="width: 25px" class="d-flex">
+                    <CircleTemplate size="7" opacity="0.7" class="m-auto" />
+                  </div>
+                  <span class="ml-1">Poor coverage </span>
+                  <b-checkbox
+                    class="ml-1"
+                    v-model="displayPoorCoverage"
+                    switch
+                  ></b-checkbox>
+                </div>
+
+                <div class="d-flex align-items-center" v-if="mode == 'Species'">
+                  <div style="width: 25px" class="d-flex">
+                    <CircleTemplate size="18" opacity="0.3" class="m-auto" />
+                  </div>
+                  <span class="ml-1">Never observed</span>
+                  <b-checkbox
+                    class="ml-1"
+                    v-model="displayGoodCoverage"
+                    switch
+                  ></b-checkbox>
+                </div>
               </div>
             </div>
           </l-control>
@@ -691,6 +716,7 @@ export default {
   data() {
     return {
       sidebar: true,
+      legend: true,
       mode_options: ["Grid", "Species"],
       mode: "Grid",
       checkbox_lost: true,
