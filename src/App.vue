@@ -41,7 +41,7 @@
             </b-row>
           </b-card-header>
           <b-card-body class="px-0">
-            <b-container class="overflow-auto" v-if="mode == 'Grid'">
+            <b-container class="d-flex flex-column" v-if="mode == 'Grid'">
               <b-row class="px-0 py-2 my-2" align-v="center">
                 <b-col>
                   Number of
@@ -199,7 +199,7 @@
                 </b-col>
               </b-row>
             </b-container>
-            <b-container class="overflow-auto" v-if="mode == 'Species'">
+            <b-container class="d-flex flex-column" v-if="mode == 'Species'">
               <b-row>
                 <b-col cols="12">
                   <!--<v-select
