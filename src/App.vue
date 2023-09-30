@@ -10,13 +10,7 @@
                 <h2 class="d-lg-none">KBAViz</h2>
               </b-col>
               <b-col>
-                <b-button
-                  class="ml-3"
-                  variant="outline-primary"
-                  size="sm"
-                  v-b-modal.modal-1
-                  role="button"
-                >
+                <b-button class="ml-3" variant="outline-primary" size="sm" v-b-modal.modal-1 role="button">
                   <b-icon icon="question-circle-fill"></b-icon>
                 </b-button>
               </b-col>
@@ -29,12 +23,7 @@
                   button-variant="outline-primary"
                   size="sm"
                 ></b-form-radio-group>
-                <b-button
-                  size="sm"
-                  variant="primary"
-                  class="ml-2 d-lg-none"
-                  @click="sidebar = false"
-                >
+                <b-button size="sm" variant="primary" class="ml-2 d-lg-none" @click="sidebar = false">
                   <b-icon icon="map-fill"></b-icon>
                 </b-button>
               </b-col>
@@ -50,42 +39,28 @@
                     <div
                       class="lost py-2"
                       :style="{
-                        width:
-                          (nb_lkgd[0] /
-                            (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) *
-                            100 +
-                          '%',
+                        width: (nb_lkgd[0] / (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) * 100 + '%',
                       }"
                     ></div>
                     <div
                       class="gained py-2 ml-auto"
                       :style="{
-                        width:
-                          (nb_lkgd[2] /
-                            (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) *
-                            100 +
-                          '%',
+                        width: (nb_lkgd[2] / (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) * 100 + '%',
                       }"
                     ></div>
                   </div>
                   <b-row>
-                    <b-col
-                      class="d-flex align-items-center justify-content-center"
-                    >
+                    <b-col class="d-flex align-items-center justify-content-center">
                       <div class="box-sm lost mr-1"></div>
                       {{ numberWithCommas(nb_lkgd[0]) }}
                       <span class="sublegend"> lost</span>
                     </b-col>
-                    <b-col
-                      class="d-flex align-items-center justify-content-center"
-                    >
+                    <b-col class="d-flex align-items-center justify-content-center">
                       <div class="box-sm kept mr-1"></div>
                       {{ numberWithCommas(nb_lkgd[1]) }}
                       <span class="sublegend"> kept</span>
                     </b-col>
-                    <b-col
-                      class="d-flex align-items-center justify-content-center"
-                    >
+                    <b-col class="d-flex align-items-center justify-content-center">
                       <div class="box-sm gained mr-1"></div>
                       {{ numberWithCommas(nb_lkgd[2]) }}
                       <span class="sublegend"> gained</span>
@@ -96,11 +71,7 @@
                   <h4>
                     <b-badge variant="primary" class="d-flex align-items-center"
                       >{{ grid }}
-                      <b-button
-                        class="close ml-1 text-white primary"
-                        aria-label="Close"
-                        @click="grid = ''"
-                      >
+                      <b-button class="close ml-1 text-white primary" aria-label="Close" @click="grid = ''">
                         <span aria-hidden="true">&times;</span>
                       </b-button>
                     </b-badge>
@@ -112,46 +83,28 @@
                   <b-alert show variant="light" class="mt-3">
                     <h4 class="alert-heading">Welcome!</h4>
                     <p>
-                      Discover the change in bird distribution between 1980 and
-                      2020! The distributions are retrieved from
-                      <a
-                        href="https://doi.org/10.1201/9781315136264"
-                        target="_blank"
-                        >"A Bird Atlas of Kenya"</a
-                      >,
-                      <a href="https://ebird.org/region/KE" target="_blank"
-                        >eBird</a
-                      >
+                      Discover the change in bird distribution between 1980 and 2020! The distributions are retrieved
+                      from
+                      <a href="https://doi.org/10.1201/9781315136264" target="_blank">"A Bird Atlas of Kenya"</a>,
+                      <a href="https://ebird.org/region/KE" target="_blank">eBird</a>
                       and
-                      <a href="https://kenya.birdmap.africa/" target="_blank"
-                        >Kenyan Bird Map</a
-                      >.
+                      <a href="https://kenya.birdmap.africa/" target="_blank">Kenyan Bird Map</a>.
                     </p>
                     <hr />
                     <p>You can explore the changes with these two views:</p>
                     <ul>
                       <li>
-                        <b-button
-                          :variant="
-                            mode == 'Grid' ? 'primary' : 'outline-primary'
-                          "
-                          size="sm"
-                          >Grid</b-button
-                        >
-                        Click a square on the map to see the change in species
-                        diversity.
+                        <b-button :variant="mode == 'Grid' ? 'primary' : 'outline-primary'" size="sm">Grid</b-button>
+                        Click a square on the map to see the change in species diversity.
                       </li>
                       <li>
                         <b-button
-                          :variant="
-                            mode == 'Species' ? 'primary' : 'outline-primary'
-                          "
+                          :variant="mode == 'Species' ? 'primary' : 'outline-primary'"
                           size="sm"
                           @click="mode = 'Species'"
                           >Species</b-button
                         >
-                        Select a species to view the changes in its
-                        distribution.
+                        Select a species to view the changes in its distribution.
                       </li>
                     </ul>
                   </b-alert>
@@ -160,31 +113,19 @@
               <b-row v-if="grid != ''">
                 <b-col cols="auto">Filter: </b-col>
                 <b-col cols="auto">
-                  <b-form-checkbox id="checkbox-lost" v-model="checkbox_lost"
-                    >Lost</b-form-checkbox
-                  ></b-col
+                  <b-form-checkbox id="checkbox-lost" v-model="checkbox_lost">Lost</b-form-checkbox></b-col
                 >
                 <b-col cols="auto">
-                  <b-form-checkbox id="checkbox-kept" v-model="checkbox_kept"
-                    >Kept</b-form-checkbox
-                  ></b-col
+                  <b-form-checkbox id="checkbox-kept" v-model="checkbox_kept">Kept</b-form-checkbox></b-col
                 >
                 <b-col cols="auto">
-                  <b-form-checkbox
-                    id="checkbox-gained"
-                    v-model="checkbox_gained"
-                    >Gained</b-form-checkbox
-                  ></b-col
+                  <b-form-checkbox id="checkbox-gained" v-model="checkbox_gained">Gained</b-form-checkbox></b-col
                 >
               </b-row>
               <b-row v-if="grid != ''" class="overflow-auto">
                 <b-col cols="12">
                   <b-list-group class="small h-100">
-                    <b-list-group-item
-                      v-for="i in gridList"
-                      :key="i.Id"
-                      class="d-flex align-items-center py-1 px-3"
-                    >
+                    <b-list-group-item v-for="i in gridList" :key="i.Id" class="d-flex align-items-center py-1 px-3">
                       {{ i.SEQ }}. <b class="ml-1">{{ i.CommonName }}</b>
                       <div
                         class="box box-sm ml-auto"
@@ -222,9 +163,7 @@
                       {{ props.option.CommonName }}
                       <img
                         :src="iucn[props.option.IUCN]"
-                        v-if="
-                          ['CR', 'DD', 'EN', 'VU'].includes(props.option.IUCN)
-                        "
+                        v-if="['CR', 'DD', 'EN', 'VU'].includes(props.option.IUCN)"
                         class="ml-1"
                         style="width: 1rem"
                       />
@@ -234,11 +173,7 @@
                       <span class="sublegend ml-2"
                         ><i>{{ props.option.ScientificName }}</i></span
                       >
-                      <img
-                        :src="iucn[props.option.IUCN]"
-                        class="ml-2"
-                        style="width: 1rem"
-                      />
+                      <img :src="iucn[props.option.IUCN]" class="ml-2" style="width: 1rem" />
                     </template>
                   </multiselect>
                 </b-col>
@@ -271,52 +206,33 @@
               </b-row>
               <b-row class="px-0 py-2 my-2">
                 <b-col>
-                  Number of squares{{
-                    species == null ? " for  all species" : ""
-                  }}
+                  Number of squares{{ species == null ? " for  all species" : "" }}
                   <div class="kept d-flex w-100 p-0">
                     <div
                       class="lost py-2"
                       :style="{
-                        width:
-                          (nb_lkgd[0] /
-                            (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) *
-                            100 +
-                          '%',
+                        width: (nb_lkgd[0] / (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) * 100 + '%',
                       }"
                     ></div>
                     <div
                       class="gained py-2 ml-auto"
                       :style="{
-                        width:
-                          (nb_lkgd[2] /
-                            (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) *
-                            100 +
-                          '%',
+                        width: (nb_lkgd[2] / (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) * 100 + '%',
                       }"
                     ></div>
                   </div>
                   <b-row>
-                    <b-col
-                      class="d-flex align-items-center justify-content-center"
-                    >
+                    <b-col class="d-flex align-items-center justify-content-center">
                       <div class="box-sm lost mr-1"></div>
-                      {{ numberWithCommas(nb_lkgd[0])
-                      }}<span class="sublegend"> lost</span>
+                      {{ numberWithCommas(nb_lkgd[0]) }}<span class="sublegend"> lost</span>
                     </b-col>
-                    <b-col
-                      class="d-flex align-items-center justify-content-center"
-                    >
+                    <b-col class="d-flex align-items-center justify-content-center">
                       <div class="box-sm kept mr-1"></div>
-                      {{ numberWithCommas(nb_lkgd[1])
-                      }}<span class="sublegend"> kept</span>
+                      {{ numberWithCommas(nb_lkgd[1]) }}<span class="sublegend"> kept</span>
                     </b-col>
-                    <b-col
-                      class="d-flex align-items-center justify-content-center"
-                    >
+                    <b-col class="d-flex align-items-center justify-content-center">
                       <div class="box-sm gained mr-1"></div>
-                      {{ numberWithCommas(nb_lkgd[2])
-                      }}<span class="sublegend"> gained</span>
+                      {{ numberWithCommas(nb_lkgd[2]) }}<span class="sublegend"> gained</span>
                     </b-col>
                   </b-row>
                 </b-col>
@@ -326,11 +242,7 @@
                   <small>Sort by:</small>
                 </b-col>
                 <b-col cols="4" class="pl-1">
-                  <b-form-select
-                    v-model="filter_selected"
-                    :options="filter_options"
-                    size="sm"
-                  ></b-form-select>
+                  <b-form-select v-model="filter_selected" :options="filter_options" size="sm"></b-form-select>
                 </b-col>
               </b-row>
               <b-row class="overflow-auto">
@@ -370,21 +282,13 @@
                         <div
                           class="bar-left lost"
                           :style="{
-                            width:
-                              (i.nb_lkgd[0] /
-                                (i.nb_lkgd[0] + i.nb_lkgd[1] + i.nb_lkgd[2])) *
-                                100 +
-                              'px',
+                            width: (i.nb_lkgd[0] / (i.nb_lkgd[0] + i.nb_lkgd[1] + i.nb_lkgd[2])) * 100 + 'px',
                           }"
                         ></div>
                         <div
                           class="bar-right gained"
                           :style="{
-                            width:
-                              (i.nb_lkgd[2] /
-                                (i.nb_lkgd[0] + i.nb_lkgd[1] + i.nb_lkgd[2])) *
-                                100 +
-                              'px',
+                            width: (i.nb_lkgd[2] / (i.nb_lkgd[0] + i.nb_lkgd[1] + i.nb_lkgd[2])) * 100 + 'px',
                           }"
                         ></div>
                       </div>
@@ -414,13 +318,7 @@
             </b-button>
           </l-control>
           <l-control position="bottomright">
-            <b-button
-              size="sm"
-              variant="primary"
-              class="d-lg-none"
-              v-if="legend == false"
-              @click="legend = true"
-            >
+            <b-button size="sm" variant="primary" class="d-lg-none" v-if="legend == false" @click="legend = true">
               <b-icon icon="question-circle-fill"></b-icon>
             </b-button>
             <div
@@ -431,25 +329,15 @@
               <b-button
                 size="sm"
                 class="close d-lg-none"
-                style="
-                  margin-right: -0.6rem;
-                  margin-top: -0.5rem;
-                  font-size: 1.2rem;
-                "
+                style="margin-right: -0.6rem; margin-top: -0.5rem; font-size: 1.2rem"
                 @click="legend = false"
               >
                 x
               </b-button>
               <div v-if="mode == 'Grid'" class="mb-1">
                 <b>Change in number of species</b>
-                <div
-                  class="legend-gradient"
-                  style="width: 100%; height: 15px"
-                ></div>
-                <div
-                  class="d-flex justify-content-between"
-                  style="font-size: 9px"
-                >
+                <div class="legend-gradient" style="width: 100%; height: 15px"></div>
+                <div class="d-flex justify-content-between" style="font-size: 9px">
                   <span>-200</span>
                   <span> 0 </span>
                   <span>200</span>
@@ -464,8 +352,7 @@
                     variant="link"
                     v-b-tooltip.top.hover
                     title="Change in effort is based on the difference between estimated coverage of the old atlas and the total duration of the new atlas."
-                    ><b-icon-question-circle-fill>
-                    </b-icon-question-circle-fill>
+                    ><b-icon-question-circle-fill> </b-icon-question-circle-fill>
                   </b-button>
                 </span>
                 <span v-if="mode == 'Species'">
@@ -476,8 +363,7 @@
                     variant="link"
                     v-b-tooltip.top.hover
                     title="The confidence in the change is based on the difference of effort (i.e. time spent) between the old and new atlas. For example, a small red circle indicates an unlikely loss of the species, while a large green circle indicates a likely gain."
-                    ><b-icon-question-circle-fill>
-                    </b-icon-question-circle-fill>
+                    ><b-icon-question-circle-fill> </b-icon-question-circle-fill>
                   </b-button>
                 </span>
                 <div class="d-flex align-items-center justify-content-between">
@@ -487,19 +373,11 @@
                   <CircleTemplate size="21" />
                   <CircleTemplate size="24" />
                 </div>
-                <div
-                  v-if="mode == 'Grid'"
-                  class="d-flex justify-content-between"
-                  style="font-size: 9px"
-                >
+                <div v-if="mode == 'Grid'" class="d-flex justify-content-between" style="font-size: 9px">
                   <span>Reduced</span>
                   <span>Increased</span>
                 </div>
-                <div
-                  v-if="mode == 'Species'"
-                  class="d-flex justify-content-between"
-                  style="font-size: 9px"
-                >
+                <div v-if="mode == 'Species'" class="d-flex justify-content-between" style="font-size: 9px">
                   <span>Low</span>
                   <span>High</span>
                 </div>
@@ -519,11 +397,7 @@
                     <CircleTemplate size="7" opacity="0.7" class="m-auto" />
                   </div>
                   <span class="ml-1">Poor coverage </span>
-                  <b-checkbox
-                    class="ml-1"
-                    v-model="displayPoorCoverage"
-                    switch
-                  ></b-checkbox>
+                  <b-checkbox class="ml-1" v-model="displayPoorCoverage" switch></b-checkbox>
                 </div>
 
                 <div class="d-flex align-items-center" v-if="mode == 'Species'">
@@ -531,11 +405,7 @@
                     <CircleTemplate size="18" opacity="0.3" class="m-auto" />
                   </div>
                   <span class="ml-1">Never observed</span>
-                  <b-checkbox
-                    class="ml-1"
-                    v-model="displayGoodCoverage"
-                    switch
-                  ></b-checkbox>
+                  <b-checkbox class="ml-1" v-model="displayGoodCoverage" switch></b-checkbox>
                 </div>
               </div>
             </div>
@@ -574,31 +444,21 @@
     <b-modal id="modal-1" size="lg" ok-only>
       <p>
         Welcome to the vizualisation tool for the
-        <a
-          href="https://github.com/Rafnuss/KenyaAtlasComparison"
-          target="_blank"
-          >Kenya bird atlas comparison project</a
-        >. This project is studying the differences in bird distribution between
-        the periods 1970s-1980s and 2000s-2010s.
+        <a href="https://github.com/Rafnuss/KenyaAtlasComparison" target="_blank">Kenya bird atlas comparison project</a
+        >. This project is studying the differences in bird distribution between the periods 1970s-1980s and
+        2000s-2010s.
       </p>
 
-      <h4>
-        <b-icon-clipboard-data class="pr-1"></b-icon-clipboard-data>Data sources
-      </h4>
+      <h4><b-icon-clipboard-data class="pr-1"></b-icon-clipboard-data>Data sources</h4>
       <ul>
         <li>
-          <b>1970s-1980s</b> A Bird Atlas of Kenya (<a
-            href="https://doi.org/10.1201/9781315136264"
-            target="_blank"
+          <b>1970s-1980s</b> A Bird Atlas of Kenya (<a href="https://doi.org/10.1201/9781315136264" target="_blank"
             >Lewis & Pomeroy, 1989</a
-          >) is the reference book describing the status and distribution of 1
-          065 species of birds in Kenya for the period 1970-1984 at the quarter
-          square degree spatial resolution. This digitized version of the book
-          is published as GBIF dataset
+          >) is the reference book describing the status and distribution of 1 065 species of birds in Kenya for the
+          period 1970-1984 at the quarter square degree spatial resolution. This digitized version of the book is
+          published as GBIF dataset
           <a href="https://doi.org/10.15468/2ga3wk" target="_blank"
-            ><img
-              src="https://zenodo.org/badge/DOI/10.15468/2ga3wk.svg"
-              alt="DOI:10.15468/2ga3wk" /></a
+            ><img src="https://zenodo.org/badge/DOI/10.15468/2ga3wk.svg" alt="DOI:10.15468/2ga3wk" /></a
           >.
         </li>
         <li>
@@ -606,18 +466,14 @@
           <ol>
             <li>
               Kenya Bird Map (KBM -
-              <a href="https://kenya.birdmap.africa/" target="_blank"
-                >kenya.birdmap.africa</a
-              >) leads the current efforts to establish a new bird atlas from
-              citizen scientists. We extracted presence information (in full or
-              ad-hoc protocol) for each species at the pentad level and upscaled
-              each species map at the QSD resolution.
+              <a href="https://kenya.birdmap.africa/" target="_blank">kenya.birdmap.africa</a>) leads the current
+              efforts to establish a new bird atlas from citizen scientists. We extracted presence information (in full
+              or ad-hoc protocol) for each species at the pentad level and upscaled each species map at the QSD
+              resolution.
             </li>
             <li>
-              eBird (<a href="https://ebird.org/region/KE" target="_blank"
-                >ebird.org</a
-              >) is the largest online bird database. We used all data entered
-              in Kenya since 2000 to produce species map presence at the QSD
+              eBird (<a href="https://ebird.org/region/KE" target="_blank">ebird.org</a>) is the largest online bird
+              database. We used all data entered in Kenya since 2000 to produce species map presence at the QSD
               resolution.
             </li>
           </ol>
@@ -627,32 +483,25 @@
       <h4><b-icon-map class="pr-1"></b-icon-map>How to read these maps</h4>
 
       <p>
-        Take care when interpreting these maps! Only presence is considered, so
-        there is no difference between the square holding 1 or 10 000
-        invididuals. This means that where there used to be multiple breeding
-        pairs in the past, even if there is only one juvenile seen today, the
-        territory is considered "kept".
+        Take care when interpreting these maps! Only presence is considered, so there is no difference between the
+        square holding 1 or 10 000 invididuals. This means that where there used to be multiple breeding pairs in the
+        past, even if there is only one juvenile seen today, the territory is considered "kept".
       </p>
       <p>
-        Also note that coverage is not consistent between the two periods, so
-        species lost could be due to the absence of observers in this square.
+        Also note that coverage is not consistent between the two periods, so species lost could be due to the absence
+        of observers in this square.
       </p>
 
       <h4><b-icon-binoculars class="pr-1"></b-icon-binoculars>Go birding!</h4>
       <p>
-        Help us extend today's coverage - a wide number of squares have not been
-        birded in recent years... To target those areas, go to Grid mode, and
-        check out the squares that have most lost species!
+        Help us extend today's coverage - a wide number of squares have not been birded in recent years... To target
+        those areas, go to Grid mode, and check out the squares that have most lost species!
       </p>
       <p></p>
       <h4><b-icon-envelope class="pr-1"></b-icon-envelope>Contact</h4>
-      <p>
-        This work was done by Raphaël Nussbaumer , Sidney Shema, Sikenykeny
-        Kennedy and Colin Jackson.
-      </p>
+      <p>This work was done by Raphaël Nussbaumer , Sidney Shema, Sikenykeny Kennedy and Colin Jackson.</p>
       <a href="https://github.com/Zoziologie/KenyaBirdAtlasViz" target="_blank"
-        ><b-icon-github class="h5 mb-0 pr-1"></b-icon-github
-        >/Zoziologie/KenyaBirdAtlasViz</a
+        ><b-icon-github class="h5 mb-0 pr-1"></b-icon-github>/Zoziologie/KenyaBirdAtlasViz</a
       >
     </b-modal>
   </b-container>
@@ -669,14 +518,7 @@ import CircleTemplate from "./circle.vue";
 
 import { latLngBounds } from "leaflet";
 
-import {
-  LMap,
-  LTileLayer,
-  LControlLayers,
-  LControl,
-  LPopup,
-  LCircle,
-} from "vue2-leaflet";
+import { LMap, LTileLayer, LControlLayers, LControl, LPopup, LCircle } from "vue2-leaflet";
 
 import chroma from "chroma-js";
 import map_data from "./assets/map_data.json";
@@ -844,9 +686,7 @@ export default {
       });
     },
     speciesList() {
-      let disp_lkgd = this.filter_selected.includes("%")
-        ? "per_lkgd"
-        : "nb_lkgd";
+      let disp_lkgd = this.filter_selected.includes("%") ? "per_lkgd" : "nb_lkgd";
       if (this.filter_selected == "Taxonomy") {
         return sp_old.sort((a, b) => a.SEQ - b.SEQ);
       } else if (this.filter_selected.includes("Lost")) {
@@ -863,13 +703,7 @@ export default {
     },
     map_data_filtered() {
       let m = this.map_data
-        .filter(
-          (x) =>
-            !(
-              (x.properties.coverage_old == "0") &
-              (x.properties.coverage_new == 0)
-            )
-        )
+        .filter((x) => !((x.properties.coverage_old == "0") & (x.properties.coverage_new == 0)))
         .map((x) => {
           x.style = {};
           x.style.fillOpacity = 0.9;
@@ -893,9 +727,7 @@ export default {
             } else if (!o & n) {
               x.style.fillColor = "#45aa59";
             } else {
-              x.style.visible = this.displayGoodCoverage
-                ? x.properties.mask
-                : false;
+              x.style.visible = this.displayGoodCoverage ? x.properties.mask : false;
               x.style.fillColor = "#000000";
               x.style.fillOpacity = 0.2;
               x.style.opacity = 0.2;
@@ -905,9 +737,7 @@ export default {
           x.style.opacity = x.style.fillOpacity;
           x.style.radius = (40000 / 2) * (1 + sz_dir * 3 * x.properties.corr);
           if (!x.properties.mask) {
-            x.style.visible = this.displayPoorCoverage
-              ? x.style.visible
-              : false;
+            x.style.visible = this.displayPoorCoverage ? x.style.visible : false;
             x.style.radius = 7000;
             x.style.opacity = 0.4;
             x.style.fillOpacity = 0.4;
@@ -934,14 +764,10 @@ export default {
           let o = feature.properties.SEQ_old.includes(seq);
           let status = o ? (n ? "kept" : "lost") : "gained";
           if (n | o) {
-            layer.bindTooltip(
-              "<b>Grid:</b> " +
-                feature.properties.Sq +
-                "<br>" +
-                "<b>Status:</b> " +
-                status,
-              { permanent: false, sticky: true }
-            );
+            layer.bindTooltip("<b>Grid:</b> " + feature.properties.Sq + "<br>" + "<b>Status:</b> " + status, {
+              permanent: false,
+              sticky: true,
+            });
           }
         },
       };
