@@ -777,7 +777,7 @@ export default {
   created() {
     let qp = new URLSearchParams(window.location.search);
     let species = qp.get("species");
-    if (species & (species != "null") & (species != "NaN")) {
+    if ((species != "null") & (species != "NaN")) {
       this.species = sp_old.filter((x) => x.SEQ == Number(species))[0];
     }
     let mode = qp.get("mode");
