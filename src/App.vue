@@ -551,6 +551,17 @@ const init_lkgd = sp_old.reduce(
   [0, 0, 0, 0]
 );
 
+const init_lkgd_gc = sp_old.reduce(
+  (acc, sp) => {
+    acc[0] = acc[0] + sp.nb_lkgd_gc[0];
+    acc[1] = acc[1] + sp.nb_lkgd_gc[1];
+    acc[2] = acc[2] + sp.nb_lkgd_gc[2];
+    acc[3] = acc[3] + sp.nb_lkgd_gc[3];
+    return acc;
+  },
+  [0, 0, 0, 0]
+);
+
 const colorscale_grid = chroma.scale("RdYlGn").domain([-200, 200]);
 
 export default {
@@ -654,14 +665,20 @@ export default {
   computed: {
     nb_lkgd() {
       if ((this.mode == "Grid") & (this.grid != "")) {
-        let f = this.map_data.filter((y) => {
-          return y.properties.Sq == this.grid;
-        });
-        return f[0].properties.nb_lkgd;
+        let f = this.map_data.find((y) => y.properties.Sq == this.grid);
+        return f.properties.nb_lkgd;
       } else if ((this.mode == "Species") & (this.species != null)) {
-        return this.species.nb_lkgd;
+        if (this.display_poor_coverage) {
+          return this.species.nb_lkgd;
+        } else {
+          return this.species.nb_lkgd_gc;
+        }
       } else {
-        return init_lkgd;
+        if (this.display_poor_coverage) {
+          return init_lkgd;
+        } else {
+          return init_lkgd_gc;
+        }
       }
     },
     grid_list() {
