@@ -405,25 +405,33 @@
                     <CircleTemplate size="18" opacity="0.3" class="m-auto" />
                   </div>
                   <span class="ml-1">Never observed</span>
-                  <b-checkbox class="ml-1" v-model="displayGoodCoverage" switch></b-checkbox>
+                  <b-checkbox class="ml-1" v-model="display_never_observed" switch></b-checkbox>
+                </div>
+
+                <div class="d-flex align-items-center">
+                  <div style="width: 25px" class="d-flex">
+                    <div
+                      class="legend-gradient-3 m-auto"
+                      style="
+                        width: 10px;
+                        height: 10px; /* border-radius: 7px; */
+                        background: transparent;
+                        border: 2px solid rgb(33, 37, 41);
+                        opacity: 1;
+                      "
+                    ></div>
+                  </div>
+                  <span class="ml-1">Grid square</span>
+                  <b-checkbox class="ml-1" v-model="display_grid_geojson" switch></b-checkbox>
                 </div>
               </div>
             </div>
           </l-control>
-
-          <!--<l-geo-json
-            v-if="mode == 'Grid'"
-            :geojson="geojson"
-            :options-style="geojson_grid_styleFunction"
-            :options="geojson_grid_options"
-            @click="geojson_grid_clickGeoJsonFunction"
-          ></l-geo-json>
           <l-geo-json
-            v-if="mode == 'Species'"
-            :geojson="geojson"
-            :options-style="geojson_species_styleFunction"
-            :options="geojson_species_options"
-          ></l-geo-json>-->
+            v-if="display_grid_geojson"
+            :geojson="grid_geojson"
+            :optionsStyle="{ color: '#555555', weight: 2, opacity: 0.65, fill: 0 }"
+          />
           <l-circle
             v-for="c in map_data_filtered"
             :key="c.properties.Sq"
@@ -518,11 +526,12 @@ import CircleTemplate from "./circle.vue";
 
 import { latLngBounds } from "leaflet";
 
-import { LMap, LTileLayer, LControlLayers, LControl, LPopup, LCircle } from "vue2-leaflet";
+import { LMap, LTileLayer, LControlLayers, LControl, LPopup, LCircle, LGeoJson } from "vue2-leaflet";
 
 import chroma from "chroma-js";
 import map_data from "./assets/map_data.json";
 import sp_old from "./assets/sp_old.json";
+import grid_geojson from "./assets/grid.json";
 
 import iucn_CR from "./assets/iucn_CR.png";
 import iucn_VU from "./assets/iucn_VU.png";
@@ -552,11 +561,13 @@ export default {
     LControl,
     LPopup,
     LCircle,
+    LGeoJson,
     CircleTemplate,
     Multiselect,
   },
   data() {
     return {
+      grid_geojson: grid_geojson,
       sidebar: true,
       legend: true,
       mode_options: ["Grid", "Species"],
@@ -585,6 +596,7 @@ export default {
       ]),
       displayPoorCoverage: true,
       displayGoodCoverage: true,
+      display_grid_geojson: false,
       map_data: map_data.features,
       iucn: {
         CR: iucn_CR,
