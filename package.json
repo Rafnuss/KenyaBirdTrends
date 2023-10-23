@@ -1,6 +1,6 @@
 {
   "name": "KenyaBirdAtlasViz",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "homepage": "http://zoziologie.raphaelnussbaumer.com/KenyaBirdAtlasViz/",
   "repository": {
     "type": "git",
@@ -15,26 +15,26 @@
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src"
   },
   "dependencies": {
-    "bootstrap": "^4.6.1",
-    "bootstrap-vue": "^2.22.0",
+    "bootstrap": "^4.6.2",
+    "bootstrap-vue": "^2.23.1",
     "chroma-js": "^2.4.2",
-    "leaflet": "^1.8.0",
+    "leaflet": "^1.9.4",
     "leaflet-geosearch": "^3.10.2",
-    "vue": "^2.7.10",
-    "vue-multiselect": "^2.1.6",
+    "vue": "^2.7.15",
+    "vue-multiselect": "^2.1.7",
     "vue2-leaflet": "^2.7.1",
     "vue2-leaflet-geosearch": "^1.0.6",
     "vue2-leaflet-markercluster": "^3.1.0"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^1.6.1",
-    "@vue/eslint-config-prettier": "^7.0.0",
-    "eslint": "^8.1.0",
+    "@vitejs/plugin-vue": "^1.10.2",
+    "@vue/eslint-config-prettier": "^7.1.0",
+    "eslint": "^8.52.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-vue": "^9.4.0",
-    "prettier": "^2.2.1",
-    "sass": "^1.26.5",
-    "vite": "^2.5.4",
+    "eslint-plugin-vue": "^9.17.0",
+    "prettier": "^2.8.8",
+    "sass": "^1.69.4",
+    "vite": "^2.9.16",
     "vite-plugin-vue2": "1.9.0"
   }
 }
