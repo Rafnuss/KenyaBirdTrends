@@ -596,19 +596,13 @@ export default {
       },
       tileProviders: [
         {
-          name: "Mapbox.Streets",
+          name: "Mapbox Streets",
           visible: true,
           url: "https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoicmFmbnVzcyIsImEiOiIzMVE1dnc0In0.3FNMKIlQ_afYktqki-6m0g",
           attribution: "",
         },
         {
-          name: "Mapbox.Dark",
-          visible: false,
-          url: "https://api.mapbox.com/styles/v1/mapbox/dark-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoicmFmbnVzcyIsImEiOiIzMVE1dnc0In0.3FNMKIlQ_afYktqki-6m0g",
-          attribution: "",
-        },
-        {
-          name: "Mapbox.Satellite",
+          name: "Mapbox Satellite",
           visible: false,
           url: "https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoicmFmbnVzcyIsImEiOiIzMVE1dnc0In0.3FNMKIlQ_afYktqki-6m0g",
           attribution: "",
