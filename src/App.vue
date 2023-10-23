@@ -446,6 +446,7 @@
             :options="{ Sq: c.properties.Sq }"
             @click="click_circle"
           />
+          <v-geosearch :options="geosearchOptions"></v-geosearch>
         </l-map>
       </b-col>
     </b-row>
@@ -521,12 +522,12 @@ import "vue-multiselect/dist/vue-multiselect.min.css";
 import "./app.scss";
 
 import Multiselect from "vue-multiselect";
+import { LMap, LTileLayer, LControlLayers, LControl, LPopup, LCircle, LGeoJson } from "vue2-leaflet";
+import { latLngBounds } from "leaflet";
+import { OpenStreetMapProvider } from "leaflet-geosearch";
+import VGeosearch from "vue2-leaflet-geosearch";
 
 import CircleTemplate from "./circle.vue";
-
-import { latLngBounds } from "leaflet";
-
-import { LMap, LTileLayer, LControlLayers, LControl, LPopup, LCircle, LGeoJson } from "vue2-leaflet";
 
 import chroma from "chroma-js";
 import map_data from "./assets/map_data.json";
@@ -575,6 +576,7 @@ export default {
     LGeoJson,
     CircleTemplate,
     Multiselect,
+    VGeosearch,
   },
   data() {
     return {
@@ -645,6 +647,13 @@ export default {
             "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community",
         },*/,
       ],
+      geosearchOptions: {
+        provider: new OpenStreetMapProvider({
+          params: {
+            countrycodes: "KE",
+          },
+        }),
+      },
     };
   },
   methods: {
