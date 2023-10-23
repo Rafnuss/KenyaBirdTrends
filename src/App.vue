@@ -18,7 +18,7 @@
                 <b-form-radio-group
                   v-model="mode"
                   :options="mode_options"
-                  @change="updateURL()"
+                  @change="update_url()"
                   buttons
                   button-variant="outline-primary"
                   size="sm"
@@ -52,17 +52,17 @@
                   <b-row>
                     <b-col class="d-flex align-items-center justify-content-center">
                       <div class="box-sm lost mr-1"></div>
-                      {{ numberWithCommas(nb_lkgd[0]) }}
+                      {{ number_with_commas(nb_lkgd[0]) }}
                       <span class="sublegend"> lost</span>
                     </b-col>
                     <b-col class="d-flex align-items-center justify-content-center">
                       <div class="box-sm kept mr-1"></div>
-                      {{ numberWithCommas(nb_lkgd[1]) }}
+                      {{ number_with_commas(nb_lkgd[1]) }}
                       <span class="sublegend"> kept</span>
                     </b-col>
                     <b-col class="d-flex align-items-center justify-content-center">
                       <div class="box-sm gained mr-1"></div>
-                      {{ numberWithCommas(nb_lkgd[2]) }}
+                      {{ number_with_commas(nb_lkgd[2]) }}
                       <span class="sublegend"> gained</span>
                     </b-col>
                   </b-row>
@@ -125,7 +125,7 @@
               <b-row v-if="grid != ''" class="overflow-auto">
                 <b-col cols="12">
                   <b-list-group class="small h-100">
-                    <b-list-group-item v-for="i in gridList" :key="i.Id" class="d-flex align-items-center py-1 px-3">
+                    <b-list-group-item v-for="i in grid_list" :key="i.Id" class="d-flex align-items-center py-1 px-3">
                       {{ i.SEQ }}. <b class="ml-1">{{ i.CommonName }}</b>
                       <div
                         class="box box-sm ml-auto"
@@ -156,7 +156,7 @@
                     placeholder="Select a species"
                     :custom-label="selectLabel"
                     track-by="SEQ"
-                    @input="updateURL()"
+                    @input="update_url()"
                     :show-labels="false"
                   >
                     <template slot="option" slot-scope="props">
@@ -224,15 +224,15 @@
                   <b-row>
                     <b-col class="d-flex align-items-center justify-content-center">
                       <div class="box-sm lost mr-1"></div>
-                      {{ numberWithCommas(nb_lkgd[0]) }}<span class="sublegend"> lost</span>
+                      {{ number_with_commas(nb_lkgd[0]) }}<span class="sublegend"> lost</span>
                     </b-col>
                     <b-col class="d-flex align-items-center justify-content-center">
                       <div class="box-sm kept mr-1"></div>
-                      {{ numberWithCommas(nb_lkgd[1]) }}<span class="sublegend"> kept</span>
+                      {{ number_with_commas(nb_lkgd[1]) }}<span class="sublegend"> kept</span>
                     </b-col>
                     <b-col class="d-flex align-items-center justify-content-center">
                       <div class="box-sm gained mr-1"></div>
-                      {{ numberWithCommas(nb_lkgd[2]) }}<span class="sublegend"> gained</span>
+                      {{ number_with_commas(nb_lkgd[2]) }}<span class="sublegend"> gained</span>
                     </b-col>
                   </b-row>
                 </b-col>
@@ -249,13 +249,13 @@
                 <b-col cols="12" class="mt-2">
                   <b-list-group class="small h-100">
                     <b-list-group-item
-                      v-for="i in speciesList"
+                      v-for="i in species_list"
                       :key="i.Id"
                       class="d-flex align-items-center py-1 px-3"
                       :active="species == null ? false : i.SEQ == species.SEQ"
                       @click="
                         species = i;
-                        updateURL();
+                        update_url();
                       "
                       :action="true"
                       role="button"
@@ -303,7 +303,7 @@
       <b-col class="flex-grow-1" @shown="reloadMap()">
         <l-map :bounds="bounds" ref="map">
           <l-tile-layer
-            v-for="tileProvider in tileProviders"
+            v-for="tileProvider in tile_providers"
             :key="tileProvider.name"
             :name="tileProvider.name"
             :visible="tileProvider.visible"
@@ -397,7 +397,7 @@
                     <CircleTemplate size="7" opacity="0.7" class="m-auto" />
                   </div>
                   <span class="ml-1">Poor coverage </span>
-                  <b-checkbox class="ml-1" v-model="displayPoorCoverage" switch></b-checkbox>
+                  <b-checkbox class="ml-1" v-model="display_poor_coverage" switch></b-checkbox>
                 </div>
 
                 <div class="d-flex align-items-center" v-if="mode == 'Species'">
@@ -444,7 +444,7 @@
             :weight="c.style.weight"
             :visible="c.style.visible"
             :options="{ Sq: c.properties.Sq }"
-            @click="clickCircle"
+            @click="click_circle"
           />
         </l-map>
       </b-col>
@@ -594,8 +594,8 @@ export default {
         [5.615985, 43.50585],
         [-5.353521, 32.958984],
       ]),
-      displayPoorCoverage: true,
-      displayGoodCoverage: true,
+      display_poor_coverage: true,
+      display_never_observed: true,
       display_grid_geojson: false,
       map_data: map_data.features,
       iucn: {
@@ -606,7 +606,7 @@ export default {
         DD: iucn_DD,
         VU: iucn_VU,
       },
-      tileProviders: [
+      tile_providers: [
         {
           name: "Mapbox Streets",
           visible: true,
@@ -637,10 +637,10 @@ export default {
     };
   },
   methods: {
-    numberWithCommas(x) {
+    number_with_commas(x) {
       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
-    updateURL() {
+    update_url() {
       let qp = new URLSearchParams();
       if ((this.mode != "") & (this.mode != null)) qp.set("mode", this.mode);
       if ((this.grid != "") & (this.grid != null)) qp.set("grid", this.grid);
@@ -664,8 +664,8 @@ export default {
         return init_lkgd;
       }
     },
-    gridList() {
-      this.updateURL();
+    grid_list() {
+      this.update_url();
       let f = this.map_data.filter((y) => {
         return y.properties.Sq == this.grid;
       });
@@ -691,7 +691,7 @@ export default {
         }
       });
     },
-    speciesList() {
+    species_list() {
       let disp_lkgd = this.filter_selected.includes("%") ? "per_lkgd" : "nb_lkgd";
       if (this.filter_selected == "Taxonomy") {
         return sp_old.sort((a, b) => a.SEQ - b.SEQ);
@@ -733,7 +733,7 @@ export default {
             } else if (!o & n) {
               x.style.fillColor = "#45aa59";
             } else {
-              x.style.visible = this.displayGoodCoverage ? x.properties.mask : false;
+              x.style.visible = this.display_never_observed ? x.properties.mask : false;
               x.style.fillColor = "#000000";
               x.style.fillOpacity = 0.2;
               x.style.opacity = 0.2;
@@ -743,7 +743,7 @@ export default {
           x.style.opacity = x.style.fillOpacity;
           x.style.radius = (40000 / 2) * (1 + sz_dir * 3 * x.properties.corr);
           if (!x.properties.mask) {
-            x.style.visible = this.displayPoorCoverage ? x.style.visible : false;
+            x.style.visible = this.display_poor_coverage ? x.style.visible : false;
             x.style.radius = 7000;
             x.style.opacity = 0.4;
             x.style.fillOpacity = 0.4;
@@ -754,7 +754,7 @@ export default {
         });
       return m;
     },
-    clickCircle() {
+    click_circle() {
       return (e) => {
         if (this.mode == "Grid") {
           let Sq = e.sourceTarget.options.Sq;
