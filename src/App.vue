@@ -69,13 +69,22 @@
                 </b-col>
                 <b-col v-if="grid != ''" cols="auto">
                   <h4>
-                    <b-badge variant="primary" class="d-flex align-items-center"
-                      >{{ grid }}
+                    <b-badge variant="primary" class="d-flex align-items-center">
+                      {{ grid }}
                       <b-button class="close ml-1 text-white primary" aria-label="Close" @click="grid = ''">
                         <span aria-hidden="true">&times;</span>
                       </b-button>
                     </b-badge>
                   </h4>
+                  <!--<b>Coverage:</b>
+                  <ul>
+                    <li>
+                      Old atlas: <small>{{ map_data.find((y) => y.properties.Sq == grid).properties.cov_old }}%</small>
+                    </li>
+                    <li>
+                      New atlas: <small>{{ map_data.find((y) => y.properties.Sq == grid).properties.cov_new }}</small>
+                    </li>
+                  </ul>-->
                 </b-col>
               </b-row>
               <b-row v-if="grid == ''">
@@ -362,7 +371,7 @@
                     class="p-0 ml-1"
                     variant="link"
                     v-b-tooltip.top.hover
-                    title="The confidence in the change is based on the difference of effort (i.e. time spent) between the old and new atlas. For example, a small red circle indicates an unlikely loss of the species, while a large green circle indicates a likely gain."
+                    title="The confidence is based on the change in effort between the old and new atlases. For example, a small red circle indicates an unlikely loss of the species, while a large green circle indicates a likely gain."
                     ><b-icon-question-circle-fill> </b-icon-question-circle-fill>
                   </b-button>
                 </span>
@@ -519,6 +528,7 @@
 <script>
 import "leaflet/dist/leaflet.css";
 import "vue-multiselect/dist/vue-multiselect.min.css";
+import "leaflet-geosearch/assets/css/leaflet.css";
 import "./app.scss";
 
 import Multiselect from "vue-multiselect";
@@ -735,7 +745,7 @@ export default {
     },
     map_data_filtered() {
       let m = this.map_data
-        .filter((x) => !((x.properties.coverage_old == "0") & (x.properties.coverage_new == 0)))
+        .filter((x) => !((x.properties.cov_old == "0") & (x.properties.cov_new == 0)))
         .map((x) => {
           x.style = {};
           x.style.fillOpacity = 0.9;
@@ -759,7 +769,7 @@ export default {
             } else if (!o & n) {
               x.style.fillColor = "#45aa59";
             } else {
-              x.style.visible = this.display_never_observed ? x.properties.mask : false;
+              x.style.visible = this.display_never_observed ? !x.properties.mask : false;
               x.style.fillColor = "#000000";
               x.style.fillOpacity = 0.2;
               x.style.opacity = 0.2;
@@ -768,7 +778,7 @@ export default {
           }
           x.style.opacity = x.style.fillOpacity;
           x.style.radius = (40000 / 2) * (1 + sz_dir * 3 * x.properties.corr);
-          if (!x.properties.mask) {
+          if (x.properties.mask) {
             x.style.visible = this.display_poor_coverage ? x.style.visible : false;
             x.style.radius = 7000;
             x.style.opacity = 0.4;
