@@ -187,7 +187,7 @@
                     </template>
                   </multiselect>
                 </b-col>
-                <b-col v-if="species != null" class="d-flex pt-1">
+                <b-col v-if="species != null" class="d-flex flex-wrap pt-1">
                   <a
                     target="_blank"
                     class="d-flex align-items-center justify-content-center"
@@ -273,7 +273,7 @@
                     <b-button v-b-toggle:my-collapse size="sm" variant="link">
                       <span class="when-open"><b-icon icon="caret-down-fill" font-scale="1" /></span>
                       <span class="when-closed"><b-icon icon="caret-right-fill" font-scale="1" /></span>
-                      Advanced filter
+                      Filters list
                     </b-button>
                   </div>
                   <small>Sort by:</small>
@@ -284,27 +284,15 @@
               </b-row>
               <b-collapse id="my-collapse">
                 <b-card bg-variant="light" class="m-2" no-body>
-                  <b-card-body class="py-2">
-                    <b-form-group label-cols="4" label-cols-lg="2" label="Display only:" label-size="sm" class="mb-0">
-                      <b-form-checkbox-group
-                        v-model="filter_checkbox_selected"
-                        :options="filter_checkbox_options"
-                        size="sm"
-                      ></b-form-checkbox-group>
-                    </b-form-group>
-                    <b-form-group
-                      label-cols="4"
-                      label-cols-lg="4"
-                      label="Display red listed and above:"
-                      label-size="sm"
-                      class="mb-0"
-                    >
-                      <b-form-select
-                        v-model="filter_red_list_selected"
-                        :options="filter_red_list_options"
-                        size="sm"
-                      ></b-form-select>
-                    </b-form-group>
+                  <b-card-body class="py-2 d-flex">
+                    <b-form-checkbox-group
+                      v-model="filter_checkbox_selected"
+                      :options="filter_checkbox_options"
+                      size="sm"
+                    />
+                    <b-form inline
+                      ><b-form-select v-model="filter_red_list_selected" :options="filter_red_list_options" size="sm"
+                    /></b-form>
                   </b-card-body>
                 </b-card>
               </b-collapse>
