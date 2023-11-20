@@ -35,6 +35,7 @@
                 <b-col>
                   Number of
                   {{ grid == "" ? "squares for  all " : "" }}species
+                  <span class="sublegend">{{ display_poor_coverage ? "(including poor coverage)" : "" }}</span>
                   <div class="kept d-flex w-100 p-0">
                     <div
                       class="lost py-2"
@@ -215,7 +216,8 @@
               </b-row>
               <b-row class="px-0 py-2 my-2">
                 <b-col>
-                  Number of squares{{ species == null ? " for  all species" : "" }}
+                  Number of squares{{ species == null ? " for all speciess" : "" }}
+                  <span class="sublegend">{{ display_poor_coverage ? "(including poor coverage)" : "" }}</span>
                   <div class="kept d-flex w-100 p-0">
                     <div
                       class="lost py-2"
