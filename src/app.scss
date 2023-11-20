@@ -105,3 +105,7 @@ body,
 .multiselect__option--selected.multiselect__option--highlight {
   background: #6a6a6a;
 }
+.collapsed > .when-open,
+.not-collapsed > .when-closed {
+  display: none;
+}
