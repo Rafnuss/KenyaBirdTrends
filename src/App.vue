@@ -136,7 +136,7 @@
                 <b-col cols="12">
                   <b-list-group class="small h-100">
                     <b-list-group-item v-for="i in grid_list" :key="i.Id" class="d-flex align-items-center py-1 px-3">
-                      {{ i.SEQ }}. <b class="ml-1">{{ i.CommonName }}</b>
+                      <b class="ml-1">{{ i.common_name }}</b>
                       <div
                         class="box box-sm ml-auto"
                         :class="{
@@ -157,12 +157,12 @@
                   v-model="species"
                   :options="species_options"
                   :reduce="(x) => x.SEQ"
-                  label="CommonName"
+                  label="common_name"
                   
                 ></v-select>-->
                   <multiselect
                     v-model="species"
-                    :options="species_options"
+                    :options="sp_filter"
                     placeholder="Select a species"
                     :custom-label="selectLabel"
                     track-by="SEQ"
@@ -170,7 +170,8 @@
                     :show-labels="false"
                   >
                     <template slot="option" slot-scope="props">
-                      {{ props.option.CommonName }}
+                      {{ props.option.common_name }}
+
                       <img
                         :src="iucn[props.option.IUCN]"
                         v-if="['CR', 'DD', 'EN', 'VU'].includes(props.option.IUCN)"
@@ -179,9 +180,9 @@
                       />
                     </template>
                     <template slot="singleLabel" slot-scope="props">
-                      <b>{{ props.option.CommonName }}</b>
+                      <b>{{ props.option.common_name }}</b>
                       <span class="sublegend ml-2"
-                        ><i>{{ props.option.ScientificName }}</i></span
+                        ><i>{{ props.option.scientific_name }}</i></span
                       >
                       <img :src="iucn[props.option.IUCN]" class="ml-2" style="width: 1rem" />
                     </template>
@@ -264,14 +265,14 @@
                   <small>Sort by:</small>
                 </b-col>
                 <b-col cols="4" class="pl-1">
-                  <b-form-select v-model="filter_selected" :options="filter_options" size="sm"></b-form-select>
+                  <b-form-select v-model="sort_selected" :options="sort_options" size="sm"></b-form-select>
                 </b-col>
               </b-row>
               <b-row class="overflow-auto">
                 <b-col cols="12" class="mt-2">
                   <b-list-group class="small h-100">
                     <b-list-group-item
-                      v-for="i in species_list"
+                      v-for="i in sp_sort"
                       :key="i.Id"
                       class="d-flex align-items-center py-1 px-3"
                       :active="species == null ? false : i.SEQ == species.SEQ"
@@ -554,7 +555,7 @@ import CircleTemplate from "./circle.vue";
 
 import chroma from "chroma-js";
 import map_data from "./assets/map_data.json";
-import sp_old from "./assets/sp_old.json";
+import sp_base from "./assets/sp_base.json";
 import grid_geojson from "./assets/grid.json";
 
 import iucn_CR from "./assets/iucn_CR.png";
@@ -564,7 +565,7 @@ import iucn_EN from "./assets/iucn_EN.png";
 import iucn_NT from "./assets/iucn_NT.png";
 import iucn_LC from "./assets/iucn_LC.png";
 
-const init_lkgd = sp_old.reduce(
+const init_lkgd = sp_base.reduce(
   (acc, sp) => {
     acc[0] = acc[0] + sp.nb_lkgd[0];
     acc[1] = acc[1] + sp.nb_lkgd[1];
@@ -575,7 +576,7 @@ const init_lkgd = sp_old.reduce(
   [0, 0, 0, 0]
 );
 
-const init_lkgd_gc = sp_old.reduce(
+const init_lkgd_gc = sp_base.reduce(
   (acc, sp) => {
     acc[0] = acc[0] + sp.nb_lkgd_gc[0];
     acc[1] = acc[1] + sp.nb_lkgd_gc[1];
@@ -611,7 +612,7 @@ export default {
       checkbox_lost: true,
       checkbox_kept: true,
       checkbox_gained: true,
-      species_options: sp_old,
+      species_options: sp_base,
       species: null,
       filter_options: [
         "Taxonomy",
@@ -624,7 +625,7 @@ export default {
         "% Kept",
         "% Difference",
       ],
-      filter_selected: "Taxonomy",
+      sort_selected: "Taxonomy",
       grid: "",
       bounds: latLngBounds([
         [5.615985, 43.50585],
@@ -690,8 +691,8 @@ export default {
       if (this.species != null) qp.set("species", this.species.SEQ);
       history.replaceState(null, null, "?" + qp.toString());
     },
-    selectLabel({ CommonName, ScientificName }) {
-      return `${CommonName} — [${ScientificName}]`;
+    selectLabel({ common_name, scientific_name }) {
+      return `${common_name} — [${scientific_name}]`;
     },
   },
   computed: {
@@ -721,14 +722,14 @@ export default {
       if (f.length == 0) {
         return [];
       }
-      let sp_old_returned = [...sp_old];
-      sp_old_returned = sp_old_returned.map((y) => {
+      let sp_base_returned = this.sp_taxo.sort((a, b) => a.sort - b.sort);
+      sp_base_returned = sp_base_returned.map((y) => {
         var n = f[0].properties.SEQ_new.includes(y.SEQ);
         let o = f[0].properties.SEQ_old.includes(y.SEQ);
         y.cat = n & o ? "kept" : n ? "gained" : o ? "lost" : "";
         return y;
       });
-      return sp_old_returned.filter((y) => {
+      return sp_base_returned.filter((y) => {
         if (y.cat == "lost") {
           return this.checkbox_lost;
         } else if (y.cat == "kept") {
@@ -740,20 +741,72 @@ export default {
         }
       });
     },
-    species_list() {
-      let disp_lkgd = this.filter_selected.includes("%") ? "per_lkgd" : "nb_lkgd";
-      if (this.filter_selected == "Taxonomy") {
-        return sp_old.sort((a, b) => a.SEQ - b.SEQ);
-      } else if (this.filter_selected.includes("Lost")) {
-        return sp_old.sort((a, b) => b[disp_lkgd][0] - a[disp_lkgd][0]);
-      } else if (this.filter_selected.includes("Gained")) {
-        return sp_old.sort((a, b) => b[disp_lkgd][2] - a[disp_lkgd][2]);
-      } else if (this.filter_selected.includes("Kept")) {
-        return sp_old.sort((a, b) => b[disp_lkgd][1] - a[disp_lkgd][1]);
-      } else if (this.filter_selected.includes("Difference")) {
-        return sp_old.sort((a, b) => b[disp_lkgd][3] - a[disp_lkgd][3]);
+    sp_taxo() {
+      console.log("run sp_taxo()");
+      if (this.taxonomy_selected == "Clements/eBird") {
+        var sn = "clements_scientific_name";
+        var cn = "clements_common_name";
+        var s = "clements_sort";
+      } else if (this.taxonomy_selected == "Checklist of the Birds of Kenya (2019)") {
+        var sn = "checklist_scientific_name";
+        var cn = "checklist_common_name";
+        var s = "checklist_sort";
+      } else if (this.taxonomy_selected == "A Bird Atlas of Kenya (1989)") {
+        var sn = "scientific_name";
+        var cn = "common_name";
+        var s = "SEQ";
+      }
+      return sp_base.map((sp) => {
+        return {
+          scientific_name: sp[sn],
+          common_name: sp[cn],
+          sort: sp[s],
+          per_lkgd: sp.per_lkgd,
+          nb_lkgd: sp.nb_lkgd,
+          kbm: sp.kbm,
+          ebird: sp.ebird,
+          IUCN: sp.IUCN,
+          IUCNID: sp.IUCNID,
+          SEQ: sp.SEQ,
+          endemic: sp.endemic,
+          afrotropical: sp.afrotropical,
+          palearctic: sp.palearctic,
+          waterbird: sp.waterbird,
+        };
+      });
+    },
+    sp_filter() {
+      console.log("run sp_filter()");
+      let spf = this.sp_taxo;
+      if (this.filter_checkbox_selected.includes("Endemic")) {
+        spf = spf.filter((sp) => sp.endemic);
+      }
+      if (this.filter_checkbox_selected.includes("Afrotropical migrant")) {
+        spf = spf.filter((sp) => sp.afrotropical);
+      }
+      if (this.filter_checkbox_selected.includes("Palearctic migrant")) {
+        spf = spf.filter((sp) => sp.palearctic);
+      }
+      if (this.filter_checkbox_selected.includes("Waterbird")) {
+        spf = spf.filter((sp) => sp.waterbird);
+      }
+      return spf;
+    },
+    sp_sort() {
+      console.log("run sp_sort()");
+      let disp_lkgd = this.sort_selected.includes("%") ? "per_lkgd" : "nb_lkgd";
+      if (this.sort_selected == "Taxonomy") {
+        return this.sp_filter.sort((a, b) => a.sort - b.sort);
+      } else if (this.sort_selected.includes("Lost")) {
+        return this.sp_filter.sort((a, b) => b[disp_lkgd][0] - a[disp_lkgd][0]);
+      } else if (this.sort_selected.includes("Gained")) {
+        return this.sp_filter.sort((a, b) => b[disp_lkgd][2] - a[disp_lkgd][2]);
+      } else if (this.sort_selected.includes("Kept")) {
+        return this.sp_filter.sort((a, b) => b[disp_lkgd][1] - a[disp_lkgd][1]);
+      } else if (this.sort_selected.includes("Difference")) {
+        return this.sp_filter.sort((a, b) => b[disp_lkgd][3] - a[disp_lkgd][3]);
       } else {
-        return sp_old;
+        return this.sp_filter;
       }
     },
     map_data_filtered() {
@@ -833,7 +886,7 @@ export default {
     let qp = new URLSearchParams(window.location.search);
     let species = qp.get("species");
     if ((species != "null") & (species != "NaN")) {
-      this.species = sp_old.filter((x) => x.SEQ == Number(species))[0];
+      this.species = sp_base.filter((x) => x.SEQ == Number(species))[0];
     }
     let mode = qp.get("mode");
     if (mode) this.mode = mode;
