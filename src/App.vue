@@ -532,9 +532,16 @@
       <p></p>
       <h4><b-icon-envelope class="pr-1"></b-icon-envelope>Contact</h4>
       <p>This work was done by Raphaël Nussbaumer , Sidney Shema, Sikenykeny Kennedy and Colin Jackson.</p>
-      <a href="https://github.com/Zoziologie/KenyaBirdAtlasViz" target="_blank"
-        ><b-icon-github class="h5 mb-0 pr-1"></b-icon-github>/Zoziologie/KenyaBirdAtlasViz</a
-      >
+      <p>
+        <a href="https://github.com/Zoziologie/KenyaBirdAtlasViz" target="_blank"
+          ><b-icon-github class="h5 mb-0 pr-1"></b-icon-github>/Zoziologie/KenyaBirdAtlasViz</a
+        >
+      </p>
+
+      <h4><b-icon icon="gear-fill" class="pr-1" />Settings</h4>
+      <b-form-group label-cols="4" label-cols-lg="2" label-size="sm" label="Taxonomy:">
+        <b-form-select v-model="taxonomy_selected" :options="taxonomy_options" size="sm"></b-form-select>
+      </b-form-group>
     </b-modal>
   </b-container>
 </template>
@@ -626,6 +633,8 @@ export default {
         "% Difference",
       ],
       sort_selected: "Taxonomy",
+      taxonomy_options: ["Clements/eBird", "Checklist of the Birds of Kenya (2019)", "A Bird Atlas of Kenya (1989)"],
+      taxonomy_selected: "Clements/eBird",
       grid: "",
       bounds: latLngBounds([
         [5.615985, 43.50585],
@@ -810,6 +819,7 @@ export default {
       }
     },
     map_data_filtered() {
+      console.log("run map_data_filtered()");
       let m = this.map_data
         .filter((x) => !((x.properties.cov_old == "0") & (x.properties.cov_new == 0)))
         .map((x) => {
