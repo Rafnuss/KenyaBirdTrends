@@ -22,7 +22,7 @@
                   buttons
                   button-variant="outline-primary"
                   size="sm"
-                ></b-form-radio-group>
+                />
                 <b-button size="sm" variant="primary" class="ml-2 d-lg-none" @click="sidebar = false">
                   <b-icon icon="map-fill"></b-icon>
                 </b-button>
@@ -184,11 +184,17 @@
                       <span class="sublegend ml-2"
                         ><i>{{ props.option.scientific_name }}</i></span
                       >
-                      <img :src="iucn[props.option.IUCN]" class="ml-2" style="width: 1rem" />
                     </template>
                   </multiselect>
                 </b-col>
                 <b-col v-if="species != null" class="d-flex pt-1">
+                  <a
+                    target="_blank"
+                    title="IUCN page"
+                    :href="'https://apiv3.iucnredlist.org/api/v3/taxonredirect/' + species.IUCNID"
+                  >
+                    <img :src="iucn[species.IUCN]" class="ml-1" style="width: 1rem" />
+                  </a>
                   <b-button
                     squared
                     variant="outline-primary"
@@ -261,42 +267,44 @@
                 </b-col>
               </b-row>
               <b-row>
-                <b-col>
-                  <b-button cols="4" v-b-toggle:my-collapse size="sm" variant="link">
-                    <span class="when-open"><b-icon icon="caret-down-fill" font-scale="1" /></span>
-                    <span class="when-closed"><b-icon icon="caret-right-fill" font-scale="1" /></span>
-                    Advanced search
-                  </b-button>
-                </b-col>
-                <b-col cols="4" class="text-right pr-0">
+                <b-col class="d-flex align-items-center flex-row">
+                  <div class="flex-grow-1">
+                    <b-button v-b-toggle:my-collapse size="sm" variant="link">
+                      <span class="when-open"><b-icon icon="caret-down-fill" font-scale="1" /></span>
+                      <span class="when-closed"><b-icon icon="caret-right-fill" font-scale="1" /></span>
+                      Advanced filter
+                    </b-button>
+                  </div>
                   <small>Sort by:</small>
-                </b-col>
-                <b-col cols="4" class="pl-1">
-                  <b-form-select v-model="sort_selected" :options="sort_options" size="sm"></b-form-select>
+                  <b-form inline>
+                    <b-form-select class="flex-grow-0 ml-1" v-model="sort_selected" :options="sort_options" size="sm" />
+                  </b-form>
                 </b-col>
               </b-row>
               <b-collapse id="my-collapse">
-                <b-card bg-variant="light" class="m-2">
-                  <b-form-group label-cols="4" label-cols-lg="2" label="Display only:" label-size="sm">
-                    <b-row>
-                      <b-col cols="6">
-                        <b-form-checkbox-group
-                          v-model="filter_checkbox_selected"
-                          :options="filter_checkbox_options"
-                          stacked
-                          size="sm"
-                        ></b-form-checkbox-group>
-                      </b-col>
-                      <b-col cols="6">
-                        <b-form-checkbox-group
-                          v-model="filter_red_list_selected"
-                          :options="filter_red_list_options"
-                          stacked
-                          size="sm"
-                        ></b-form-checkbox-group>
-                      </b-col>
-                    </b-row>
-                  </b-form-group>
+                <b-card bg-variant="light" class="m-2" no-body>
+                  <b-card-body class="py-2">
+                    <b-form-group label-cols="4" label-cols-lg="2" label="Display only:" label-size="sm" class="mb-0">
+                      <b-form-checkbox-group
+                        v-model="filter_checkbox_selected"
+                        :options="filter_checkbox_options"
+                        size="sm"
+                      ></b-form-checkbox-group>
+                    </b-form-group>
+                    <b-form-group
+                      label-cols="4"
+                      label-cols-lg="4"
+                      label="Display red listed and above:"
+                      label-size="sm"
+                      class="mb-0"
+                    >
+                      <b-form-select
+                        v-model="filter_red_list_selected"
+                        :options="filter_red_list_options"
+                        size="sm"
+                      ></b-form-select>
+                    </b-form-group>
+                  </b-card-body>
                 </b-card>
               </b-collapse>
               <b-row class="overflow-auto">
@@ -510,7 +518,7 @@
         </l-map>
       </b-col>
     </b-row>
-    <b-modal id="modal-1" size="lg" ok-only>
+    <b-modal id="modal-1" size="lg" ok-only title="Information on Kenya Bird Atlas Viz">
       <p>
         Welcome to the vizualisation tool for the
         <a href="https://github.com/Rafnuss/KenyaAtlasComparison" target="_blank">Kenya bird atlas comparison project</a
@@ -658,8 +666,8 @@ export default {
       checkbox_gained: true,
       species_options: sp_base,
       species: null,
-      filter_red_list_options: ["Near Threatened", "Vulnerable", "Endangered", "Critically Endangered"],
-      filter_red_list_selected: [],
+      filter_red_list_options: ["All", "Near Threatened", "Vulnerable", "Endangered", "Critically Endangered"],
+      filter_red_list_selected: "All",
       filter_checkbox_options: ["Endemic", "Afrotropical migrant", "Palearctic migrant", "Waterbird"],
       filter_checkbox_selected: [],
       sort_options: [
@@ -839,6 +847,15 @@ export default {
       }
       if (this.filter_checkbox_selected.includes("Waterbird")) {
         spf = spf.filter((sp) => sp.waterbird);
+      }
+      if (this.filter_red_list_selected == "Near Threatened") {
+        spf = spf.filter((sp) => ["CR", "EN", "VU", "NT"].includes(sp.IUCN));
+      } else if (this.filter_red_list_selected == "Vulnerable") {
+        spf = spf.filter((sp) => ["CR", "EN", "VU"].includes(sp.IUCN));
+      } else if (this.filter_red_list_selected == "Endangered") {
+        spf = spf.filter((sp) => ["CR", "EN"].includes(sp.IUCN));
+      } else if (this.filter_red_list_selected == "Critically Endangered") {
+        spf = spf.filter((sp) => ["CR"].includes(sp.IUCN));
       }
       return spf;
     },
