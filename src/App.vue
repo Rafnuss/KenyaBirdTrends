@@ -261,13 +261,44 @@
                 </b-col>
               </b-row>
               <b-row>
-                <b-col cols="8" class="text-right pr-0">
+                <b-col>
+                  <b-button cols="4" v-b-toggle:my-collapse size="sm" variant="link">
+                    <span class="when-open"><b-icon icon="caret-down-fill" font-scale="1" /></span>
+                    <span class="when-closed"><b-icon icon="caret-right-fill" font-scale="1" /></span>
+                    Advanced search
+                  </b-button>
+                </b-col>
+                <b-col cols="4" class="text-right pr-0">
                   <small>Sort by:</small>
                 </b-col>
                 <b-col cols="4" class="pl-1">
                   <b-form-select v-model="sort_selected" :options="sort_options" size="sm"></b-form-select>
                 </b-col>
               </b-row>
+              <b-collapse id="my-collapse">
+                <b-card bg-variant="light" class="m-2">
+                  <b-form-group label-cols="4" label-cols-lg="2" label="Display only:" label-size="sm">
+                    <b-row>
+                      <b-col cols="6">
+                        <b-form-checkbox-group
+                          v-model="filter_checkbox_selected"
+                          :options="filter_checkbox_options"
+                          stacked
+                          size="sm"
+                        ></b-form-checkbox-group>
+                      </b-col>
+                      <b-col cols="6">
+                        <b-form-checkbox-group
+                          v-model="filter_red_list_selected"
+                          :options="filter_red_list_options"
+                          stacked
+                          size="sm"
+                        ></b-form-checkbox-group>
+                      </b-col>
+                    </b-row>
+                  </b-form-group>
+                </b-card>
+              </b-collapse>
               <b-row class="overflow-auto">
                 <b-col cols="12" class="mt-2">
                   <b-list-group class="small h-100">
@@ -621,7 +652,11 @@ export default {
       checkbox_gained: true,
       species_options: sp_base,
       species: null,
-      filter_options: [
+      filter_red_list_options: ["Near Threatened", "Vulnerable", "Endangered", "Critically Endangered"],
+      filter_red_list_selected: [],
+      filter_checkbox_options: ["Endemic", "Afrotropical migrant", "Palearctic migrant", "Waterbird"],
+      filter_checkbox_selected: [],
+      sort_options: [
         "Taxonomy",
         "# Lost",
         "# Gained",
