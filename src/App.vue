@@ -187,7 +187,7 @@
                     </template>
                   </multiselect>
                 </b-col>
-                <b-col v-if="species != null">
+                <b-col v-if="species != null" class="d-flex pt-1">
                   <b-button
                     squared
                     variant="outline-primary"
@@ -211,6 +211,17 @@
                     target="_blank"
                   >
                     KBM-{{ i }}
+                  </b-button>
+                  <b-button
+                    squared
+                    variant="primary"
+                    class="ml-auto mr-1 btn-xs"
+                    size="sm"
+                    :href="'https://test/' + species.SEQ"
+                    target="_blank"
+                    disabled
+                  >
+                    <b-icon icon="download" /> Download map
                   </b-button>
                 </b-col>
               </b-row>
