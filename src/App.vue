@@ -314,14 +314,20 @@
                       :action="true"
                       role="button"
                     >
-                      {{ i.SEQ }}. <b class="ml-1">{{ i.CommonName }}</b>
-                      <img
-                        v-if="['CR', 'DD', 'EN', 'VU'].includes(i.IUCN)"
-                        :src="iucn[i.IUCN]"
-                        v-bind:alt="i.IUCN"
-                        class="ml-1"
-                        style="width: 1rem"
-                      />
+                      <b class="ml-1">{{ i.common_name }}</b>
+                      <a
+                        target="_blank"
+                        title="IUCN page"
+                        :href="'https://apiv3.iucnredlist.org/api/v3/taxonredirect/' + i.IUCNID"
+                      >
+                        <img
+                          v-if="['CR', 'DD', 'EN', 'VU'].includes(i.IUCN)"
+                          :src="iucn[i.IUCN]"
+                          v-bind:alt="i.IUCN"
+                          class="ml-1"
+                          style="width: 1rem"
+                        />
+                      </a>
                       <div
                         class="bar kept"
                         v-b-tooltip.right.hover.html="
