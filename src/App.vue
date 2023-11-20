@@ -190,6 +190,7 @@
                 <b-col v-if="species != null" class="d-flex pt-1">
                   <a
                     target="_blank"
+                    class="d-flex align-items-center justify-content-center"
                     title="IUCN page"
                     :href="'https://apiv3.iucnredlist.org/api/v3/taxonredirect/' + species.IUCNID"
                   >
@@ -198,7 +199,7 @@
                   <b-button
                     squared
                     variant="outline-primary"
-                    class="ml-1 btn-xs"
+                    class="ml-1 btn-xs d-flex align-items-center justify-content-center"
                     size="sm"
                     v-for="(i, u) in species.ebird"
                     :key="'sp-ebird-' + u"
@@ -210,7 +211,7 @@
                   <b-button
                     squared
                     variant="outline-primary"
-                    class="ml-1 btn-xs"
+                    class="ml-1 btn-xs d-flex align-items-center justify-content-center"
                     size="sm"
                     v-for="(i, u) in species.kbm"
                     :key="'sp-kbm-' + u"
