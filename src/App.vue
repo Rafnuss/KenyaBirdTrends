@@ -938,7 +938,9 @@ export default {
       };
     },
   },
-  mounted() {},
+  mounted() {
+    if (JSON.parse(this.$cookie.get("taxonomy_selected"))) this.taxonomy_selected = JSON.parse(this.$cookie.get("taxonomy_selected"));
+  },
   created() {
     let qp = new URLSearchParams(window.location.search);
     let species = qp.get("species");
@@ -963,6 +965,9 @@ export default {
           );
         }, "10");
       }
+    },
+    taxonomy_selected() {
+      this.$cookie.set("taxonomy_selected", JSON.stringify(this.taxonomy_selected), 365);
     },
   },
 };
