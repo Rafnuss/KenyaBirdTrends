@@ -233,6 +233,10 @@
                   </b-button>
                 </b-col>
               </b-row>
+              <b-alert show variant="warning" v-if="species.flag != null" class="m-2 small py-2 px-3">
+                <b-icon icon="exclamation-triangle"></b-icon>
+                {{ species.flag }}
+              </b-alert>
               <b-row class="px-0 py-2 my-2">
                 <b-col>
                   Number of squares{{ species == null ? " for all speciess" : "" }}
@@ -819,6 +823,7 @@ export default {
           afrotropical: sp.afrotropical,
           palearctic: sp.palearctic,
           waterbird: sp.waterbird,
+          flag: sp.flag,
         };
       });
     },
