@@ -294,9 +294,11 @@
                       :options="filter_checkbox_options"
                       size="sm"
                     />
-                    <b-form inline
-                      ><b-form-select v-model="filter_red_list_selected" :options="filter_red_list_options" size="sm"
-                    /></b-form>
+                    <b-form inline >
+                      <b-form-group label-size="sm" label="Red list category:">
+                        <b-form-select v-model="filter_red_list_selected" :options="filter_red_list_options" size="sm"/>
+                      </b-form-group>
+                  </b-form>
                   </b-card-body>
                 </b-card>
               </b-collapse>
