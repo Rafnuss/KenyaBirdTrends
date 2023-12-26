@@ -233,7 +233,7 @@
                   </b-button>
                 </b-col>
               </b-row>
-              <b-alert show variant="warning" v-if="species.flag != null" class="m-2 small py-2 px-3">
+              <b-alert show variant="warning" v-if="species && species.flag != null" class="m-2 small py-2 px-3">
                 <b-icon icon="exclamation-triangle"></b-icon>
                 {{ species.flag }}
               </b-alert>
