@@ -909,7 +909,14 @@ export default {
             }
           }
           x.style.opacity = x.style.fillOpacity;
-          x.style.radius = (40000 / 2) * (1 + sz_dir * 3 * x.properties.corr);
+          let szmax = 30000; //max radius in ???
+          let szmin = 10000; //min radius in ???
+          let xs = 0.7; // correction value normalization
+          let szn =
+            sz_dir *
+            Math.sign(x.properties.corr) *
+            Math.min(Math.sqrt(Math.abs(x.properties.corr)) / Math.sqrt(Math.abs(xs)), 1);
+          x.style.radius = ((szn + 1) / 2) * (szmax - szmin) + szmin; //(40000 / 2) * (1 + sz_dir * 3 * x.properties.corr);
           if (x.properties.mask) {
             x.style.visible = this.display_poor_coverage ? x.style.visible : false;
             x.style.radius = 7000;
