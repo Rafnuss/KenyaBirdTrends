@@ -816,6 +816,8 @@ export default {
           sort: sp[s],
           per_lkgd: sp.per_lkgd,
           nb_lkgd: sp.nb_lkgd,
+          per_lkgd_gc: sp.per_lkgd_gc,
+          nb_lkgd_gc: sp.nb_lkgd_gc,
           kbm: sp.kbm,
           ebird: sp.ebird,
           IUCN: sp.IUCN,
