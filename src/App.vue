@@ -6,8 +6,8 @@
           <b-card-header header-tag="nav">
             <b-row align-v="center" class="no-gutters">
               <b-col cols="auto" class="d-flex">
-                <h2 class="d-none d-lg-block mb-0">Kenya Bird Atlas Viz</h2>
-                <h2 class="d-lg-none">KBAViz</h2>
+                <h2 class="d-none d-lg-block mb-0">Kenya Bird Trends</h2>
+                <h2 class="d-lg-none">KBT</h2>
               </b-col>
               <b-col>
                 <b-button
@@ -612,7 +612,7 @@
           >.
         </li>
         <li>
-          <b>2000s-2010s</b>
+          <b>2009-2023</b>
           <ol>
             <li>
               Kenya Bird Map (KBM -
@@ -652,12 +652,12 @@
       <p></p>
       <h4><b-icon-envelope class="pr-1"></b-icon-envelope>Contact</h4>
       <p>
-        This work was done by Raphaël Nussbaumer , Sidney Shema, Sikenykeny Kennedy and Colin
+        This work was done by Raphaël Nussbaumer, Sidney Shema, Sikenykeny Kennedy and Colin
         Jackson.
       </p>
       <p>
-        <a href="https://github.com/Zoziologie/KenyaBirdAtlasViz" target="_blank"
-          ><b-icon-github class="h5 mb-0 pr-1"></b-icon-github>/Zoziologie/KenyaBirdAtlasViz</a
+        <a href="https://github.com/Rafnuss/KenyaBirdTrends" target="_blank"
+          ><b-icon-github class="h5 mb-0 pr-1"></b-icon-github>/Rafnuss/KenyaBirdTrends</a
         >
       </p>
 

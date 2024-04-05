@@ -33,7 +33,7 @@ body,
 }
 .bar {
   width: 100px;
-  height: 0.875rem;
+  height: 1rem;
   margin-left: auto;
   position: relative;
   top: 50%;
@@ -41,11 +41,11 @@ body,
 }
 .bar-left {
   float: left;
-  height: 0.875rem;
+  height: 1rem;
 }
 .bar-right {
   float: right;
-  height: 0.875rem;
+  height: 1rem;
 }
 .lost {
   background: $lost;
@@ -108,4 +108,7 @@ body,
 .collapsed > .when-open,
 .not-collapsed > .when-closed {
   display: none;
+}
+.leaflet-control > a:hover {
+  text-decoration: none;
 }
