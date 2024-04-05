@@ -35,20 +35,39 @@
                   class="ml-2 d-lg-none"
                   @click="sidebar = false"
                 >
-                  <b-icon icon="map-fill"></b-icon>
+                  <b-icon icon="map-fill" />
                 </b-button>
               </b-col>
             </b-row>
           </b-card-header>
           <b-card-body class="px-0">
             <b-container class="d-flex flex-column" v-if="mode == 'Grid'">
-              <b-row class="px-0 py-2 my-2" align-v="center">
+              <b-row v-if="grid.length > 0">
+                <b-col>
+                  <b-badge v-for="g in grid" :key="g" variant="primary" class="mr-1">
+                    {{ g }}
+                    <!--<span style="cursor: pointer" @click="grid = grid.filter((i) => g != i)">
+                      &times;
+                    </span>-->
+                  </b-badge>
+                  <b-badge
+                    v-if="grid.length > 1"
+                    variant="danger"
+                    class="mr-1"
+                    style="cursor: pointer"
+                    @click="grid = []"
+                    v-b-tooltip.hover
+                    title="Remove all squares from selection"
+                  >
+                    <b-icon icon="trash-fill" aria-hidden="true" />
+                  </b-badge>
+                </b-col>
+              </b-row>
+              <b-row class="px-0 py-0 my-2" align-v="center">
                 <b-col>
                   Number of
-                  {{ grid == "" ? "squares for  all " : "" }}species
-                  <span class="sublegend">{{
-                    display_poor_coverage ? "(including poor coverage)" : ""
-                  }}</span>
+                  {{ grid.length == 0 ? "squares for  all " : "" }}species
+                  <span class="sublegend">(including poor coverage)</span>
                   <div class="kept d-flex w-100 p-0">
                     <div
                       class="lost py-2"
@@ -81,31 +100,8 @@
                     </b-col>
                   </b-row>
                 </b-col>
-                <b-col v-if="grid != ''" cols="auto">
-                  <h4>
-                    <b-badge variant="primary" class="d-flex align-items-center">
-                      {{ grid }}
-                      <b-button
-                        class="close ml-1 text-white primary"
-                        aria-label="Close"
-                        @click="grid = ''"
-                      >
-                        <span aria-hidden="true">&times;</span>
-                      </b-button>
-                    </b-badge>
-                  </h4>
-                  <!--<b>Coverage:</b>
-                  <ul>
-                    <li>
-                      Old atlas: <small>{{ map_data.find((y) => y.properties.Sq == grid).properties.cov_old }}%</small>
-                    </li>
-                    <li>
-                      New atlas: <small>{{ map_data.find((y) => y.properties.Sq == grid).properties.cov_new }}</small>
-                    </li>
-                  </ul>-->
-                </b-col>
               </b-row>
-              <b-row v-if="grid == ''">
+              <b-row v-if="grid.length == 0">
                 <b-col cols="12">
                   <b-alert show variant="light" class="mt-3">
                     <h4 class="alert-heading">Welcome!</h4>
@@ -126,8 +122,9 @@
                         <b-button
                           :variant="mode == 'Grid' ? 'primary' : 'outline-primary'"
                           size="sm"
-                          >Grid</b-button
                         >
+                          Grid
+                        </b-button>
                         Click a square on the map to see the change in species diversity.
                       </li>
                       <li>
@@ -144,7 +141,7 @@
                   </b-alert>
                 </b-col>
               </b-row>
-              <b-row v-if="grid != ''">
+              <b-row v-if="grid.length > 0">
                 <b-col cols="auto">Filter: </b-col>
                 <b-col cols="auto">
                   <b-form-checkbox id="checkbox-lost" v-model="checkbox_lost">Lost</b-form-checkbox>
@@ -160,7 +157,7 @@
                   </b-form-checkbox>
                 </b-col>
               </b-row>
-              <b-row v-if="grid != ''" class="overflow-auto">
+              <b-row v-if="grid.length > 0" class="overflow-auto">
                 <b-col cols="12">
                   <b-list-group class="small h-100">
                     <b-list-group-item
@@ -172,9 +169,9 @@
                       <div
                         class="box box-sm ml-auto"
                         :class="{
-                          kept: i.cat == 'kept',
-                          gained: i.cat == 'gained',
-                          lost: i.cat == 'lost',
+                          kept: i.trend == 'kept',
+                          gained: i.trend == 'gained',
+                          lost: i.trend == 'lost',
                         }"
                       />
                     </b-list-group-item>
@@ -539,40 +536,23 @@
                   <span class="ml-1">Never observed</span>
                   <b-checkbox class="ml-1" v-model="display_never_observed" switch></b-checkbox>
                 </div>
-
-                <div class="d-flex align-items-center">
-                  <div style="width: 25px" class="d-flex">
-                    <div
-                      class="legend-gradient-3 m-auto"
-                      style="
-                        width: 10px;
-                        height: 10px; /* border-radius: 7px; */
-                        background: transparent;
-                        border: 2px solid rgb(33, 37, 41);
-                        opacity: 1;
-                      "
-                    ></div>
-                  </div>
-                  <span class="ml-1">Grid square</span>
-                  <b-checkbox class="ml-1" v-model="display_grid_geojson" switch></b-checkbox>
-                </div>
-                <div class="d-flex align-items-center">
-                  <span class="ml-1">County boundaries</span>
-                  <b-checkbox class="ml-1" v-model="display_county_geojson" switch></b-checkbox>
-                </div>
               </div>
             </div>
           </l-control>
           <l-geo-json
-            :visible="display_grid_geojson"
             :geojson="grid_geojson"
+            :visible="false"
             :optionsStyle="{ color: '#555555', weight: 2, opacity: 0.65, fill: 0 }"
+            layerType="overlay"
+            name="Grid square"
           />
           <l-geo-json
-            :visible="display_county_geojson"
             :geojson="county_geojson"
+            :visible="false"
             ref="countyGeojson"
             :optionsStyle="{ color: '#555555', weight: 2, opacity: 0.65, fill: 1 }"
+            layerType="overlay"
+            name="Counties"
           />
           <l-circle
             v-for="c in map_data_filtered"
@@ -799,15 +779,13 @@ export default {
         "A Bird Atlas of Kenya (1989)",
       ],
       taxonomy_selected: "Clements/eBird",
-      grid: "",
+      grid: [],
       bounds: latLngBounds([
         [5.615985, 43.50585],
         [-5.353521, 32.958984],
       ]),
       display_poor_coverage: true,
       display_never_observed: true,
-      display_grid_geojson: false,
-      display_county_geojson: false,
       map_data: map_data.features,
       iucn: {
         CR: iucn_CR,
@@ -819,13 +797,13 @@ export default {
       },
       tile_providers: [
         {
-          name: "Mapbox Streets",
+          name: "Streets",
           visible: true,
           url: "https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoicmFmbnVzcyIsImEiOiIzMVE1dnc0In0.3FNMKIlQ_afYktqki-6m0g",
           attribution: "",
         },
         {
-          name: "Mapbox Satellite",
+          name: "Satellite",
           visible: false,
           url: "https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoicmFmbnVzcyIsImEiOiIzMVE1dnc0In0.3FNMKIlQ_afYktqki-6m0g",
           attribution: "",
@@ -870,10 +848,22 @@ export default {
     },
   },
   computed: {
+    SEQ_grid() {
+      let map_data_filtered = this.map_data.filter((y) => this.grid.includes(y.properties.Sq));
+      return {
+        SEQ_new: [...new Set(map_data_filtered.map((y) => y.properties.SEQ_new).flat(2))],
+        SEQ_old: [...new Set(map_data_filtered.map((y) => y.properties.SEQ_old).flat(2))],
+      };
+    },
     nb_lkgd() {
-      if ((this.mode == "Grid") & (this.grid != "")) {
-        let f = this.map_data.find((y) => y.properties.Sq == this.grid);
-        return f.properties.nb_lkgd;
+      if ((this.mode == "Grid") & (this.grid.length > 0)) {
+        let f = this.SEQ_grid;
+        let SEQ_common = f.SEQ_old.filter((i) => f.SEQ_new.includes(i));
+        let l = f.SEQ_old.length - SEQ_common.length;
+        let g = f.SEQ_new.length - SEQ_common.length;
+        let k = SEQ_common.length;
+        let d = f.SEQ_new.length - f.SEQ_old.length;
+        return [l, k, g, d];
       } else if ((this.mode == "Species") & (this.species != null)) {
         if (this.display_poor_coverage) {
           return this.species.nb_lkgd;
@@ -890,25 +880,20 @@ export default {
     },
     grid_list() {
       this.update_url();
-      let f = this.map_data.filter((y) => {
-        return y.properties.Sq == this.grid;
-      });
-      if (f.length == 0) {
-        return [];
-      }
+      let f = this.SEQ_grid;
       let sp_base_returned = this.sp_taxo.sort((a, b) => a.sort - b.sort);
       sp_base_returned = sp_base_returned.map((y) => {
-        var n = f[0].properties.SEQ_new.includes(y.SEQ);
-        let o = f[0].properties.SEQ_old.includes(y.SEQ);
-        y.cat = n & o ? "kept" : n ? "gained" : o ? "lost" : "";
+        var n = f.SEQ_new.includes(y.SEQ);
+        let o = f.SEQ_old.includes(y.SEQ);
+        y.trend = n & o ? "kept" : n ? "gained" : o ? "lost" : "";
         return y;
       });
       return sp_base_returned.filter((y) => {
-        if (y.cat == "lost") {
+        if (y.trend == "lost") {
           return this.checkbox_lost;
-        } else if (y.cat == "kept") {
+        } else if (y.trend == "kept") {
           return this.checkbox_kept;
-        } else if (y.cat == "gained") {
+        } else if (y.trend == "gained") {
           return this.checkbox_gained;
         } else {
           return false;
@@ -1007,10 +992,15 @@ export default {
           if (this.mode == "Grid") {
             sz_dir = -1;
             x.style.fillColor = colorscale_grid(x.properties.nb_lkgd[3]).hex();
-            if (this.grid) {
-              x.style.fillOpacity = this.grid == x.properties.Sq ? 1 : 0.3;
+            if (this.grid.includes(x.properties.Sq)) {
+              x.style.fillOpacity = 1;
+            } else if (x.properties.mask) {
+              x.style.visible = this.display_poor_coverage ? x.style.visible : false;
+              x.style.fillOpacity = 0.4;
+            } else {
+              x.style.fillOpacity = 0.4;
             }
-          } else if (this.mode == "Species") {
+          } else {
             let seq = this.species == null ? null : this.species.SEQ;
             let n = x.properties.SEQ_new.includes(seq);
             let o = x.properties.SEQ_old.includes(seq);
@@ -1025,8 +1015,11 @@ export default {
               x.style.visible = this.display_never_observed ? !x.properties.mask : false;
               x.style.fillColor = "#000000";
               x.style.fillOpacity = 0.2;
-              x.style.opacity = 0.2;
               sz_dir = -1;
+            }
+            if (x.properties.mask) {
+              x.style.visible = this.display_poor_coverage ? x.style.visible : false;
+              x.style.fillOpacity = 0.4;
             }
           }
           x.style.opacity = x.style.fillOpacity;
@@ -1038,12 +1031,7 @@ export default {
             Math.sign(x.properties.corr) *
             Math.min(Math.sqrt(Math.abs(x.properties.corr)) / Math.sqrt(Math.abs(xs)), 1);
           x.style.radius = ((szn + 1) / 2) * (szmax - szmin) + szmin; //(40000 / 2) * (1 + sz_dir * 3 * x.properties.corr);
-          if (x.properties.mask) {
-            x.style.visible = this.display_poor_coverage ? x.style.visible : false;
-            x.style.radius = 7000;
-            x.style.opacity = 0.4;
-            x.style.fillOpacity = 0.4;
-          }
+          if (x.properties.mask) x.style.radius = 7000;
           x.style.color = "#2e2e2e";
           x.style.weight = 1;
           return x;
@@ -1054,7 +1042,11 @@ export default {
       return (e) => {
         if (this.mode == "Grid") {
           let Sq = e.sourceTarget.options.Sq;
-          this.grid = this.grid == Sq ? "" : Sq;
+          if (!this.grid.includes(Sq)) {
+            this.grid.push(Sq);
+          } else {
+            this.grid = this.grid.filter((i) => i != Sq);
+          }
         }
       };
     },
@@ -1091,7 +1083,7 @@ export default {
     let mode = qp.get("mode");
     if (mode) this.mode = mode;
     let grid = qp.get("grid");
-    if (grid) this.grid = grid;
+    if (grid) this.grid = grid.split(",");
   },
   watch: {
     sidebar: function (val) {
