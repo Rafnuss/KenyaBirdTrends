@@ -61,6 +61,17 @@
                   >
                     <b-icon icon="trash-fill" aria-hidden="true" />
                   </b-badge>
+                  <b-badge
+                    v-if="grid.length > 0"
+                    variant="info"
+                    class="float-right"
+                    style="cursor: pointer"
+                    @click="export_csv"
+                    v-b-tooltip.hover
+                    title="Export species list"
+                  >
+                    <b-icon icon="download" aria-hidden="true" />
+                  </b-badge>
                 </b-col>
               </b-row>
               <b-row class="px-0 py-0 my-2" align-v="center">
@@ -845,6 +856,27 @@ export default {
     },
     selectLabel({ common_name, scientific_name }) {
       return `${common_name} — [${scientific_name}]`;
+    },
+    export_csv() {
+      let l = this.grid_list.map(
+        ({ IUCNID, per_lkgd, per_lkgd_gc, nb_lkgd, nb_lkgd_gc, sort, kbm, ebird, SEQ, ...item }) =>
+          item
+      );
+      console.log(l);
+      let keys = Object.keys(l[0]);
+
+      let csv = keys.join(",") + "\n";
+      l.forEach((obj) => {
+        csv += keys.map((k) => obj[k]).join(",") + "\n";
+      });
+
+      const blob = new Blob([csv], { type: "text/csv" });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "kenyabirdtrend_export_" + this.grid.join("_") + ".csv";
+      a.click();
+      window.URL.revokeObjectURL(url);
     },
   },
   computed: {
