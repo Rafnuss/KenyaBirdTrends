@@ -61,17 +61,19 @@
                   >
                     <b-icon icon="trash-fill" aria-hidden="true" />
                   </b-badge>
-                  <b-badge
+
+                  <b-button
+                    class="float-right ml-auto mr-1 btn-xs"
                     v-if="grid.length > 0"
-                    variant="info"
-                    class="float-right"
-                    style="cursor: pointer"
+                    squared
+                    variant="primary"
+                    size="sm"
                     @click="export_csv"
                     v-b-tooltip.hover
                     title="Export species list"
                   >
-                    <b-icon icon="download" aria-hidden="true" />
-                  </b-badge>
+                    <b-icon icon="download" />
+                  </b-button>
                 </b-col>
               </b-row>
               <b-row class="px-0 py-0 my-2" align-v="center">
@@ -561,9 +563,10 @@
             :geojson="county_geojson"
             :visible="false"
             ref="countyGeojson"
-            :optionsStyle="{ color: '#555555', weight: 2, opacity: 0.65, fill: 1 }"
+            :optionsStyle="{ color: '#555555', weight: 1.2, opacity: 0.65, fill: 0 }"
             layerType="overlay"
             name="Counties"
+            @update:visible="() => this.$refs.countyGeojson.mapObject.bringToBack()"
           />
           <l-circle
             v-for="c in map_data_filtered"
@@ -1105,6 +1108,9 @@ export default {
   mounted() {
     if (JSON.parse(this.$cookie.get("taxonomy_selected")))
       this.taxonomy_selected = JSON.parse(this.$cookie.get("taxonomy_selected"));
+    this.$nextTick(() => {
+      //this.$refs.countyGeojson.mapObject.bringToBack();
+    });
   },
   created() {
     let qp = new URLSearchParams(window.location.search);
@@ -1134,11 +1140,6 @@ export default {
     taxonomy_selected() {
       this.$cookie.set("taxonomy_selected", JSON.stringify(this.taxonomy_selected), 365);
     },
-  },
-  updated() {
-    this.$nextTick(() => {
-      this.$refs.countyGeojson.mapObject.bringToBack();
-    });
   },
 };
 </script>
