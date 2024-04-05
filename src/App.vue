@@ -556,13 +556,23 @@
                   <span class="ml-1">Grid square</span>
                   <b-checkbox class="ml-1" v-model="display_grid_geojson" switch></b-checkbox>
                 </div>
+                <div class="d-flex align-items-center">
+                  <span class="ml-1">County boundaries</span>
+                  <b-checkbox class="ml-1" v-model="display_county_geojson" switch></b-checkbox>
+                </div>
               </div>
             </div>
           </l-control>
           <l-geo-json
-            v-if="display_grid_geojson"
+            :visible="display_grid_geojson"
             :geojson="grid_geojson"
             :optionsStyle="{ color: '#555555', weight: 2, opacity: 0.65, fill: 0 }"
+          />
+          <l-geo-json
+            :visible="display_county_geojson"
+            :geojson="county_geojson"
+            ref="countyGeojson"
+            :optionsStyle="{ color: '#555555', weight: 2, opacity: 0.65, fill: 1 }"
           />
           <l-circle
             v-for="c in map_data_filtered"
@@ -684,6 +694,7 @@ import {
   LPopup,
   LCircle,
   LGeoJson,
+  LTooltip,
 } from "vue2-leaflet";
 import { latLngBounds } from "leaflet";
 import { OpenStreetMapProvider } from "leaflet-geosearch";
@@ -695,6 +706,7 @@ import chroma from "chroma-js";
 import map_data from "./assets/map_data.json";
 import sp_base from "./assets/sp_base.json";
 import grid_geojson from "./assets/grid.json";
+import county_geojson from "./assets/county.json";
 
 import iucn_CR from "./assets/iucn_CR.png";
 import iucn_VU from "./assets/iucn_VU.png";
@@ -736,6 +748,7 @@ export default {
     LPopup,
     LCircle,
     LGeoJson,
+    LTooltip,
     CircleTemplate,
     Multiselect,
     VGeosearch,
@@ -743,6 +756,7 @@ export default {
   data() {
     return {
       grid_geojson: grid_geojson,
+      county_geojson: county_geojson,
       sidebar: true,
       legend: true,
       mode_options: ["Grid", "Species"],
@@ -793,6 +807,7 @@ export default {
       display_poor_coverage: true,
       display_never_observed: true,
       display_grid_geojson: false,
+      display_county_geojson: false,
       map_data: map_data.features,
       iucn: {
         CR: iucn_CR,
@@ -1095,6 +1110,11 @@ export default {
     taxonomy_selected() {
       this.$cookie.set("taxonomy_selected", JSON.stringify(this.taxonomy_selected), 365);
     },
+  },
+  updated() {
+    this.$nextTick(() => {
+      this.$refs.countyGeojson.mapObject.bringToBack();
+    });
   },
 };
 </script>
