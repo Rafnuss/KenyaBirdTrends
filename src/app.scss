@@ -48,13 +48,13 @@ body,
   height: 1rem;
 }
 .lost {
-  background: $lost;
+  background: $lost !important;
 }
 .kept {
-  background: $kept;
+  background: $kept !important;
 }
 .gained {
-  background: $gained;
+  background: $gained !important;
 }
 .custom-checkbox #checkbox-lost:checked ~ .custom-control-label::before {
   background-color: $lost !important;
@@ -112,3 +112,15 @@ body,
 .leaflet-control > a:hover {
   text-decoration: none;
 }
+.tiny-font {
+  font-size: 12px;
+}
+.small-font {
+  font-size: 15px;
+}
+
+
+
+
+
+
