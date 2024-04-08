@@ -119,12 +119,18 @@
                   <b-alert show variant="light" class="mt-3">
                     <h4 class="alert-heading">Welcome!</h4>
                     <p>
-                      Explore changes in bird distribution in Kenya between the periods of 1970-1984 and 2009-2023.</p><p>The
-                      distributions are retrieved from
+                      Explore changes in bird distribution in Kenya between the periods of 1970-1984
+                      and 2009-2023.
+                    </p>
+                    <p>
+                      The distributions are retrieved from
                       <a href="https://doi.org/10.1201/9781315136264" target="_blank"
                         >"A Bird Atlas of Kenya"</a
-                      > for the historical period, and from <a href="https://kenya.birdmap.africa/" target="_blank">Kenya Bird Map</a>
-                      and <a href="https://ebird.org/region/KE" target="_blank">eBird</a> for the recent period.
+                      >
+                      for the historical period, and from
+                      <a href="https://kenya.birdmap.africa/" target="_blank">Kenya Bird Map</a> and
+                      <a href="https://ebird.org/region/KE" target="_blank">eBird</a> for the recent
+                      period.
                     </p>
                     <hr />
                     <p>You can explore the changes with these two views:</p>
@@ -583,91 +589,126 @@
         </l-map>
       </b-col>
     </b-row>
-    <b-modal id="modal-1" size="lg" ok-only ok-title="Close" title="Welcome to Kenya Bird Trends!" :visible="open_modal" class="small-font" >
+    <b-modal
+      id="modal-1"
+      size="lg"
+      ok-only
+      ok-title="Close"
+      title="Welcome to Kenya Bird Trends!"
+      :visible="open_modal"
+      class="small-font"
+    >
       <p class="small-font">
-        Visualize the change in the distribution of birds in Kenya between two time periods: 1970-1984 and 2009-2023. Read below to learn how the maps are built and how to navigate them. 
+        Visualize the change in the distribution of birds in Kenya between two time periods:
+        1970-1984 and 2009-2023. Read below to learn how the maps are built and how to navigate
+        them.
       </p>
-      
-    <p class="small-font">You can explore distribution changes in two views: </p>
-    <ol class="small-font">
-      <li>
-        <b-button
-                          :variant="mode == 'Grid' ? 'primary' : 'outline-primary'"
-                          size="sm"
-                        >
-                          Grid
-                        </b-button> Click on the square(s) on the map to learn about specific areas you are interested in. </li>
-    <li> <b-button
-                          :variant="mode == 'Species' ? 'primary' : 'outline-primary'"
-                          size="sm"
-                        >
-                          Species
-                        </b-button> Select the species you are interested in to view their distribution map. <p class="tiny-font">You can use filters to browse only endemic, Red-listed, migrant, or waterbird species. You can also use the “Sort by” button to sort species by most gained or lost squares.</p> </li></ol>
 
-   
+      <p class="small-font">You can explore distribution changes in two views:</p>
+      <ol class="small-font">
+        <li>
+          <b-button :variant="mode == 'Grid' ? 'primary' : 'outline-primary'" size="sm">
+            Grid
+          </b-button>
+          Click on the square(s) on the map to learn about specific areas you are interested in.
+        </li>
+        <li>
+          <b-button :variant="mode == 'Species' ? 'primary' : 'outline-primary'" size="sm">
+            Species
+          </b-button>
+          Select the species you are interested in to view their distribution map.
+          <p class="tiny-font">
+            You can use filters to browse only endemic, Red-listed, migrant, or waterbird species.
+            You can also use the “Sort by” button to sort species by most gained or lost squares.
+          </p>
+        </li>
+      </ol>
 
       <hr />
-      
+
       <h5>How to read the maps</h5>
-      
-        <b-alert show variant="warning" class="small-font">
-          <b>These maps show presence data only and do not provide information on abundance!</b>
-          There is no difference between the square holding 1 or 10 000 invididuals, so it is not possible to directly draw conclusions on abundance trends.
-        </b-alert>
-        <b-container>
-          <b-row>
-    <b-col>
-      <h5>Circle colour (species view)</h5>
-      
-        <ul class="list-unstyled">
-          <li class="small-font"> 
-          <CircleTemplate size="18" class="gained d-inline-block  mr-2"/>
-          <b>Gained:</b> The species was not present in the historical atlas but was recorded in the recent period. </li>
-          <li class="small-font"> 
-          <CircleTemplate size="18" class="kept d-inline-block  mr-2" />
-          <b>Kept:</b> The species was present in both time periods.</li>
-          <li class="small-font"> 
-          <CircleTemplate size="18" class="lost d-inline-block  mr-2" />
-          <b>Lost:</b> The species was present in the historical atlas but was not recorded in the recent period.</li>
-          <li class="small-font"> 
-          <CircleTemplate size="18" opacity="0.3" class="d-inline-block  mr-2" />
-          <b>Never observed:</b> Despite good coverage, the species was not recorded in either time period.</li>
 
-        </ul>
-        <p class="tiny-font">You'll notice entire areas of Kenya do not have any data. This is because no data was entered in these squares. Want to help colour the map? Go to those areas and submit your sightings to KBM or eBird!  </p>
-       </b-col> 
-       <b-col>
-      <h5>Circle size</h5>
-    <p class="small-font">The size of the circle represents the <b>confidence in the result based on the change in effort between the two periods</b>. </p>
-      <p class="tiny-font">A small circle should be interpreted with great caution, as the result might be due to a significant change in effort between the two periods rather than describing an actual trend.</p>
+      <b-alert show variant="warning" class="small-font">
+        <b>These maps show presence data only and do not provide information on abundance!</b>
+        There is no difference between the square holding 1 or 10 000 invididuals, so it is not
+        possible to directly draw conclusions on abundance trends.
+      </b-alert>
+      <b-container>
+        <b-row>
+          <b-col>
+            <h5>Circle colour (species view)</h5>
 
-    </b-col>
-  </b-row>
-</b-container>
-    <hr />
-    <h5>Data sources</h5>
+            <ul class="list-unstyled">
+              <li class="small-font">
+                <CircleTemplate size="18" class="gained d-inline-block mr-2" />
+                <b>Gained:</b> The species was not present in the historical atlas but was recorded
+                in the recent period.
+              </li>
+              <li class="small-font">
+                <CircleTemplate size="18" class="kept d-inline-block mr-2" />
+                <b>Kept:</b> The species was present in both time periods.
+              </li>
+              <li class="small-font">
+                <CircleTemplate size="18" class="lost d-inline-block mr-2" />
+                <b>Lost:</b> The species was present in the historical atlas but was not recorded in
+                the recent period.
+              </li>
+              <li class="small-font">
+                <CircleTemplate size="18" opacity="0.3" class="d-inline-block mr-2" />
+                <b>Never observed:</b> Despite good coverage, the species was not recorded in either
+                time period.
+              </li>
+            </ul>
+            <p class="tiny-font">
+              You'll notice entire areas of Kenya do not have any data. This is because no data was
+              entered in these squares. Want to help colour the map? Go to those areas and submit
+              your sightings to KBM or eBird!
+            </p>
+          </b-col>
+          <b-col>
+            <h5>Circle size</h5>
+            <p class="small-font">
+              The size of the circle represents the
+              <b>confidence in the result based on the change in effort between the two periods</b>.
+            </p>
+            <p class="tiny-font">
+              A small circle should be interpreted with great caution, as the result might be due to
+              a significant change in effort between the two periods rather than describing an
+              actual trend.
+            </p>
+          </b-col>
+        </b-row>
+      </b-container>
+      <hr />
+      <h5>Data sources</h5>
       <p class="small-font">We compare species presence between two distinct periods:</p>
       <ul class="small-font">
-        <li >
+        <li>
           <b>1970-1984</b>: Presence data taken from <em>A Bird Atlas of Kenya</em> (<a
             href="https://doi.org/10.1201/9781315136264"
             target="_blank"
             >Lewis & Pomeroy, 1989</a
-          >)<p class="tiny-font">Reference book describing the status and distribution of 1 065 species
-          at the scale of quarter square degree (QSD, 27 x 27 km). The
-          digitized version of the book is available as <a href="https://www.gbif.org/dataset/00327ee4-9970-4aef-b51a-d6998ebcc249" taregt="_blank">GBIF dataset</a>. </p>
-          
+          >)
+          <p class="tiny-font">
+            Reference book describing the status and distribution of 1 065 species at the scale of
+            quarter square degree (QSD, 27 x 27 km). The digitized version of the book is available
+            as
+            <a
+              href="https://www.gbif.org/dataset/00327ee4-9970-4aef-b51a-d6998ebcc249"
+              taregt="_blank"
+              >GBIF dataset</a
+            >.
+          </p>
         </li>
         <li>
-          <b>2009-2023</b>: Presence data extracted from two citizen science platforms: 
-          <ol class="tiny-font" style="
-    padding-left: 15px;">
+          <b>2009-2023</b>: Presence data extracted from two citizen science platforms:
+          <ol class="tiny-font" style="padding-left: 15px">
             <li>
               Kenya Bird Map (KBM -
               <a href="https://kenya.birdmap.africa/" target="_blank">kenya.birdmap.africa</a>)
-              leads current efforts to establish a new bird atlas from citizen scientists. We
-              used presence information (from full or ad-hoc protocols) for each species at the
-              pentad level and upscaled each map to match the spatial resolution of the historical atlas.
+              leads current efforts to establish a new bird atlas from citizen scientists. We used
+              presence information (from full or ad-hoc protocols) for each species at the pentad
+              level and upscaled each map to match the spatial resolution of the historical atlas.
             </li>
             <li>
               eBird (<a href="https://ebird.org/region/KE" target="_blank">ebird.org</a>) is the
@@ -677,12 +718,17 @@
           </ol>
         </li>
       </ul>
-      <hr/>
+      <hr />
       <h5>Settings</h5>
-    <ul class="small-font"><li>Change the map background to satellite view to explore terrain and topography (top right on map)</li>
-    <li>View grid square borders and county borders(top right on map)</li>
-   <li>Change the taxonomy used below:</li></ul>
-    <b-form-group label-size="sm">
+      <ul class="small-font">
+        <li>
+          Change the map background to satellite view to explore terrain and topography (top right
+          on map)
+        </li>
+        <li>View grid square borders and county borders(top right on map)</li>
+        <li>Change the taxonomy used below:</li>
+      </ul>
+      <b-form-group label-size="sm">
         <b-form-select
           v-model="taxonomy_selected"
           :options="taxonomy_options"
@@ -690,22 +736,28 @@
         ></b-form-select>
       </b-form-group>
       <h5>Export products</h5>
-      <p class="small-font">You can export two products from this website: </p>
-      <ol class="small-font"><li>A map of distribution change for each species (.jpg), from the species view</li>
-      <li>A list of species and their corresponding trend for a given area (.csv), from the grid view</li></ol>
+      <p class="small-font">You can export two products from this website:</p>
+      <ol class="small-font">
+        <li>A map of distribution change for each species (.jpg), from the species view</li>
+        <li>
+          A list of species and their corresponding trend for a given area (.csv), from the grid
+          view
+        </li>
+      </ol>
       <hr />
-      
-      <p class="tiny-font">For any questions, please reach out to <a href="mailto:rafnuss@gmail.com" target="_blank">Raphaël Nussbaumer</a>  |  <a href="https://github.com/Rafnuss/KenyaBirdTrends" target="_blank">
-          <b-icon-github class="h5 mb-0 pr-1"></b-icon-github>/Rafnuss/KenyaBirdTrends
-          </a></p>
-     
-      <p class="tiny-font"><b-form-checkbox
-      v-model="open_modal" >
-      Open information box on next visit
-    </b-form-checkbox></p>
-    
-    </b-modal>
 
+      <p class="tiny-font">
+        For any questions, please reach out to
+        <a href="mailto:rafnuss@gmail.com" target="_blank">Raphaël Nussbaumer</a> |
+        <a href="https://github.com/Rafnuss/KenyaBirdTrends" target="_blank">
+          <b-icon-github class="h5 mb-0 pr-1"></b-icon-github>/Rafnuss/KenyaBirdTrends
+        </a>
+      </p>
+
+      <p class="tiny-font">
+        <b-form-checkbox v-model="open_modal"> Open information box on next visit </b-form-checkbox>
+      </p>
+    </b-modal>
   </b-container>
 </template>
 
@@ -902,7 +954,6 @@ export default {
         ({ IUCNID, per_lkgd, per_lkgd_gc, nb_lkgd, nb_lkgd_gc, sort, kbm, ebird, SEQ, ...item }) =>
           item
       );
-      console.log(l);
       let keys = Object.keys(l[0]);
 
       let csv = keys.join(",") + "\n";
@@ -1147,8 +1198,7 @@ export default {
       this.taxonomy_selected = JSON.parse(this.$cookie.get("taxonomy_selected"));
   },
   created() {
-    if (this.$cookie.get("open_modal"))
-      this.open_modal = this.$cookie.get("open_modal") == "true";
+    if (this.$cookie.get("open_modal")) this.open_modal = this.$cookie.get("open_modal") == "true";
     let qp = new URLSearchParams(window.location.search);
     let species = qp.get("species");
     if ((species != "null") & (species != "NaN")) {
@@ -1176,10 +1226,9 @@ export default {
     taxonomy_selected() {
       this.$cookie.set("taxonomy_selected", JSON.stringify(this.taxonomy_selected), 365);
     },
-    open_modal(){
-      console.log(this.open_modal)
+    open_modal() {
       this.$cookie.set("open_modal", this.open_modal, 365);
-    }
+    },
   },
 };
 </script>
