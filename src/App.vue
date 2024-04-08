@@ -264,9 +264,8 @@
                     variant="primary"
                     class="ml-auto mr-1 btn-xs"
                     size="sm"
-                    :href="'https://test/' + species.SEQ"
+                    :href="'/species_map/' + species.SEQ + '.png'"
                     target="_blank"
-                    disabled
                   >
                     <b-icon icon="download" /> Download map
                   </b-button>
