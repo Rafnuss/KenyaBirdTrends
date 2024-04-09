@@ -16,7 +16,9 @@ html,
 body,
 .container {
   height: 100%;
-  margin: 0;
+}
+.h-100-56 {
+  height: calc(100vh - 56px);
 }
 .box-sm {
   width: 0.875rem;
@@ -118,9 +120,3 @@ body,
 .small-font {
   font-size: 15px;
 }
-
-
-
-
-
-
