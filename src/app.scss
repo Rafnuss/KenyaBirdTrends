@@ -13,9 +13,12 @@ $gained: #45aa59;
 //import "bootstrap/dist/css/bootstrap.css";
 
 html,
-body,
-.container {
+body {
   height: 100%;
+}
+h1 {
+  border-bottom: 1px solid #dee2e6;
+  line-height: 1.25;
 }
 .h-100-56 {
   height: calc(100vh - 56px);
@@ -114,17 +117,16 @@ body,
 .leaflet-control > a:hover {
   text-decoration: none;
 }
-.tiny-font {
-  font-size: 12px;
-}
-.small-font {
-  font-size: 15px;
-}
 .logo-link {
   display: grid;
   place-items: center;
-  min-height: 6rem;
 }
 .logo-link:hover {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.img-organisations {
+  max-height: 9rem;
+}
+.img-partners {
+  max-height: 7rem;
 }
