@@ -53,10 +53,14 @@
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
-    <Intro v-if="mode == 'Intro'" />
+    <Intro
+      v-if="mode == 'Intro'"
+      @changeModeGrid="mode = 'Grid'"
+      @changeModeSpecies="mode = 'Species'"
+    />
     <b-row class="flex-grow-1 no-gutters" v-else>
       <b-col md="4" fluid="md" class="h-100-56" v-if="sidebar">
-        <b-container class="d-flex flex-column" v-if="mode == 'Grid'">
+        <b-container class="d-flex flex-column h-100" v-if="mode == 'Grid'">
           <b-row class="px-0 py-0 my-2" align-v="center">
             <b-col>
               Number of
@@ -180,7 +184,7 @@
             </b-col>
           </b-row>
         </b-container>
-        <b-container class="d-flex flex-column" v-if="mode == 'Species'">
+        <b-container class="d-flex flex-column h-100" v-if="mode == 'Species'">
           <b-row>
             <b-col cols="12" class="mt-2">
               <!--<v-select
@@ -346,7 +350,7 @@
               </b-card-body>
             </b-card>
           </b-collapse>
-          <b-row class="overflow-auto">
+          <b-row class="overflow-auto my-2">
             <b-col cols="12" class="mt-2">
               <b-list-group class="small h-100">
                 <b-list-group-item
@@ -565,14 +569,14 @@
           </l-control>
           <l-geo-json
             :geojson="grid_geojson"
-            :visible="false"
+            :visible="grid_geojson_visible"
             :optionsStyle="{ color: '#555555', weight: 2, opacity: 0.65, fill: 0 }"
             layerType="overlay"
             name="Grid square"
           />
           <l-geo-json
             :geojson="county_geojson"
-            :visible="false"
+            :visible="county_geojson_visible"
             ref="countyGeojson"
             :optionsStyle="{ color: '#555555', weight: 1.2, opacity: 0.65, fill: 0 }"
             layerType="overlay"
@@ -597,25 +601,43 @@
         </l-map>
       </b-col>
     </b-row>
-    <b-modal id="modal-settings" title="Settings">
-      <ul>
-        <li>
-          Change the map background to satellite view to explore terrain and topography (top right
-          on map)
-        </li>
-        <li>View grid square and/or county borders (top right on map)</li>
-        <li>Search for a specific location</li>
-        <li>Change the species taxonomy used below:</li>
-      </ul>
-      <b-card>
-        <b-form-group label-size="sm">
-          <b-form-select
-            v-model="taxonomy_selected"
-            :options="taxonomy_options"
-            size="sm"
-          ></b-form-select>
-        </b-form-group>
-      </b-card>
+    <b-modal id="modal-settings" title="Settings" hide-footer="true">
+      <b-row>
+        <b-col cols="12">
+          <b-card class="bg-light mb-2" cols="12">
+            Select your preferred taxonomy:
+            <b-form-group label-size="sm">
+              <b-form-select v-model="taxonomy_selected" :options="taxonomy_options" size="sm" />
+            </b-form-group>
+            <span class="small">
+              <b>Note: </b>In order to match the taxonomies used in the old atlas with eBird and
+              KBM, we had to align species name to the lowest taxonomical resolution (i.e. lump
+              species), explaining some unusual species names.
+            </span>
+          </b-card>
+        </b-col>
+        <b-col cols="12">
+          <b-card class="bg-light mb-2">
+            <b-form-group>
+              Customize the map background:
+              <b-form-checkbox v-model="grid_geojson_visible">
+                Show the grid squares</b-form-checkbox
+              >
+              <b-form-checkbox v-model="county_geojson_visible">
+                Show the county boundary lines
+              </b-form-checkbox>
+            </b-form-group>
+            <div class="d-flex">
+              <div class="leaflet-control-layers leaflet-control d-inline">
+                <span class="leaflet-control-layers-toggle"></span>
+              </div>
+              <span class="small ml-2">
+                <b>Note: </b>You can also modify these values in the top-right menu of the map.
+              </span>
+            </div>
+          </b-card>
+        </b-col>
+      </b-row>
     </b-modal>
   </b-container>
 </template>
@@ -699,7 +721,9 @@ export default {
   data() {
     return {
       grid_geojson: grid_geojson,
+      grid_geojson_visible: false,
       county_geojson: county_geojson,
+      county_geojson_visible: false,
       sidebar: true,
       legend: true,
       mode: "Intro",

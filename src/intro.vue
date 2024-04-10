@@ -42,14 +42,14 @@
             Select one or multiple grid squares (27x27km) on the map to view and export the list of
             species lost, kept, and gained in this area.
           </p>
-          <b-button>Grid</b-button>
+          <b-button @click="$emit('changeModeGrid')" align-self="center">Grid</b-button>
         </b-card>
         <b-card class="bg-light">
           <p class="text-muted mb-0">Species</p>
           <p class="small">
             Visualize the map of the squares lost, kept, and gained for a specific species.
           </p>
-          <b-button>Species</b-button>
+          <b-button @click="$emit('changeModeSpecies')" class="mx-auto">Species</b-button>
         </b-card>
       </b-card-group>
 
