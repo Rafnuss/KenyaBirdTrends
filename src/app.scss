@@ -120,3 +120,11 @@ body,
 .small-font {
   font-size: 15px;
 }
+.logo-link {
+  display: grid;
+  place-items: center;
+  min-height: 6rem;
+}
+.logo-link:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
