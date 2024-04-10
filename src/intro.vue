@@ -6,38 +6,48 @@
         <b-img src="logo_test_large.png" class="pl-4 bg-white" height="139" align="right" />
       </h1>
       <p>
-        Kenya has seen drastic changes in the past 50 years in this landscape. ... But exactly how
-        these changes have impacted the kenyan avifauna is still poorly documented.
+        Kenya has seen <b>significant changes in its landscape</b> over the past 50 years:
+        exponential population increase has been accompanied by growing urbanisation, intensified
+        agriculture, deforestation, and increased pollution, among others. How has this has impacted
+        bird abundance and distribution on a large scale?
       </p>
-      <p>This work is based on... where we did that and that...</p>
       <p>
-        Visualize the change in the distribution of birds in Kenya between two time periods:
-        1970-1984 and 2009-2023. These changes are displayed on a grid of 27 x 27 km squares
-        spanning the entire country. We compare bird presence information within each square to
+        We use data from of Africa's oldest and most comprehensive bird atlases and two citizen
+        science platforms to compare bird distributions between a historical time period (1970-1984)
+        and a more recent period (2009-2023), providing
+        <b>insights into bird distribution patterns across the past 50 years</b>. This work and key
+        results are described in detail in: <br /><span
+          >Nussbaumer et al. (in prep), Bird atlas and citizen science data reveal long-term changes
+          in range in Kenya</span
+        >.
+      </p>
+      <p>
+        On this tool, you can
+        <b>visualize the change in the spatial range of each bird species in Kenya</b>
+        between these two time periods. We compare bird presence information within each square to
         define whether the species has gained, lost, or kept this square between the two periods
-        considered.
+        considered. Changes are displayed on a grid of 27x27 km squares spanning the entire country.
       </p>
 
-      <h2>How to navigate</h2>
+      <h2>How to navigate this tool</h2>
       <p>
-        You can explore the changes in bird distribution in two views(<span class="small"
-          >accessible from the menu in the header above</span
-        >):
+        You can explore the changes in bird distribution using two views
+        <span class="small">(accessible from the menu in the header above)</span>:
       </p>
 
       <b-card-group deck class="mb-2">
         <b-card class="bg-light">
           <p class="text-muted mb-0">Grid</p>
           <p class="small">
-            Select one or mulitple grid square (27x27km) on the map to view and export the list of
-            species lost, kept or gained.
+            Select one or multiple grid squares (27x27km) on the map to view and export the list of
+            species lost, kept, and gained in this area.
           </p>
           <b-button>Grid</b-button>
         </b-card>
         <b-card class="bg-light">
           <p class="text-muted mb-0">Species</p>
           <p class="small">
-            Visualize the map of the region lost kept or gained for a specific species.
+            Visualize the map of the squares lost, kept, and gained for a specific species.
           </p>
           <b-button>Species</b-button>
         </b-card>
@@ -45,9 +55,9 @@
 
       <h2>Data sources</h2>
       <p>
-        To draw out changes in species distribution, we extracted presence data from the sources
-        below. For the recent period, we combined data from two sources to create a single species
-        map that we compared with the corresponding species map from the historical atlas.
+        Presence data was extracted from the sources below to draw out changes in a species'
+        distribution. For the recent period, data from two sources was combined to create a single
+        species map that was compared with the corresponding species map from the historical atlas.
       </p>
       <b-row>
         <b-col md="6">
@@ -141,7 +151,7 @@
     <b-container fluid class="bg-light p-5">
       <h6 class="text-muted text-uppercase">Implementing organisations</h6>
       <b-row align-v="stretch" class="px-5 pb-2">
-        <b-col md="4" v-for="o in organisations" :key="o.href">
+        <b-col md="3" v-for="o in organisations" :key="o.href">
           <a :href="o.href" target="_blank" class="logo-link p-4 bg-white rounded h-100">
             <b-img fluid :src="o.src" alt="Image" class="img-organisations" />
           </a>
@@ -176,6 +186,7 @@ export default {
         { href: "https://tropical-biology.org/", src: "logo_tba.png" },
         { href: "https://www.arocha.or.ke/", src: "logo_ark.png" },
         { href: "https://museums.or.ke/", src: "logo_museums.png" },
+        { href: "https://www.darwininitiative.org.uk/", src: "logo_darwin.png" },
       ],
       partners: [
         { href: "https://tropical-biology.org/", src: "logo_birdlife.png" },
