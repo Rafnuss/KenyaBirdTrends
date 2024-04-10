@@ -1,6 +1,6 @@
 <template>
   <b-container fluid class="h-100 d-flex flex-column p-0">
-    <b-navbar toggleable="sm" variant="light" style="border-bottom: 1px solid #e5e9ef">
+    <b-navbar toggleable="sm" variant="light" style="border-bottom: 1px solid #e5e9ef" sticky>
       <b-navbar-brand href="#">Kenya Bird Trends</b-navbar-brand>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
       <b-collapse id="nav-collapse" is-nav>
@@ -39,7 +39,7 @@
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
-        <b-navbar-nav class="ml-auto">
+        <b-navbar-nav class="ml-auto d-inline-block">
           <b-button
             href="https://github.com/Rafnuss/KenyaBirdTrends"
             target="_blank"
@@ -53,11 +53,9 @@
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
-    <b-row class="flex-grow-1 no-gutters">
-      <b-col v-if="mode == 'Intro'">
-        <Intro />
-      </b-col>
-      <b-col md="4" fluid="md" class="h-100-56" v-if="sidebar & (mode != 'Intro')">
+    <Intro v-if="mode == 'Intro'" />
+    <b-row class="flex-grow-1 no-gutters" v-else>
+      <b-col md="4" fluid="md" class="h-100-56" v-if="sidebar">
         <b-container class="d-flex flex-column" v-if="mode == 'Grid'">
           <b-row class="px-0 py-0 my-2" align-v="center">
             <b-col>
@@ -100,7 +98,14 @@
           <b-row v-if="grid.length == 0">
             <b-col cols="12">
               <b-alert show variant="info" class="mt-3">
-                <p>Click on one (or several) circle(s) on the map to select a grid square and view the species list for that area.</p><p>For each species, you can see whether it has been gained, lost, or kept between the two periods.</p>
+                <p>
+                  Click on one (or several) circle(s) on the map to select a grid square and view
+                  the species list for that area.
+                </p>
+                <p>
+                  For each species, you can see whether it has been gained, lost, or kept between
+                  the two periods.
+                </p>
               </b-alert>
             </b-col>
           </b-row>
@@ -592,7 +597,6 @@
       </b-col>
     </b-row>
     <b-modal id="modal-settings" title="Settings">
-      
       <ul>
         <li>
           Change the map background to satellite view to explore terrain and topography (top right
