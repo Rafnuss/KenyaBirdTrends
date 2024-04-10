@@ -1,6 +1,6 @@
 <template>
   <b-container fluid class="h-100 d-flex flex-column p-0">
-    <b-navbar toggleable="sm" variant="light" style="border-bottom: 1px solid #E5E9EF;">
+    <b-navbar toggleable="sm" variant="light" style="border-bottom: 1px solid #e5e9ef">
       <b-navbar-brand href="#">Kenya Bird Trends</b-navbar-brand>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
       <b-collapse id="nav-collapse" is-nav>
@@ -40,527 +40,368 @@
 
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
-          <b-button href="https://github.com/Rafnuss/KenyaBirdTrends" target="_blank" variant="light">
-            <b-icon-github></b-icon-github>
+          <b-button
+            href="https://github.com/Rafnuss/KenyaBirdTrends"
+            target="_blank"
+            variant="light"
+          >
+            <b-icon-github />
           </b-button>
-          </b-navbar-nav>
+          <b-button v-b-modal.modal-settings variant="light">
+            <b-icon-gear />
+          </b-button>
+        </b-navbar-nav>
       </b-collapse>
     </b-navbar>
     <b-row class="flex-grow-1 no-gutters">
       <b-col v-if="mode == 'Intro'">
-        <b-container>
-          <h1>Kenya Bird Trends</h1>
-          <b-alert show variant="info" class="mt-3">
-                    <p>Welcome to !</p>
-                    <p>
-            Visualize the change in the distribution of birds in Kenya between two time periods:
-            1970-1984 and 2009-2023. Read below to learn how the maps are built and how to navigate
-            them.
-          </p>
-                  </b-alert>
-         
-
-          <h2>Data sources</h2>
-          <p>We compare species presence between two distinct periods:</p>
-          <ul>
-            <li>
-              <b>1970-1984</b>: Presence data taken from <em>A Bird Atlas of Kenya</em> (<a
-                href="https://doi.org/10.1201/9781315136264"
-                target="_blank"
-                >Lewis & Pomeroy, 1989</a
-              >)
-              <p class="tiny-font">
-                Reference book describing the status and distribution of 1 065 species at the scale
-                of quarter square degree (QSD, 27 x 27 km). The digitized version of the book is
-                available as
-                <a
-                  href="https://www.gbif.org/dataset/00327ee4-9970-4aef-b51a-d6998ebcc249"
-                  taregt="_blank"
-                  >GBIF dataset</a
-                >.
-              </p>
-            </li>
-            <li>
-              <b>2009-2023</b>: Presence data extracted from two citizen science platforms:
-              <ol class="tiny-font" style="padding-left: 15px">
-                <li>
-                  Kenya Bird Map (KBM -
-                  <a href="https://kenya.birdmap.africa/" target="_blank">kenya.birdmap.africa</a>)
-                  leads current efforts to establish a new bird atlas from citizen scientists. We
-                  used presence information (from full or ad-hoc protocols) for each species at the
-                  pentad level and upscaled each map to match the spatial resolution of the
-                  historical atlas.
-                </li>
-                <li>
-                  eBird (<a href="https://ebird.org/region/KE" target="_blank">ebird.org</a>) is the
-                  largest online bird database. We used all data entered in Kenya since 2009 to
-                  produce species maps of presence at the QSD resolution.
-                </li>
-              </ol>
-            </li>
-          </ul>
-        
-          <hr />
-
-          <h2>Navigate the maps</h2>
-
-          <p>You can explore distribution changes in two views:</p>
-          <ol>
-            <li>
-              <b-button :variant="mode == 'Grid' ? 'primary' : 'outline-primary'" size="sm">
-                Grid
-              </b-button>
-              Click on the square(s) on the map to learn about specific areas you are interested in.
-            </li>
-            <li>
-              <b-button :variant="mode == 'Species' ? 'primary' : 'outline-primary'" size="sm">
-                Species
-              </b-button>
-              Select the species you are interested in to view their distribution map.
-              <p>
-                You can use filters to browse only endemic, Red-listed, migrant, or waterbird
-                species. You can also use the “Sort by” button to sort species by most gained or
-                lost squares.
-              </p>
-            </li>
-          </ol>
-
-          <b-alert show variant="warning">
-            <b>These maps show presence data only and do not provide information on abundance!</b>
-            There is no difference between the square holding 1 or 10 000 invididuals, so it is not
-            possible to directly draw conclusions on abundance trends.
-          </b-alert>
-          <b-row>
-            <b-col>
-              <h5>Circle colour (species view)</h5>
-
-              <ul class="list-unstyled">
-                <li>
-                  <CircleTemplate size="18" class="gained d-inline-block mr-2" />
-                  <b>Gained:</b> The species was not present in the historical atlas but was
-                  recorded in the recent period.
-                </li>
-                <li>
-                  <CircleTemplate size="18" class="kept d-inline-block mr-2" />
-                  <b>Kept:</b> The species was present in both time periods.
-                </li>
-                <li>
-                  <CircleTemplate size="18" class="lost d-inline-block mr-2" />
-                  <b>Lost:</b> The species was present in the historical atlas but was not recorded
-                  in the recent period.
-                </li>
-                <li>
-                  <CircleTemplate size="18" opacity="0.3" class="d-inline-block mr-2" />
-                  <b>Never observed:</b> Despite good coverage, the species was not recorded in
-                  either time period.
-                </li>
-              </ul>
-              <p class="tiny-font">
-                You'll notice entire areas of Kenya do not have any data. This is because no data
-                was entered in these squares. Want to help colour the map? Go to those areas and
-                submit your sightings to KBM or eBird!
-              </p>
-            </b-col>
-            <b-col>
-              <h5>Circle size</h5>
-              <p>
-                The size of the circle represents the
-                <b>confidence in the result based on the change in effort between the two periods</b
-                >.
-              </p>
-              <p class="tiny-font">
-                A small circle should be interpreted with great caution, as the result might be due
-                to a significant change in effort between the two periods rather than describing an
-                actual trend.
-              </p>
-            </b-col>
-          </b-row>
-          <h2>Export products</h2>
-          <p>You can export two products from this website:</p>
-          <ol>
-            <li>A map of distribution change for each species (.jpg), from the species view</li>
-            <li>
-              A list of species and their corresponding trend for a given area (.csv), from the grid
-              view
-            </li>
-          </ol>
-          <h2>Settings</h2>
-          <b-card>
-            <b-form-group label-size="sm">
-            <b-form-select
-              v-model="taxonomy_selected"
-              :options="taxonomy_options"
-              size="sm"
-            ></b-form-select>
-          </b-form-group>
-          </b-card>
-          <ul>
-            <li>
-              Change the map background to satellite view to explore terrain and topography (top
-              right on map)
-            </li>
-            <li>View grid square borders and county borders(top right on map)</li>
-            <li>Change the taxonomy used below:</li>
-          </ul>
-          
-          <p class="tiny-font">
-            For any questions, please reach out to
-            <a href="mailto:rafnuss@gmail.com" target="_blank">Raphaël Nussbaumer</a> |
-            
-          </p>
-        </b-container>
+        <Intro />
       </b-col>
       <b-col md="4" fluid="md" class="h-100-56" v-if="sidebar & (mode != 'Intro')">
-            <b-container class="d-flex flex-column" v-if="mode == 'Grid'">
-              <b-row class="px-0 py-0 my-2" align-v="center">
-                <b-col>
-                  Number of
-                  {{ grid.length == 0 ? "squares for  all " : "" }}species
-                  <span class="sublegend">(including poor coverage)</span>
-                  <div class="kept d-flex w-100 p-0">
-                    <div
-                      class="lost py-2"
-                      :style="{
-                        width: (nb_lkgd[0] / (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) * 100 + '%',
-                      }"
-                    ></div>
-                    <div
-                      class="gained py-2 ml-auto"
-                      :style="{
-                        width: (nb_lkgd[2] / (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) * 100 + '%',
-                      }"
-                    ></div>
-                  </div>
-                  <b-row>
-                    <b-col class="d-flex align-items-center justify-content-center">
-                      <div class="box-sm lost mr-1"></div>
-                      {{ number_with_commas(nb_lkgd[0]) }}
-                      <span class="sublegend"> lost</span>
-                    </b-col>
-                    <b-col class="d-flex align-items-center justify-content-center">
-                      <div class="box-sm kept mr-1"></div>
-                      {{ number_with_commas(nb_lkgd[1]) }}
-                      <span class="sublegend"> kept</span>
-                    </b-col>
-                    <b-col class="d-flex align-items-center justify-content-center">
-                      <div class="box-sm gained mr-1"></div>
-                      {{ number_with_commas(nb_lkgd[2]) }}
-                      <span class="sublegend"> gained</span>
-                    </b-col>
-                  </b-row>
+        <b-container class="d-flex flex-column" v-if="mode == 'Grid'">
+          <b-row class="px-0 py-0 my-2" align-v="center">
+            <b-col>
+              Number of
+              {{ grid.length == 0 ? "squares for  all " : "" }}species
+              <span class="sublegend">(including poor coverage)</span>
+              <div class="kept d-flex w-100 p-0">
+                <div
+                  class="lost py-2"
+                  :style="{
+                    width: (nb_lkgd[0] / (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) * 100 + '%',
+                  }"
+                ></div>
+                <div
+                  class="gained py-2 ml-auto"
+                  :style="{
+                    width: (nb_lkgd[2] / (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) * 100 + '%',
+                  }"
+                ></div>
+              </div>
+              <b-row>
+                <b-col class="d-flex align-items-center justify-content-center">
+                  <div class="box-sm lost mr-1"></div>
+                  {{ number_with_commas(nb_lkgd[0]) }}
+                  <span class="sublegend"> lost</span>
+                </b-col>
+                <b-col class="d-flex align-items-center justify-content-center">
+                  <div class="box-sm kept mr-1"></div>
+                  {{ number_with_commas(nb_lkgd[1]) }}
+                  <span class="sublegend"> kept</span>
+                </b-col>
+                <b-col class="d-flex align-items-center justify-content-center">
+                  <div class="box-sm gained mr-1"></div>
+                  {{ number_with_commas(nb_lkgd[2]) }}
+                  <span class="sublegend"> gained</span>
                 </b-col>
               </b-row>
-              <b-row v-if="grid.length == 0">
-                <b-col cols="12">
-                  <b-alert show variant="info" class="mt-3">
-                    <p>Click on the map to select a square!</p>
-                  </b-alert>
-                </b-col>
-              </b-row>
-              <b-row v-if="grid.length > 0">
-                <b-col>
-                  <b-badge v-for="g in grid" :key="g" variant="primary" class="mr-1">
-                    {{ g }}
-                    <!--<span style="cursor: pointer" @click="grid = grid.filter((i) => g != i)">
+            </b-col>
+          </b-row>
+          <b-row v-if="grid.length == 0">
+            <b-col cols="12">
+              <b-alert show variant="info" class="mt-3">
+                <p>Click on the map to select a square!</p>
+              </b-alert>
+            </b-col>
+          </b-row>
+          <b-row v-if="grid.length > 0">
+            <b-col>
+              <b-badge v-for="g in grid" :key="g" variant="primary" class="mr-1">
+                {{ g }}
+                <!--<span style="cursor: pointer" @click="grid = grid.filter((i) => g != i)">
                       &times;
                     </span>-->
-                  </b-badge>
-                  <b-badge
-                    v-if="grid.length > 1"
-                    variant="danger"
-                    class="mr-1"
-                    style="cursor: pointer"
-                    @click="grid = []"
-                    v-b-tooltip.hover
-                    title="Remove all squares from selection"
-                  >
-                    <b-icon icon="trash-fill" aria-hidden="true" />
-                  </b-badge>
+              </b-badge>
+              <b-badge
+                v-if="grid.length > 1"
+                variant="danger"
+                class="mr-1"
+                style="cursor: pointer"
+                @click="grid = []"
+                v-b-tooltip.hover
+                title="Remove all squares from selection"
+              >
+                <b-icon icon="trash-fill" aria-hidden="true" />
+              </b-badge>
 
-                  <b-button
-                    class="float-right ml-auto mr-1 btn-xs"
-                    v-if="grid.length > 0"
-                    squared
-                    variant="primary"
-                    size="sm"
-                    @click="export_csv"
-                    v-b-tooltip.hover
-                    title="Export species list"
-                  >
-                    <b-icon icon="download" />
-                  </b-button>
-                </b-col>
-              </b-row>
-              <b-row v-if="grid.length > 0">
-                <b-col cols="auto">Filter: </b-col>
-                <b-col cols="auto">
-                  <b-form-checkbox id="checkbox-lost" v-model="checkbox_lost">Lost</b-form-checkbox>
-                </b-col>
-                <b-col cols="auto">
-                  <b-form-checkbox id="checkbox-kept" v-model="checkbox_kept">
-                    Kept
-                  </b-form-checkbox>
-                </b-col>
-                <b-col cols="auto">
-                  <b-form-checkbox id="checkbox-gained" v-model="checkbox_gained"
-                    >Gained
-                  </b-form-checkbox>
-                </b-col>
-              </b-row>
-              <b-row v-if="grid.length > 0" class="overflow-auto">
-                <b-col cols="12">
-                  <b-list-group class="small h-100">
-                    <b-list-group-item
-                      v-for="i in grid_list"
-                      :key="i.Id"
-                      class="d-flex align-items-center py-1 px-3"
-                    >
-                      <b class="ml-1">{{ i.common_name }}</b>
-                      <div
-                        class="box box-sm ml-auto"
-                        :class="{
-                          kept: i.trend == 'kept',
-                          gained: i.trend == 'gained',
-                          lost: i.trend == 'lost',
-                        }"
-                      />
-                    </b-list-group-item>
-                  </b-list-group>
-                </b-col>
-              </b-row>
-            </b-container>
-            <b-container class="d-flex flex-column" v-if="mode == 'Species'">
-              <b-row>
-                <b-col cols="12" class="mt-2">
-                  <!--<v-select
+              <b-button
+                class="float-right ml-auto mr-1 btn-xs"
+                v-if="grid.length > 0"
+                squared
+                variant="primary"
+                size="sm"
+                @click="export_csv"
+                v-b-tooltip.hover
+                title="Export species list"
+              >
+                <b-icon icon="download" />
+              </b-button>
+            </b-col>
+          </b-row>
+          <b-row v-if="grid.length > 0">
+            <b-col cols="auto">Filter: </b-col>
+            <b-col cols="auto">
+              <b-form-checkbox id="checkbox-lost" v-model="checkbox_lost">Lost</b-form-checkbox>
+            </b-col>
+            <b-col cols="auto">
+              <b-form-checkbox id="checkbox-kept" v-model="checkbox_kept"> Kept </b-form-checkbox>
+            </b-col>
+            <b-col cols="auto">
+              <b-form-checkbox id="checkbox-gained" v-model="checkbox_gained"
+                >Gained
+              </b-form-checkbox>
+            </b-col>
+          </b-row>
+          <b-row v-if="grid.length > 0" class="overflow-auto">
+            <b-col cols="12">
+              <b-list-group class="small h-100">
+                <b-list-group-item
+                  v-for="i in grid_list"
+                  :key="i.Id"
+                  class="d-flex align-items-center py-1 px-3"
+                >
+                  <b class="ml-1">{{ i.common_name }}</b>
+                  <div
+                    class="box box-sm ml-auto"
+                    :class="{
+                      kept: i.trend == 'kept',
+                      gained: i.trend == 'gained',
+                      lost: i.trend == 'lost',
+                    }"
+                  />
+                </b-list-group-item>
+              </b-list-group>
+            </b-col>
+          </b-row>
+        </b-container>
+        <b-container class="d-flex flex-column" v-if="mode == 'Species'">
+          <b-row>
+            <b-col cols="12" class="mt-2">
+              <!--<v-select
                   v-model="species"
                   :options="species_options"
                   :reduce="(x) => x.SEQ"
                   label="common_name"
                   
                 ></v-select>-->
-                  <multiselect
-                    v-model="species"
-                    :options="sp_filter"
-                    placeholder="Select a species"
-                    :custom-label="selectLabel"
-                    track-by="SEQ"
-                    @input="update_url()"
-                    :show-labels="false"
-                  >
-                    <template slot="option" slot-scope="props">
-                      {{ props.option.common_name }}
-                      <img
-                        :src="iucn[props.option.IUCN]"
-                        v-if="['CR', 'DD', 'EN', 'VU'].includes(props.option.IUCN)"
-                        class="ml-1"
-                        style="width: 1rem"
-                      />
-                    </template>
-                    <template slot="singleLabel" slot-scope="props">
-                      <b>{{ props.option.common_name }}</b>
-                      <span class="sublegend ml-2">
-                        <i>{{ props.option.scientific_name }}</i>
-                      </span>
-                    </template>
-                  </multiselect>
+              <multiselect
+                v-model="species"
+                :options="sp_filter"
+                placeholder="Select a species"
+                :custom-label="selectLabel"
+                track-by="SEQ"
+                @input="update_url()"
+                :show-labels="false"
+              >
+                <template slot="option" slot-scope="props">
+                  {{ props.option.common_name }}
+                  <img
+                    :src="iucn[props.option.IUCN]"
+                    v-if="['CR', 'DD', 'EN', 'VU'].includes(props.option.IUCN)"
+                    class="ml-1"
+                    style="width: 1rem"
+                  />
+                </template>
+                <template slot="singleLabel" slot-scope="props">
+                  <b>{{ props.option.common_name }}</b>
+                  <span class="sublegend ml-2">
+                    <i>{{ props.option.scientific_name }}</i>
+                  </span>
+                </template>
+              </multiselect>
+            </b-col>
+            <b-col v-if="species != null" class="d-flex flex-wrap pt-1">
+              <a
+                target="_blank"
+                class="d-flex align-items-center justify-content-center"
+                title="IUCN page"
+                :href="'https://apiv3.iucnredlist.org/api/v3/taxonredirect/' + species.IUCNID"
+              >
+                <img :src="iucn[species.IUCN]" class="ml-1" style="width: 1rem" />
+              </a>
+              <b-button
+                squared
+                variant="outline-primary"
+                class="ml-1 btn-xs d-flex align-items-center justify-content-center"
+                size="sm"
+                v-for="(i, u) in species.ebird"
+                :key="'sp-ebird-' + u"
+                :href="'https://ebird.org/species/' + i + '/KE'"
+                target="_blank"
+              >
+                eBird-{{ species.ebird.length > 1 ? i : i[0] }}
+              </b-button>
+              <b-button
+                squared
+                variant="outline-primary"
+                class="ml-1 btn-xs d-flex align-items-center justify-content-center"
+                size="sm"
+                v-for="(i, u) in species.kbm"
+                :key="'sp-kbm-' + u"
+                :href="'https://kenya.birdmap.africa/species/' + i"
+                target="_blank"
+              >
+                KBM-{{ i }}
+              </b-button>
+              <b-button
+                squared
+                variant="primary"
+                class="ml-auto mr-1 btn-xs"
+                size="sm"
+                :href="'/species_map/' + species.SEQ + '.png'"
+                target="_blank"
+              >
+                <b-icon icon="download" /> Download map
+              </b-button>
+            </b-col>
+          </b-row>
+          <b-alert
+            show
+            variant="warning"
+            v-if="species && species.flag != null"
+            class="m-2 small py-2 px-3"
+          >
+            <b-icon icon="exclamation-triangle"></b-icon>
+            {{ species.flag }}
+          </b-alert>
+          <b-row class="px-0 my-2">
+            <b-col>
+              Number of squares{{ species == null ? " for all species" : "" }}
+              <span class="sublegend">{{
+                display_poor_coverage ? "(including poor coverage)" : ""
+              }}</span>
+              <div class="kept d-flex w-100 p-0">
+                <div
+                  class="lost py-2"
+                  :style="{
+                    width: (nb_lkgd[0] / (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) * 100 + '%',
+                  }"
+                ></div>
+                <div
+                  class="gained py-2 ml-auto"
+                  :style="{
+                    width: (nb_lkgd[2] / (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) * 100 + '%',
+                  }"
+                ></div>
+              </div>
+              <b-row>
+                <b-col class="d-flex align-items-center justify-content-center">
+                  <div class="box-sm lost mr-1"></div>
+                  {{ number_with_commas(nb_lkgd[0]) }}<span class="sublegend"> lost</span>
                 </b-col>
-                <b-col v-if="species != null" class="d-flex flex-wrap pt-1">
+                <b-col class="d-flex align-items-center justify-content-center">
+                  <div class="box-sm kept mr-1"></div>
+                  {{ number_with_commas(nb_lkgd[1]) }}<span class="sublegend"> kept</span>
+                </b-col>
+                <b-col class="d-flex align-items-center justify-content-center">
+                  <div class="box-sm gained mr-1"></div>
+                  {{ number_with_commas(nb_lkgd[2]) }}<span class="sublegend"> gained</span>
+                </b-col>
+              </b-row>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col class="d-flex align-items-center flex-row">
+              <div class="flex-grow-1">
+                <b-button v-b-toggle:my-collapse size="sm" variant="link">
+                  <span class="when-open"><b-icon icon="caret-down-fill" font-scale="1" /></span>
+                  <span class="when-closed"><b-icon icon="caret-right-fill" font-scale="1" /></span>
+                  Filters list
+                </b-button>
+              </div>
+              <small>Sort by:</small>
+              <b-form inline>
+                <b-form-select
+                  class="flex-grow-0 ml-1"
+                  v-model="sort_selected"
+                  :options="sort_options"
+                  size="sm"
+                />
+              </b-form>
+            </b-col>
+          </b-row>
+          <b-collapse id="my-collapse">
+            <b-card bg-variant="light" class="m-2" no-body>
+              <b-card-body class="py-2 d-flex">
+                <b-form-checkbox-group
+                  v-model="filter_checkbox_selected"
+                  :options="filter_checkbox_options"
+                  size="sm"
+                />
+                <b-form inline>
+                  <b-form-group label-size="sm" label="Red list category:">
+                    <b-form-select
+                      v-model="filter_red_list_selected"
+                      :options="filter_red_list_options"
+                      size="sm"
+                    />
+                  </b-form-group>
+                </b-form>
+              </b-card-body>
+            </b-card>
+          </b-collapse>
+          <b-row class="overflow-auto">
+            <b-col cols="12" class="mt-2">
+              <b-list-group class="small h-100">
+                <b-list-group-item
+                  v-for="i in sp_sort"
+                  :key="i.Id"
+                  class="d-flex align-items-center py-1 px-3"
+                  :active="species == null ? false : i.SEQ == species.SEQ"
+                  @click="
+                    species = i;
+                    update_url();
+                  "
+                  :action="true"
+                  role="button"
+                >
+                  <b class="ml-1">{{ i.common_name }}</b>
                   <a
                     target="_blank"
-                    class="d-flex align-items-center justify-content-center"
                     title="IUCN page"
-                    :href="'https://apiv3.iucnredlist.org/api/v3/taxonredirect/' + species.IUCNID"
+                    :href="'https://apiv3.iucnredlist.org/api/v3/taxonredirect/' + i.IUCNID"
                   >
-                    <img :src="iucn[species.IUCN]" class="ml-1" style="width: 1rem" />
+                    <img
+                      v-if="['CR', 'DD', 'EN', 'VU'].includes(i.IUCN)"
+                      :src="iucn[i.IUCN]"
+                      v-bind:alt="i.IUCN"
+                      class="ml-1"
+                      style="width: 1rem"
+                    />
                   </a>
-                  <b-button
-                    squared
-                    variant="outline-primary"
-                    class="ml-1 btn-xs d-flex align-items-center justify-content-center"
-                    size="sm"
-                    v-for="(i, u) in species.ebird"
-                    :key="'sp-ebird-' + u"
-                    :href="'https://ebird.org/species/' + i + '/KE'"
-                    target="_blank"
+                  <div
+                    class="bar kept"
+                    v-b-tooltip.right.hover.html="
+                      '<b>Lost:</b> ' +
+                      i.nb_lkgd[0] +
+                      '<br><b>Kept:</b> ' +
+                      i.nb_lkgd[1] +
+                      '<br><b>Gained:</b> ' +
+                      i.nb_lkgd[2]
+                    "
                   >
-                    eBird-{{ species.ebird.length > 1 ? i : i[0] }}
-                  </b-button>
-                  <b-button
-                    squared
-                    variant="outline-primary"
-                    class="ml-1 btn-xs d-flex align-items-center justify-content-center"
-                    size="sm"
-                    v-for="(i, u) in species.kbm"
-                    :key="'sp-kbm-' + u"
-                    :href="'https://kenya.birdmap.africa/species/' + i"
-                    target="_blank"
-                  >
-                    KBM-{{ i }}
-                  </b-button>
-                  <b-button
-                    squared
-                    variant="primary"
-                    class="ml-auto mr-1 btn-xs"
-                    size="sm"
-                    :href="'/species_map/' + species.SEQ + '.png'"
-                    target="_blank"
-                  >
-                    <b-icon icon="download" /> Download map
-                  </b-button>
-                </b-col>
-              </b-row>
-              <b-alert
-                show
-                variant="warning"
-                v-if="species && species.flag != null"
-                class="m-2 small py-2 px-3"
-              >
-                <b-icon icon="exclamation-triangle"></b-icon>
-                {{ species.flag }}
-              </b-alert>
-              <b-row class="px-0 my-2">
-                <b-col>
-                  Number of squares{{ species == null ? " for all species" : "" }}
-                  <span class="sublegend">{{
-                    display_poor_coverage ? "(including poor coverage)" : ""
-                  }}</span>
-                  <div class="kept d-flex w-100 p-0">
                     <div
-                      class="lost py-2"
+                      class="bar-left lost"
                       :style="{
-                        width: (nb_lkgd[0] / (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) * 100 + '%',
+                        width:
+                          (i.nb_lkgd[0] / (i.nb_lkgd[0] + i.nb_lkgd[1] + i.nb_lkgd[2])) * 100 +
+                          'px',
                       }"
                     ></div>
                     <div
-                      class="gained py-2 ml-auto"
+                      class="bar-right gained"
                       :style="{
-                        width: (nb_lkgd[2] / (nb_lkgd[0] + nb_lkgd[1] + nb_lkgd[2])) * 100 + '%',
+                        width:
+                          (i.nb_lkgd[2] / (i.nb_lkgd[0] + i.nb_lkgd[1] + i.nb_lkgd[2])) * 100 +
+                          'px',
                       }"
                     ></div>
                   </div>
-                  <b-row>
-                    <b-col class="d-flex align-items-center justify-content-center">
-                      <div class="box-sm lost mr-1"></div>
-                      {{ number_with_commas(nb_lkgd[0]) }}<span class="sublegend"> lost</span>
-                    </b-col>
-                    <b-col class="d-flex align-items-center justify-content-center">
-                      <div class="box-sm kept mr-1"></div>
-                      {{ number_with_commas(nb_lkgd[1]) }}<span class="sublegend"> kept</span>
-                    </b-col>
-                    <b-col class="d-flex align-items-center justify-content-center">
-                      <div class="box-sm gained mr-1"></div>
-                      {{ number_with_commas(nb_lkgd[2]) }}<span class="sublegend"> gained</span>
-                    </b-col>
-                  </b-row>
-                </b-col>
-              </b-row>
-              <b-row>
-                <b-col class="d-flex align-items-center flex-row">
-                  <div class="flex-grow-1">
-                    <b-button v-b-toggle:my-collapse size="sm" variant="link">
-                      <span class="when-open"
-                        ><b-icon icon="caret-down-fill" font-scale="1"
-                      /></span>
-                      <span class="when-closed"
-                        ><b-icon icon="caret-right-fill" font-scale="1"
-                      /></span>
-                      Filters list
-                    </b-button>
-                  </div>
-                  <small>Sort by:</small>
-                  <b-form inline>
-                    <b-form-select
-                      class="flex-grow-0 ml-1"
-                      v-model="sort_selected"
-                      :options="sort_options"
-                      size="sm"
-                    />
-                  </b-form>
-                </b-col>
-              </b-row>
-              <b-collapse id="my-collapse">
-                <b-card bg-variant="light" class="m-2" no-body>
-                  <b-card-body class="py-2 d-flex">
-                    <b-form-checkbox-group
-                      v-model="filter_checkbox_selected"
-                      :options="filter_checkbox_options"
-                      size="sm"
-                    />
-                    <b-form inline>
-                      <b-form-group label-size="sm" label="Red list category:">
-                        <b-form-select
-                          v-model="filter_red_list_selected"
-                          :options="filter_red_list_options"
-                          size="sm"
-                        />
-                      </b-form-group>
-                    </b-form>
-                  </b-card-body>
-                </b-card>
-              </b-collapse>
-              <b-row class="overflow-auto">
-                <b-col cols="12" class="mt-2">
-                  <b-list-group class="small h-100">
-                    <b-list-group-item
-                      v-for="i in sp_sort"
-                      :key="i.Id"
-                      class="d-flex align-items-center py-1 px-3"
-                      :active="species == null ? false : i.SEQ == species.SEQ"
-                      @click="
-                        species = i;
-                        update_url();
-                      "
-                      :action="true"
-                      role="button"
-                    >
-                      <b class="ml-1">{{ i.common_name }}</b>
-                      <a
-                        target="_blank"
-                        title="IUCN page"
-                        :href="'https://apiv3.iucnredlist.org/api/v3/taxonredirect/' + i.IUCNID"
-                      >
-                        <img
-                          v-if="['CR', 'DD', 'EN', 'VU'].includes(i.IUCN)"
-                          :src="iucn[i.IUCN]"
-                          v-bind:alt="i.IUCN"
-                          class="ml-1"
-                          style="width: 1rem"
-                        />
-                      </a>
-                      <div
-                        class="bar kept"
-                        v-b-tooltip.right.hover.html="
-                          '<b>Lost:</b> ' +
-                          i.nb_lkgd[0] +
-                          '<br><b>Kept:</b> ' +
-                          i.nb_lkgd[1] +
-                          '<br><b>Gained:</b> ' +
-                          i.nb_lkgd[2]
-                        "
-                      >
-                        <div
-                          class="bar-left lost"
-                          :style="{
-                            width:
-                              (i.nb_lkgd[0] / (i.nb_lkgd[0] + i.nb_lkgd[1] + i.nb_lkgd[2])) * 100 +
-                              'px',
-                          }"
-                        ></div>
-                        <div
-                          class="bar-right gained"
-                          :style="{
-                            width:
-                              (i.nb_lkgd[2] / (i.nb_lkgd[0] + i.nb_lkgd[1] + i.nb_lkgd[2])) * 100 +
-                              'px',
-                          }"
-                        ></div>
-                      </div>
-                    </b-list-group-item>
-                  </b-list-group>
-                </b-col>
-              </b-row>
-            </b-container>
+                </b-list-group-item>
+              </b-list-group>
+            </b-col>
+          </b-row>
+        </b-container>
       </b-col>
       <b-col class="flex-grow-1" @shown="reloadMap()" v-if="mode != 'Intro'">
         <l-map :bounds="bounds" ref="map">
@@ -610,6 +451,36 @@
                   <span> 0 </span>
                   <span>200</span>
                 </div>
+              </div>
+              <div class="mb-1" v-if="mode == 'Species'">
+                <b>Circle color</b>
+                <b-row no-gutters>
+                  <b-col
+                    cols="4"
+                    class="d-inline-flex justify-content-center"
+                    v-b-tooltip.top.hover
+                    title="The species was not present in the historical atlas but was recorded in the recent period."
+                  >
+                    <CircleTemplate size="18" class="gained mr-1" />
+                    Gained
+                  </b-col>
+                  <b-col
+                    cols="4"
+                    class="d-inline-flex justify-content-center"
+                    v-b-tooltip.top.hover
+                    title="The species was present in both time periods."
+                  >
+                    <CircleTemplate size="18" class="kept mr-1" /> Kept
+                  </b-col>
+                  <b-col
+                    cols="4"
+                    class="d-inline-flex justify-content-center"
+                    v-b-tooltip.top.hover
+                    title="The species was present in the historical atlas but was not recorded in the recent period."
+                  >
+                    <CircleTemplate size="18" class="lost mr-1" /> Lost
+                  </b-col>
+                </b-row>
               </div>
               <div class="mb-1">
                 <span v-if="mode == 'Grid'">
@@ -720,6 +591,25 @@
         </l-map>
       </b-col>
     </b-row>
+    <b-modal id="modal-settings" title="Settings">
+      <b-card>
+        <b-form-group label-size="sm">
+          <b-form-select
+            v-model="taxonomy_selected"
+            :options="taxonomy_options"
+            size="sm"
+          ></b-form-select>
+        </b-form-group>
+      </b-card>
+      <ul>
+        <li>
+          Change the map background to satellite view to explore terrain and topography (top right
+          on map)
+        </li>
+        <li>View grid square borders and county borders(top right on map)</li>
+        <li>Change the taxonomy used below:</li>
+      </ul>
+    </b-modal>
   </b-container>
 </template>
 
@@ -745,6 +635,7 @@ import { OpenStreetMapProvider } from "leaflet-geosearch";
 import VGeosearch from "vue2-leaflet-geosearch";
 
 import CircleTemplate from "./circle.vue";
+import Intro from "./intro.vue";
 
 import chroma from "chroma-js";
 import map_data from "./assets/map_data.json";
@@ -795,6 +686,7 @@ export default {
     LTooltip,
     CircleTemplate,
     Multiselect,
+    Intro,
     VGeosearch,
   },
   data() {
@@ -803,8 +695,7 @@ export default {
       county_geojson: county_geojson,
       sidebar: true,
       legend: true,
-      mode_options: ["Grid", "Species"],
-      mode: "Grid",
+      mode: "Intro",
       checkbox_lost: true,
       checkbox_kept: true,
       checkbox_gained: true,
