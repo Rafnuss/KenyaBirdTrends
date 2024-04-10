@@ -1,6 +1,6 @@
 <template>
   <b-container fluid class="h-100 d-flex flex-column p-0">
-    <b-navbar toggleable="sm" variant="light">
+    <b-navbar toggleable="sm" variant="light" style="border-bottom: 1px solid #E5E9EF;">
       <b-navbar-brand href="#">Kenya Bird Trends</b-navbar-brand>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
       <b-collapse id="nav-collapse" is-nav>
@@ -8,12 +8,12 @@
           <b-nav-item
             href="#"
             @click="
-              mode = 'Home';
+              mode = 'Intro';
               update_url();
             "
-            :active="mode == 'Home'"
+            :active="mode == 'Intro'"
           >
-            Home
+            Intro
           </b-nav-item>
           <b-nav-item
             href="#"
@@ -40,30 +40,69 @@
 
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
-          <b-nav-form>
-            <b-form-input size="sm" class="mr-sm-2" placeholder="Search"></b-form-input>
-            <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
-          </b-nav-form>
-
-          <b-nav-item-dropdown right>
-            <!-- Using 'button-content' slot -->
-            <template #button-content>
-              <em>User</em>
-            </template>
-            <b-dropdown-item href="#">Profile</b-dropdown-item>
-            <b-dropdown-item href="#">Sign Out</b-dropdown-item>
-          </b-nav-item-dropdown>
-        </b-navbar-nav>
+          <b-button href="https://github.com/Rafnuss/KenyaBirdTrends" target="_blank" variant="light">
+            <b-icon-github></b-icon-github>
+          </b-button>
+          </b-navbar-nav>
       </b-collapse>
     </b-navbar>
-    <b-row class="flex-grow-1 no-gutters bg-light">
-      <b-col v-if="mode == 'Home'">
-        <b-container class="bg-white">
-          <p>
+    <b-row class="flex-grow-1 no-gutters">
+      <b-col v-if="mode == 'Intro'">
+        <b-container>
+          <h1>Kenya Bird Trends</h1>
+          <b-alert show variant="info" class="mt-3">
+                    <p>Welcome to !</p>
+                    <p>
             Visualize the change in the distribution of birds in Kenya between two time periods:
             1970-1984 and 2009-2023. Read below to learn how the maps are built and how to navigate
             them.
           </p>
+                  </b-alert>
+         
+
+          <h2>Data sources</h2>
+          <p>We compare species presence between two distinct periods:</p>
+          <ul>
+            <li>
+              <b>1970-1984</b>: Presence data taken from <em>A Bird Atlas of Kenya</em> (<a
+                href="https://doi.org/10.1201/9781315136264"
+                target="_blank"
+                >Lewis & Pomeroy, 1989</a
+              >)
+              <p class="tiny-font">
+                Reference book describing the status and distribution of 1 065 species at the scale
+                of quarter square degree (QSD, 27 x 27 km). The digitized version of the book is
+                available as
+                <a
+                  href="https://www.gbif.org/dataset/00327ee4-9970-4aef-b51a-d6998ebcc249"
+                  taregt="_blank"
+                  >GBIF dataset</a
+                >.
+              </p>
+            </li>
+            <li>
+              <b>2009-2023</b>: Presence data extracted from two citizen science platforms:
+              <ol class="tiny-font" style="padding-left: 15px">
+                <li>
+                  Kenya Bird Map (KBM -
+                  <a href="https://kenya.birdmap.africa/" target="_blank">kenya.birdmap.africa</a>)
+                  leads current efforts to establish a new bird atlas from citizen scientists. We
+                  used presence information (from full or ad-hoc protocols) for each species at the
+                  pentad level and upscaled each map to match the spatial resolution of the
+                  historical atlas.
+                </li>
+                <li>
+                  eBird (<a href="https://ebird.org/region/KE" target="_blank">ebird.org</a>) is the
+                  largest online bird database. We used all data entered in Kenya since 2009 to
+                  produce species maps of presence at the QSD resolution.
+                </li>
+              </ol>
+            </li>
+          </ul>
+        
+          <hr />
+
+          <h2>Navigate the maps</h2>
 
           <p>You can explore distribution changes in two views:</p>
           <ol>
@@ -85,10 +124,6 @@
               </p>
             </li>
           </ol>
-
-          <hr />
-
-          <h5>How to read the maps</h5>
 
           <b-alert show variant="warning">
             <b>These maps show presence data only and do not provide information on abundance!</b>
@@ -140,64 +175,7 @@
               </p>
             </b-col>
           </b-row>
-          <hr />
-          <h5>Data sources</h5>
-          <p>We compare species presence between two distinct periods:</p>
-          <ul>
-            <li>
-              <b>1970-1984</b>: Presence data taken from <em>A Bird Atlas of Kenya</em> (<a
-                href="https://doi.org/10.1201/9781315136264"
-                target="_blank"
-                >Lewis & Pomeroy, 1989</a
-              >)
-              <p class="tiny-font">
-                Reference book describing the status and distribution of 1 065 species at the scale
-                of quarter square degree (QSD, 27 x 27 km). The digitized version of the book is
-                available as
-                <a
-                  href="https://www.gbif.org/dataset/00327ee4-9970-4aef-b51a-d6998ebcc249"
-                  taregt="_blank"
-                  >GBIF dataset</a
-                >.
-              </p>
-            </li>
-            <li>
-              <b>2009-2023</b>: Presence data extracted from two citizen science platforms:
-              <ol class="tiny-font" style="padding-left: 15px">
-                <li>
-                  Kenya Bird Map (KBM -
-                  <a href="https://kenya.birdmap.africa/" target="_blank">kenya.birdmap.africa</a>)
-                  leads current efforts to establish a new bird atlas from citizen scientists. We
-                  used presence information (from full or ad-hoc protocols) for each species at the
-                  pentad level and upscaled each map to match the spatial resolution of the
-                  historical atlas.
-                </li>
-                <li>
-                  eBird (<a href="https://ebird.org/region/KE" target="_blank">ebird.org</a>) is the
-                  largest online bird database. We used all data entered in Kenya since 2009 to
-                  produce species maps of presence at the QSD resolution.
-                </li>
-              </ol>
-            </li>
-          </ul>
-          <hr />
-          <h5>Settings</h5>
-          <ul>
-            <li>
-              Change the map background to satellite view to explore terrain and topography (top
-              right on map)
-            </li>
-            <li>View grid square borders and county borders(top right on map)</li>
-            <li>Change the taxonomy used below:</li>
-          </ul>
-          <b-form-group label-size="sm">
-            <b-form-select
-              v-model="taxonomy_selected"
-              :options="taxonomy_options"
-              size="sm"
-            ></b-form-select>
-          </b-form-group>
-          <h5>Export products</h5>
+          <h2>Export products</h2>
           <p>You can export two products from this website:</p>
           <ol>
             <li>A map of distribution change for each species (.jpg), from the species view</li>
@@ -206,59 +184,33 @@
               view
             </li>
           </ol>
-          <hr />
-
+          <h2>Settings</h2>
+          <b-card>
+            <b-form-group label-size="sm">
+            <b-form-select
+              v-model="taxonomy_selected"
+              :options="taxonomy_options"
+              size="sm"
+            ></b-form-select>
+          </b-form-group>
+          </b-card>
+          <ul>
+            <li>
+              Change the map background to satellite view to explore terrain and topography (top
+              right on map)
+            </li>
+            <li>View grid square borders and county borders(top right on map)</li>
+            <li>Change the taxonomy used below:</li>
+          </ul>
+          
           <p class="tiny-font">
             For any questions, please reach out to
             <a href="mailto:rafnuss@gmail.com" target="_blank">Raphaël Nussbaumer</a> |
-            <a href="https://github.com/Rafnuss/KenyaBirdTrends" target="_blank">
-              <b-icon-github class="h5 mb-0 pr-1"></b-icon-github>/Rafnuss/KenyaBirdTrends
-            </a>
+            
           </p>
         </b-container>
       </b-col>
-      <b-col md="4" fluid="md" class="h-100-56" v-if="sidebar & (mode != 'Home')">
-        <b-card no-body class="h-100-56">
-          <!--
-            <b-card-header header-tag="nav">
-            <b-row align-v="center" class="no-gutters">
-              <b-col cols="auto" class="d-flex">
-                <h2 class="d-none d-lg-block mb-0">Kenya Bird Trends</h2>
-                <h2 class="d-lg-none">KBT</h2>
-              </b-col>
-              <b-col>
-                <b-button
-                  class="ml-3"
-                  variant="outline-primary"
-                  size="sm"
-                  v-b-modal.modal-1
-                  role="button"
-                >
-                  <b-icon icon="question-circle-fill"></b-icon>
-                </b-button>
-              </b-col>
-              <b-col class="text-right">
-                <b-form-radio-group
-                  v-model="mode"
-                  :options="mode_options"
-                  @change="update_url()"
-                  buttons
-                  button-variant="outline-primary"
-                  size="sm"
-                />
-                <b-button
-                  size="sm"
-                  variant="primary"
-                  class="ml-2 d-lg-none"
-                  @click="sidebar = false"
-                >
-                  <b-icon icon="map-fill" />
-                </b-button>
-              </b-col>
-            </b-row>
-          </b-card-header>
-          -->
-          <b-card-body class="px-0">
+      <b-col md="4" fluid="md" class="h-100-56" v-if="sidebar & (mode != 'Intro')">
             <b-container class="d-flex flex-column" v-if="mode == 'Grid'">
               <b-row class="px-0 py-0 my-2" align-v="center">
                 <b-col>
@@ -301,8 +253,6 @@
               <b-row v-if="grid.length == 0">
                 <b-col cols="12">
                   <b-alert show variant="info" class="mt-3">
-                    <h4 class="alert-heading">Welcome!</h4>
-                    <hr />
                     <p>Click on the map to select a square!</p>
                   </b-alert>
                 </b-col>
@@ -381,7 +331,7 @@
             </b-container>
             <b-container class="d-flex flex-column" v-if="mode == 'Species'">
               <b-row>
-                <b-col cols="12">
+                <b-col cols="12" class="mt-2">
                   <!--<v-select
                   v-model="species"
                   :options="species_options"
@@ -469,7 +419,7 @@
                 <b-icon icon="exclamation-triangle"></b-icon>
                 {{ species.flag }}
               </b-alert>
-              <b-row class="px-0 py-2 my-2">
+              <b-row class="px-0 my-2">
                 <b-col>
                   Number of squares{{ species == null ? " for all species" : "" }}
                   <span class="sublegend">{{
@@ -611,10 +561,8 @@
                 </b-col>
               </b-row>
             </b-container>
-          </b-card-body>
-        </b-card>
       </b-col>
-      <b-col class="flex-grow-1" @shown="reloadMap()" v-if="mode != 'Home'">
+      <b-col class="flex-grow-1" @shown="reloadMap()" v-if="mode != 'Intro'">
         <l-map :bounds="bounds" ref="map">
           <l-tile-layer
             v-for="tileProvider in tile_providers"
