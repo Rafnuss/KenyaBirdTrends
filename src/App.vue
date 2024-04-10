@@ -100,7 +100,7 @@
           <b-row v-if="grid.length == 0">
             <b-col cols="12">
               <b-alert show variant="info" class="mt-3">
-                <p>Click on the map to select a square!</p>
+                <p>Click on one (or several) circle(s) on the map to select a grid square and view the species list for that area.</p><p>For each species, you can see whether it has been gained, lost, or kept between the two periods.</p>
               </b-alert>
             </b-col>
           </b-row>
@@ -592,6 +592,16 @@
       </b-col>
     </b-row>
     <b-modal id="modal-settings" title="Settings">
+      
+      <ul>
+        <li>
+          Change the map background to satellite view to explore terrain and topography (top right
+          on map)
+        </li>
+        <li>View grid square and/or county borders (top right on map)</li>
+        <li>Search for a specific location</li>
+        <li>Change the species taxonomy used below:</li>
+      </ul>
       <b-card>
         <b-form-group label-size="sm">
           <b-form-select
@@ -601,14 +611,6 @@
           ></b-form-select>
         </b-form-group>
       </b-card>
-      <ul>
-        <li>
-          Change the map background to satellite view to explore terrain and topography (top right
-          on map)
-        </li>
-        <li>View grid square borders and county borders(top right on map)</li>
-        <li>Change the taxonomy used below:</li>
-      </ul>
     </b-modal>
   </b-container>
 </template>
