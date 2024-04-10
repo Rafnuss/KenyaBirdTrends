@@ -99,13 +99,14 @@
             <b-col cols="12">
               <b-alert show variant="info" class="mt-3">
                 <p>
-                  Click on one (or several) circle(s) on the map to select a grid square and view
-                  the species list for that area.
+                  Click on one or multiple circle(s) on the map to select a grid square and view the
+                  species list for that area.
                 </p>
                 <p>
                   For each species, you can see whether it has been gained, lost, or kept between
                   the two periods.
                 </p>
+                <p>You can export this species list as a CSV file.</p>
               </b-alert>
             </b-col>
           </b-row>
