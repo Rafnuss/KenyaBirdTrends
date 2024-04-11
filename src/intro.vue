@@ -38,18 +38,28 @@
       <b-card-group deck class="mb-2">
         <b-card class="bg-light">
           <p class="text-muted mb-0">Grid</p>
-          <p class="small">
+          <span class="small">
             Select one or multiple grid squares (27x27km) on the map to view and export the list of
             species lost, kept, and gained in this area.
-          </p>
-          <b-button @click="$emit('changeModeGrid')" align-self="center">Grid</b-button>
+          </span>
+          <template #footer>
+            <div class="d-flex justify-content-center">
+              <b-button @click="$emit('changeModeGrid')" align-self="center"
+                >Go to Grid view</b-button
+              >
+            </div>
+          </template>
         </b-card>
         <b-card class="bg-light">
           <p class="text-muted mb-0">Species</p>
-          <p class="small">
+          <span class="small">
             Visualize the map of the squares lost, kept, and gained for a specific species.
-          </p>
-          <b-button @click="$emit('changeModeSpecies')" class="mx-auto">Species</b-button>
+          </span>
+          <template #footer>
+            <div class="d-flex justify-content-center">
+              <b-button @click="$emit('changeModeSpecies')">Go to Species view</b-button>
+            </div>
+          </template>
         </b-card>
       </b-card-group>
 
@@ -150,17 +160,32 @@
     </b-container>
     <b-container fluid class="bg-light p-5">
       <h6 class="text-muted text-uppercase">Implementing organisations</h6>
-      <b-row align-v="stretch" class="px-5 pb-2">
-        <b-col md="3" v-for="o in organisations" :key="o.href">
-          <a :href="o.href" target="_blank" class="logo-link p-4 bg-white rounded h-100">
+      <b-row align-v="stretch" class="pb-2">
+        <b-col
+          lg="3"
+          sm="6"
+          v-for="o in organisations"
+          :key="o.href"
+          class="mb-2"
+          style="height: 9rem"
+        >
+          <a :href="o.href" target="_blank" class="logo-link px-2 bg-white rounded h-100">
             <b-img fluid :src="o.src" alt="Image" class="img-organisations" />
           </a>
         </b-col>
       </b-row>
       <h6 class="text-muted text-uppercase">Partner organisations</h6>
-      <b-row align-v="stretch" class="px-5">
-        <b-col md="2" v-for="p in partners" :key="p.href">
-          <a :href="p.href" target="_blank" class="logo-link p-4 bg-white rounded h-100">
+      <b-row align-v="stretch">
+        <b-col
+          cols="6"
+          md="4"
+          lg="2"
+          v-for="p in partners"
+          :key="p.href"
+          class="mb-2"
+          style="height: 7rem"
+        >
+          <a :href="p.href" target="_blank" class="logo-link px-2 bg-white rounded h-100">
             <b-img fluid :src="p.src" alt="Image" class="img-partners" />
           </a>
         </b-col>

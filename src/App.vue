@@ -2,7 +2,16 @@
   <b-container fluid class="h-100 d-flex flex-column p-0">
     <b-navbar toggleable="sm" variant="light" style="border-bottom: 1px solid #e5e9ef" sticky>
       <b-navbar-brand href="#">Kenya Bird Trends</b-navbar-brand>
-      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+      <b-button
+        size="sm"
+        variant="primary"
+        class="mr-2 d-lg-none"
+        @click="sidebar = sidebar ? false : true"
+      >
+        <b-icon icon="map-fill" v-if="sidebar" />
+        <b-icon icon="list" v-if="!sidebar" />
+      </b-button>
+      <b-navbar-toggle target="nav-collapse" />
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
           <b-nav-item
@@ -425,11 +434,6 @@
             layer-type="base"
           />
           <l-control-layers />
-          <l-control position="topleft" class="d-lg-none">
-            <b-button size="sm" variant="primary" @click="sidebar = true">
-              <b-icon icon="list"></b-icon>
-            </b-button>
-          </l-control>
           <l-control position="bottomright">
             <b-button
               size="sm"
@@ -469,10 +473,9 @@
                     cols="4"
                     class="d-inline-flex justify-content-center"
                     v-b-tooltip.top.hover
-                    title="The species was not present in the historical atlas but was recorded in the recent period."
+                    title="The species was present in the historical atlas but was not recorded in the recent period."
                   >
-                    <CircleTemplate size="18" class="gained mr-1" />
-                    Gained
+                    <CircleTemplate size="18" class="lost mr-1" /> Lost
                   </b-col>
                   <b-col
                     cols="4"
@@ -486,9 +489,10 @@
                     cols="4"
                     class="d-inline-flex justify-content-center"
                     v-b-tooltip.top.hover
-                    title="The species was present in the historical atlas but was not recorded in the recent period."
+                    title="The species was not present in the historical atlas but was recorded in the recent period."
                   >
-                    <CircleTemplate size="18" class="lost mr-1" /> Lost
+                    <CircleTemplate size="18" class="gained mr-1" />
+                    Gained
                   </b-col>
                 </b-row>
               </div>
