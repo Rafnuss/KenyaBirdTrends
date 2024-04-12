@@ -68,8 +68,8 @@
       @changeModeSpecies="mode = 'Species'"
     />
     <b-row class="flex-grow-1 no-gutters" v-else>
-      <b-col md="4" fluid="md" class="h-100-56" v-if="sidebar">
-        <b-container class="d-flex flex-column h-100" v-if="mode == 'Grid'">
+      <b-col md="6" lg="4" fluid class="h-100-56" v-if="sidebar">
+        <b-container fluid class="d-flex flex-column h-100" v-if="mode == 'Grid'">
           <b-row class="px-0 py-0 my-2" align-v="center">
             <b-col>
               Number of
@@ -150,10 +150,8 @@
                 variant="primary"
                 size="sm"
                 @click="export_csv"
-                v-b-tooltip.hover
-                title="Export species list"
               >
-                <b-icon icon="download" />
+                <b-icon icon="download" /> Download list
               </b-button>
             </b-col>
           </b-row>
@@ -193,7 +191,7 @@
             </b-col>
           </b-row>
         </b-container>
-        <b-container class="d-flex flex-column h-100" v-if="mode == 'Species'">
+        <b-container fluid class="d-flex flex-column h-100" v-if="mode == 'Species'">
           <b-row>
             <b-col cols="12" class="mt-2">
               <!--<v-select
