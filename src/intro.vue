@@ -185,9 +185,10 @@
           class="mb-2"
           style="height: 7rem"
         >
-          <a :href="p.href" target="_blank" class="logo-link px-2 bg-white rounded h-100">
+          <!-- <a class="logo-link px-2 bg-white rounded h-100" :href="p.href" target="_blank" >
             <b-img fluid :src="p.src" alt="Image" class="img-partners" />
-          </a>
+          </a>-->
+          <b-skeleton-icon class="logo-link px-2 bg-white rounded h-100 w-100"></b-skeleton-icon>
         </b-col>
       </b-row>
     </b-container>
