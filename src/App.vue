@@ -74,7 +74,7 @@
             <b-col>
               Number of
               {{ grid.length == 0 ? "squares for  all " : "" }}species
-              <span class="sublegend">(including poor coverage)</span>
+              <span class="sublegend" v-if="display_poor_coverage">(including poor coverage)</span>
               <div class="kept d-flex w-100 p-0">
                 <div
                   class="lost py-2"
