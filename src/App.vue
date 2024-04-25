@@ -387,6 +387,7 @@
                     />
                   </a>
                   <div
+                    v-if="i.nb_lkgd[0] + i.nb_lkgd[1] + i.nb_lkgd[2] > 0"
                     class="bar kept"
                     v-b-tooltip.right.hover.html="
                       '<b>Lost:</b> ' +
