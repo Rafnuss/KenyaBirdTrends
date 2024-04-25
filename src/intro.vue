@@ -12,7 +12,7 @@
         bird abundance and distribution on a large scale?
       </p>
       <p>
-        We use data from of Africa's oldest and most comprehensive bird atlases and two citizen
+        We use data from one of Africa's oldest and most comprehensive bird atlases and two citizen
         science platforms to compare bird distributions between a historical time period (1970-1984)
         and a more recent period (2009-2023), providing
         <b>insights into bird distribution patterns across the past 50 years</b>. This work and key
