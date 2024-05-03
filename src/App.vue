@@ -41,7 +41,6 @@
               update_url();
             "
             :active="mode == 'Species'"
-            @change="update_url()"
           >
             Species
           </b-nav-item>
@@ -132,13 +131,13 @@
                     </span>-->
               </b-badge>
               <b-badge
-                v-if="grid.length > 1"
+                v-if="grid.length > 0"
                 variant="danger"
                 class="mr-1"
                 style="cursor: pointer"
                 @click="grid = []"
                 v-b-tooltip.hover
-                title="Remove all squares from selection"
+                title="Clear squares selection"
               >
                 <b-icon icon="trash-fill" aria-hidden="true" />
               </b-badge>
@@ -604,7 +603,7 @@
         </l-map>
       </b-col>
     </b-row>
-    <b-modal id="modal-settings" title="Settings" hide-footer="true">
+    <b-modal id="modal-settings" title="Settings" :hide-footer="true">
       <b-row>
         <b-col cols="12">
           <b-card class="bg-light mb-2" cols="12">
@@ -767,7 +766,7 @@ export default {
         "Checklist of the Birds of Kenya (2019)",
         "A Bird Atlas of Kenya (1989)",
       ],
-      taxonomy_selected: "Clements/eBird",
+      taxonomy_selected: "Checklist of the Birds of Kenya (2019)",
       grid: [],
       bounds: latLngBounds([
         [5.615985, 43.50585],
