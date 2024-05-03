@@ -26,7 +26,7 @@
         <b>visualize the change in the spatial range of each bird species in Kenya</b>
         between these two time periods. We compare bird presence information within each square to
         define whether the species has gained, lost, or kept this square between the two periods
-        considered. Changes are displayed on a grid of 27x27 km squares spanning the entire country.
+        considered. Changes are displayed on a grid of 55x55 km squares spanning the entire country.
       </p>
 
       <h2>How to navigate this tool</h2>
@@ -39,7 +39,7 @@
         <b-card class="bg-light">
           <p class="text-muted mb-0">Grid</p>
           <span class="small">
-            Select one or multiple grid squares (27x27km) on the map to view and export the list of
+            Select one or multiple grid squares (55x55km) on the map to view and export the list of
             species lost, kept, and gained in this area.
           </span>
           <template #footer>
