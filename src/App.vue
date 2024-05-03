@@ -119,6 +119,11 @@
                   the two periods.
                 </p>
                 <p>You can export this species list as a CSV file.</p>
+                <div class="col text-center">
+                  <b-button @click="locate.start()" variant="primary">
+                    Find target list at my location
+                  </b-button>
+                </div>
               </b-alert>
             </b-col>
           </b-row>
@@ -665,6 +670,10 @@ import { latLngBounds } from "leaflet";
 import { OpenStreetMapProvider } from "leaflet-geosearch";
 import VGeosearch from "vue2-leaflet-geosearch";
 
+//import 'leaflet.locatecontrol'
+import Locatecontrol from "leaflet.locatecontrol";
+import "leaflet.locatecontrol/dist/L.Control.Locate.css";
+
 import CircleTemplate from "./circle.vue";
 import Intro from "./intro.vue";
 
@@ -818,6 +827,8 @@ export default {
           },
         }),
       },
+      locate: {},
+      map: {},
     };
   },
   methods: {
@@ -1081,6 +1092,36 @@ export default {
     },
   },
   mounted() {
+    this.map = this.$refs.map.mapObject;
+
+    // This does not work with this: https://github.com/vue-leaflet/Vue2Leaflet/issues/476
+    this.map.on("locationfound", (e) => {
+      const dist = this.map_data.map(
+        (m) =>
+          Math.pow(m.geometry.coordinates[0] - e.latitude, 2) +
+          Math.pow(m.geometry.coordinates[1] - e.longitude, 2)
+      );
+      const min_id = dist.reduce((r, v, i, a) => (v >= a[r] ? r : i), -1);
+      if (dist[min_id] < 1) {
+        this.grid = [this.map_data[min_id].properties.Sq];
+        this.grid_geojson_visible = true;
+        this.checkbox_kept = false;
+        this.checkbox_lost = true;
+        this.checkbox_gained = false;
+      } else {
+        alert("Your location is too far from a square. No list will be shown");
+      }
+    });
+
+    this.locate = new Locatecontrol({
+      locateOptions: {
+        maxZoom: 9,
+      },
+    });
+    this.locate.addTo(this.map);
+    //this.locate.start();
+
+    // this.map.locate({ setView: true, maxZoom: 16 });
     if (JSON.parse(this.$cookie.get("taxonomy_selected")))
       this.taxonomy_selected = JSON.parse(this.$cookie.get("taxonomy_selected"));
   },
@@ -1099,8 +1140,8 @@ export default {
     sidebar: function (val) {
       if (!val) {
         setTimeout(() => {
-          this.$refs.map.mapObject.invalidateSize();
-          this.$refs.map.mapObject.fitBounds(
+          this.map.invalidateSize();
+          this.map.fitBounds(
             latLngBounds([
               [5.615985, 43.50585],
               [-5.353521, 32.958984],

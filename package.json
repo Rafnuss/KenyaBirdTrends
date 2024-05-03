@@ -1,6 +1,6 @@
 {
   "name": "kenyabirdtrends",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "homepage": "https://kenyabirdtrends.co.ke/",
   "repository": {
     "type": "git",
@@ -21,6 +21,7 @@
     "chroma-js": "^2.4.2",
     "leaflet": "^1.9.4",
     "leaflet-geosearch": "^3.11.1",
+    "leaflet.locatecontrol": "^0.81.0",
     "vue": "^2.7.16",
     "vue-cookie": "^1.1.4",
     "vue-multiselect": "^2.1.9",
