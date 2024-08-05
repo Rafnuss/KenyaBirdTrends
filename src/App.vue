@@ -1133,6 +1133,9 @@ export default {
     });
 
     this.locate = new Locatecontrol({
+      strings: {
+        title: "Explore target species at my location!",
+      },
       locateOptions: {
         maxZoom: 9,
       },
