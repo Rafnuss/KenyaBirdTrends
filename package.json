@@ -1,42 +1,46 @@
 {
+  "title": "Kenya Bird Trends",
   "name": "kenyabirdtrends",
-  "version": "0.3.1",
+  "description": "Visualisation of the distribution changes of birds in Kenya between 1980s and 2010s",
+  "version": "0.3.2",
   "homepage": "https://kenyabirdtrends.co.ke/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Rafnuss/KenyaBirdTrends.git"
   },
-  "title": "Kenya Bird Trends",
   "type": "module",
   "private": true,
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src"
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
+    "generate-pwa-assets": "pwa-assets-generator --preset minimal-2023 public/logo_crane.svg"
   },
   "dependencies": {
-    "bootstrap": "^4.6.2",
-    "bootstrap-vue": "^2.23.1",
-    "chroma-js": "^2.4.2",
-    "leaflet": "^1.9.4",
-    "leaflet-geosearch": "^3.11.1",
-    "leaflet.locatecontrol": "^0.81.0",
-    "vue": "^2.7.16",
-    "vue-cookie": "^1.1.4",
-    "vue-multiselect": "^2.1.9",
-    "vue2-leaflet": "^2.7.1",
-    "vue2-leaflet-geosearch": "^1.0.6",
-    "vue2-leaflet-markercluster": "^3.1.0"
+    "bootstrap": "~4.6.2",
+    "bootstrap-vue": "~2.23.1",
+    "chroma-js": "~2.6.0",
+    "leaflet": "~1.9.4",
+    "leaflet-geosearch": "~3.11.1",
+    "leaflet.locatecontrol": "~0.81.1",
+    "vue": "~2.7.16",
+    "vue-cookie": "~1.1.4",
+    "vue-multiselect": "~2.1.9",
+    "vue2-leaflet": "~2.7.1",
+    "vue2-leaflet-geosearch": "~1.0.6",
+    "vue2-leaflet-markercluster": "~3.1.0"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue2": "^2.3.1",
-    "@vue/eslint-config-prettier": "^7.1.0",
-    "eslint": "^8.57.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-vue": "^9.24.0",
-    "prettier": "^2.8.8",
-    "sass": "^1.74.1",
-    "vite": "^5.0.0"
+    "@vite-pwa/assets-generator": "^0.2.4",
+    "@vitejs/plugin-vue2": "~2.3.1",
+    "@vue/eslint-config-prettier": "~7.1.0",
+    "eslint": "~8.57.0",
+    "eslint-plugin-prettier": "~4.2.1",
+    "eslint-plugin-vue": "~9.27.0",
+    "prettier": "~2.8.8",
+    "sass": "~1.77.8",
+    "vite": "~5.3.5",
+    "vite-plugin-pwa": "^0.20.1"
   }
 }

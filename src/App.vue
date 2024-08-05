@@ -1,7 +1,15 @@
 <template>
   <b-container fluid class="h-100 d-flex flex-column p-0">
     <b-navbar toggleable="sm" variant="light" style="border-bottom: 1px solid #e5e9ef" sticky>
-      <b-navbar-brand href="#">Kenya Bird Trends</b-navbar-brand>
+      <b-navbar-brand
+        href="#"
+        @click="
+          mode = 'Intro';
+          update_url();
+        "
+      >
+        Kenya Bird Trends
+      </b-navbar-brand>
       <b-button
         size="sm"
         variant="primary"
@@ -14,7 +22,7 @@
       <b-navbar-toggle target="nav-collapse" />
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
-          <b-nav-item
+          <!--<b-nav-item
             href="#"
             @click="
               mode = 'Intro';
@@ -22,8 +30,8 @@
             "
             :active="mode == 'Intro'"
           >
-            Intro
-          </b-nav-item>
+            Intro 
+          </b-nav-item>-->
           <b-nav-item
             href="#"
             @click="
@@ -48,13 +56,6 @@
 
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto d-inline-block">
-          <b-button
-            href="https://github.com/Rafnuss/KenyaBirdTrends"
-            target="_blank"
-            variant="light"
-          >
-            <b-icon-github />
-          </b-button>
           <b-button v-b-modal.modal-settings variant="light">
             <b-icon-gear />
           </b-button>
@@ -218,7 +219,14 @@
                   {{ props.option.common_name }}
                   <img
                     :src="iucn[props.option.IUCN]"
-                    v-if="['CR', 'DD', 'EN', 'VU'].includes(props.option.IUCN)"
+                    v-if="
+                      [
+                        'Critically Endangered',
+                        'Data Deficient',
+                        'Endangered',
+                        'Vulnerable',
+                      ].includes(props.option.IUCN)
+                    "
                     class="ml-1"
                     style="width: 1rem"
                   />
@@ -383,7 +391,14 @@
                     :href="'https://apiv3.iucnredlist.org/api/v3/taxonredirect/' + i.IUCNID"
                   >
                     <img
-                      v-if="['CR', 'DD', 'EN', 'VU'].includes(i.IUCN)"
+                      v-if="
+                        [
+                          'Critically Endangered',
+                          'Data Deficient',
+                          'Endangered',
+                          'Vulnerable',
+                        ].includes(i.IUCN)
+                      "
                       :src="iucn[i.IUCN]"
                       v-bind:alt="i.IUCN"
                       class="ml-1"
@@ -785,12 +800,12 @@ export default {
       display_never_observed: true,
       map_data: map_data.features,
       iucn: {
-        CR: iucn_CR,
-        EN: iucn_EN,
-        NT: iucn_NT,
-        LC: iucn_LC,
-        DD: iucn_DD,
-        VU: iucn_VU,
+        "Critically Endangered": iucn_CR,
+        "Endangered": iucn_EN,
+        "Near Threatened": iucn_NT,
+        "Least Concern": iucn_LC,
+        "Data Deficient": iucn_DD,
+        "Vulnerable": iucn_VU,
       },
       tile_providers: [
         {
@@ -971,14 +986,19 @@ export default {
       if (this.filter_checkbox_selected.includes("Waterbird")) {
         spf = spf.filter((sp) => sp.waterbird);
       }
+      console.log(spf[10].IUCN);
       if (this.filter_red_list_selected == "Near Threatened") {
-        spf = spf.filter((sp) => ["CR", "EN", "VU", "NT"].includes(sp.IUCN));
+        spf = spf.filter((sp) =>
+          ["Critically Endangered", "Endangered", "Vulnerable", "Near Threatened"].includes(sp.IUCN)
+        );
       } else if (this.filter_red_list_selected == "Vulnerable") {
-        spf = spf.filter((sp) => ["CR", "EN", "VU"].includes(sp.IUCN));
+        spf = spf.filter((sp) =>
+          ["Critically Endangered", "Endangered", "Vulnerable"].includes(sp.IUCN)
+        );
       } else if (this.filter_red_list_selected == "Endangered") {
-        spf = spf.filter((sp) => ["CR", "EN"].includes(sp.IUCN));
+        spf = spf.filter((sp) => ["Critically Endangered", "Endangered"].includes(sp.IUCN));
       } else if (this.filter_red_list_selected == "Critically Endangered") {
-        spf = spf.filter((sp) => ["CR"].includes(sp.IUCN));
+        spf = spf.filter((sp) => ["Critically Endangered"].includes(sp.IUCN));
       }
       return spf;
     },
@@ -1114,6 +1134,9 @@ export default {
     });
 
     this.locate = new Locatecontrol({
+      strings: {
+        title: "Explore target species at my location!",
+      },
       locateOptions: {
         maxZoom: 9,
       },
