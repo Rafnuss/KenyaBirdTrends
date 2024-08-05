@@ -159,8 +159,8 @@
       </ol>
     </b-container>
     <b-container fluid class="bg-light p-5">
-      <h6 class="text-muted text-uppercase">Implementing organisations</h6>
-      <b-row align-v="stretch" class="pb-2">
+      <!--<h6 class="text-muted text-uppercase">Implementing organisations</h6>-->
+      <b-row class="pb-2 justify-content-center">
         <b-col
           lg="3"
           sm="6"
@@ -174,8 +174,8 @@
           </a>
         </b-col>
       </b-row>
-      <h6 class="text-muted text-uppercase">Partner organisations</h6>
-      <b-row align-v="stretch">
+      <!--<h6 class="text-muted text-uppercase">Partner organisations</h6>-->
+      <b-row class="justify-content-center">
         <b-col
           cols="6"
           md="4"
@@ -185,16 +185,18 @@
           class="mb-2"
           style="height: 7rem"
         >
-          <!-- <a class="logo-link px-2 bg-white rounded h-100" :href="p.href" target="_blank" >
+          <a class="logo-link px-2 bg-white rounded h-100" :href="p.href" target="_blank">
             <b-img fluid :src="p.src" alt="Image" class="img-partners" />
-          </a>-->
-          <b-skeleton-icon class="logo-link px-2 bg-white rounded h-100 w-100"></b-skeleton-icon>
+          </a>
         </b-col>
       </b-row>
     </b-container>
     <b-container fluid class="bg-dark p-3 small text-white">
-      For any questions, please reach out to
+      For any questions or suggestions, please reach out to
       <a href="mailto:rafnuss@gmail.com" target="_blank" class="text-white">Raphaël Nussbaumer</a>.
+      <a href="https://github.com/Rafnuss/KenyaBirdTrends" target="_blank">
+        <b-icon-github variant="white" />
+      </a>
     </b-container>
   </div>
 </template>
@@ -212,15 +214,13 @@ export default {
         { href: "https://tropical-biology.org/", src: "logo_tba.png" },
         { href: "https://www.arocha.or.ke/", src: "logo_ark.png" },
         { href: "https://museums.or.ke/", src: "logo_museums.png" },
-        { href: "https://www.darwininitiative.org.uk/", src: "logo_darwin.png" },
       ],
       partners: [
-        { href: "https://tropical-biology.org/", src: "logo_birdlife.png" },
-        { href: "https://tropical-biology.org/", src: "logo_kfs.png" },
-        { href: "https://tropical-biology.org/", src: "logo_kws.png" },
-        { href: "https://tropical-biology.org/", src: "logo_nature_kenya.png" },
-        { href: "https://tropical-biology.org/", src: "logo_nema.png" },
-        { href: "https://tropical-biology.org/", src: "logo_wrti.png" },
+        { href: "https://www.darwininitiative.org.uk/", src: "logo_darwin.png" },
+        { href: "https://naturekenya.org/", src: "logo_nature_kenya.png" },
+        { href: "https://www.kws.go.ke/", src: "logo_kws.png" },
+        { href: "https://wrti.go.ke/", src: "logo_wrti.png" },
+        { href: "https://nigeria.birdmap.africa/", src: "logo_nba.png" },
       ],
     };
   },
