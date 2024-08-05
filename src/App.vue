@@ -48,13 +48,6 @@
 
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto d-inline-block">
-          <b-button
-            href="https://github.com/Rafnuss/KenyaBirdTrends"
-            target="_blank"
-            variant="light"
-          >
-            <b-icon-github />
-          </b-button>
           <b-button v-b-modal.modal-settings variant="light">
             <b-icon-gear />
           </b-button>

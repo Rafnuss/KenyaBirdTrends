@@ -192,8 +192,11 @@
       </b-row>
     </b-container>
     <b-container fluid class="bg-dark p-3 small text-white">
-      For any questions, please reach out to
+      For any questions or suggestions, please reach out to
       <a href="mailto:rafnuss@gmail.com" target="_blank" class="text-white">Raphaël Nussbaumer</a>.
+      <a href="https://github.com/Rafnuss/KenyaBirdTrends" target="_blank">
+        <b-icon-github variant="white" />
+      </a>
     </b-container>
   </div>
 </template>
