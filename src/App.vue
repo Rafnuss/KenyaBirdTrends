@@ -218,7 +218,14 @@
                   {{ props.option.common_name }}
                   <img
                     :src="iucn[props.option.IUCN]"
-                    v-if="['CR', 'DD', 'EN', 'VU'].includes(props.option.IUCN)"
+                    v-if="
+                      [
+                        'Critically Endangered',
+                        'Data Deficient',
+                        'Endangered',
+                        'Vulnerable',
+                      ].includes(props.option.IUCN)
+                    "
                     class="ml-1"
                     style="width: 1rem"
                   />
@@ -383,7 +390,14 @@
                     :href="'https://apiv3.iucnredlist.org/api/v3/taxonredirect/' + i.IUCNID"
                   >
                     <img
-                      v-if="['CR', 'DD', 'EN', 'VU'].includes(i.IUCN)"
+                      v-if="
+                        [
+                          'Critically Endangered',
+                          'Data Deficient',
+                          'Endangered',
+                          'Vulnerable',
+                        ].includes(i.IUCN)
+                      "
                       :src="iucn[i.IUCN]"
                       v-bind:alt="i.IUCN"
                       class="ml-1"
@@ -785,12 +799,12 @@ export default {
       display_never_observed: true,
       map_data: map_data.features,
       iucn: {
-        CR: iucn_CR,
-        EN: iucn_EN,
-        NT: iucn_NT,
-        LC: iucn_LC,
-        DD: iucn_DD,
-        VU: iucn_VU,
+        "Critically Endangered": iucn_CR,
+        "Endangered": iucn_EN,
+        "Near Threatened": iucn_NT,
+        "Least Concern": iucn_LC,
+        "Data Deficient": iucn_DD,
+        "Vulnerable": iucn_VU,
       },
       tile_providers: [
         {
@@ -971,14 +985,19 @@ export default {
       if (this.filter_checkbox_selected.includes("Waterbird")) {
         spf = spf.filter((sp) => sp.waterbird);
       }
+      console.log(spf[10].IUCN);
       if (this.filter_red_list_selected == "Near Threatened") {
-        spf = spf.filter((sp) => ["CR", "EN", "VU", "NT"].includes(sp.IUCN));
+        spf = spf.filter((sp) =>
+          ["Critically Endangered", "Endangered", "Vulnerable", "Near Threatened"].includes(sp.IUCN)
+        );
       } else if (this.filter_red_list_selected == "Vulnerable") {
-        spf = spf.filter((sp) => ["CR", "EN", "VU"].includes(sp.IUCN));
+        spf = spf.filter((sp) =>
+          ["Critically Endangered", "Endangered", "Vulnerable"].includes(sp.IUCN)
+        );
       } else if (this.filter_red_list_selected == "Endangered") {
-        spf = spf.filter((sp) => ["CR", "EN"].includes(sp.IUCN));
+        spf = spf.filter((sp) => ["Critically Endangered", "Endangered"].includes(sp.IUCN));
       } else if (this.filter_red_list_selected == "Critically Endangered") {
-        spf = spf.filter((sp) => ["CR"].includes(sp.IUCN));
+        spf = spf.filter((sp) => ["Critically Endangered"].includes(sp.IUCN));
       }
       return spf;
     },
