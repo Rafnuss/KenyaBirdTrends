@@ -1,7 +1,15 @@
 <template>
   <b-container fluid class="h-100 d-flex flex-column p-0">
     <b-navbar toggleable="sm" variant="light" style="border-bottom: 1px solid #e5e9ef" sticky>
-      <b-navbar-brand href="#">Kenya Bird Trends</b-navbar-brand>
+      <b-navbar-brand
+        href="#"
+        @click="
+          mode = 'Intro';
+          update_url();
+        "
+      >
+        Kenya Bird Trends
+      </b-navbar-brand>
       <b-button
         size="sm"
         variant="primary"
@@ -14,7 +22,7 @@
       <b-navbar-toggle target="nav-collapse" />
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
-          <b-nav-item
+          <!--<b-nav-item
             href="#"
             @click="
               mode = 'Intro';
@@ -22,8 +30,8 @@
             "
             :active="mode == 'Intro'"
           >
-            Intro
-          </b-nav-item>
+            Intro 
+          </b-nav-item>-->
           <b-nav-item
             href="#"
             @click="
