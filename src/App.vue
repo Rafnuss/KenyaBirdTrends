@@ -14,6 +14,7 @@
         size="sm"
         variant="primary"
         class="mr-2 d-lg-none"
+        v-if="mode != 'Intro'"
         @click="sidebar = sidebar ? false : true"
       >
         <b-icon icon="map-fill" v-if="sidebar" />
@@ -1112,39 +1113,6 @@ export default {
     },
   },
   mounted() {
-    this.map = this.$refs.map.mapObject;
-
-    // This does not work with this: https://github.com/vue-leaflet/Vue2Leaflet/issues/476
-    this.map.on("locationfound", (e) => {
-      const dist = this.map_data.map(
-        (m) =>
-          Math.pow(m.geometry.coordinates[0] - e.latitude, 2) +
-          Math.pow(m.geometry.coordinates[1] - e.longitude, 2)
-      );
-      const min_id = dist.reduce((r, v, i, a) => (v >= a[r] ? r : i), -1);
-      if (dist[min_id] < 1) {
-        this.grid = [this.map_data[min_id].properties.Sq];
-        this.grid_geojson_visible = true;
-        this.checkbox_kept = false;
-        this.checkbox_lost = true;
-        this.checkbox_gained = false;
-      } else {
-        alert("Your location is too far from a square. No list will be shown");
-      }
-    });
-
-    this.locate = new Locatecontrol({
-      strings: {
-        title: "Explore target species at my location!",
-      },
-      locateOptions: {
-        maxZoom: 9,
-      },
-    });
-    this.locate.addTo(this.map);
-    //this.locate.start();
-
-    // this.map.locate({ setView: true, maxZoom: 16 });
     if (JSON.parse(this.$cookie.get("taxonomy_selected")))
       this.taxonomy_selected = JSON.parse(this.$cookie.get("taxonomy_selected"));
   },
@@ -1163,14 +1131,52 @@ export default {
     sidebar: function (val) {
       if (!val) {
         setTimeout(() => {
-          this.map.invalidateSize();
-          this.map.fitBounds(
+          this.$refs.map.mapObject.invalidateSize();
+          this.$refs.map.mapObject.fitBounds(
             latLngBounds([
               [5.615985, 43.50585],
               [-5.353521, 32.958984],
             ])
           );
         }, "10");
+      }
+    },
+    mode: function (val) {
+      if ((val != "Intro") & (this.locate == null)) {
+        console.log("yeas!");
+
+        const map = this.$refs.map.mapObject;
+
+        // This does not work with this: https://github.com/vue-leaflet/Vue2Leaflet/issues/476
+        map.on("locationfound", (e) => {
+          const dist = this.map_data.map(
+            (m) =>
+              Math.pow(m.geometry.coordinates[0] - e.latitude, 2) +
+              Math.pow(m.geometry.coordinates[1] - e.longitude, 2)
+          );
+          const min_id = dist.reduce((r, v, i, a) => (v >= a[r] ? r : i), -1);
+          if (dist[min_id] < 1) {
+            this.grid = [this.map_data[min_id].properties.Sq];
+            this.grid_geojson_visible = true;
+            this.checkbox_kept = false;
+            this.checkbox_lost = true;
+            this.checkbox_gained = false;
+          } else {
+            alert("Your location is too far from a square. No list will be shown");
+          }
+        });
+
+        this.locate = new Locatecontrol({
+          strings: {
+            title: "Explore target species at my location!",
+          },
+          locateOptions: {
+            maxZoom: 9,
+          },
+        });
+        this.locate.addTo(map);
+        //this.locate.start();
+        // this.map.locate({ setView: true, maxZoom: 16 });
       }
     },
     taxonomy_selected() {
