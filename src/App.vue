@@ -846,7 +846,7 @@ export default {
           },
         }),
       },
-      locate: {},
+      locate: null,
       deferredPrompt: null, // Store the 'beforeinstallprompt' event
       showInstallButton: false,
     };
@@ -1004,7 +1004,6 @@ export default {
       if (this.filter_checkbox_selected.includes("Waterbird")) {
         spf = spf.filter((sp) => sp.waterbird);
       }
-      console.log(spf[10].IUCN);
       if (this.filter_red_list_selected == "Near Threatened") {
         spf = spf.filter((sp) =>
           ["Critically Endangered", "Endangered", "Vulnerable", "Near Threatened"].includes(sp.IUCN)
@@ -1168,11 +1167,8 @@ export default {
       }
     },
     mode: function (val) {
-      if ((val != "Intro") & (this.locate == null)) {
-        console.log("yeas!");
-
+      if (val != "Intro") {
         const map = this.$refs.map.mapObject;
-
         // This does not work with this: https://github.com/vue-leaflet/Vue2Leaflet/issues/476
         map.on("locationfound", (e) => {
           const dist = this.map_data.map(
@@ -1192,17 +1188,17 @@ export default {
           }
         });
 
-        this.locate = new Locatecontrol({
-          strings: {
-            title: "Explore target species at my location!",
-          },
-          locateOptions: {
-            maxZoom: 9,
-          },
-        });
+        if (this.locate == null) {
+          this.locate = new Locatecontrol({
+            strings: {
+              title: "Explore target species at my location!",
+            },
+            locateOptions: {
+              maxZoom: 9,
+            },
+          });
+        }
         this.locate.addTo(map);
-        //this.locate.start();
-        // this.map.locate({ setView: true, maxZoom: 16 });
       }
     },
     taxonomy_selected() {
