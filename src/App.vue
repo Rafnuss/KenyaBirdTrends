@@ -60,6 +60,9 @@
           <b-button v-b-modal.modal-settings variant="light">
             <b-icon-gear />
           </b-button>
+          <b-button variant="light" @click="promptInstall" v-if="showInstallButton">
+            <b-icon icon="file-arrow-down" />
+          </b-button>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
@@ -844,7 +847,8 @@ export default {
         }),
       },
       locate: {},
-      map: {},
+      deferredPrompt: null, // Store the 'beforeinstallprompt' event
+      showInstallButton: false,
     };
   },
   methods: {
@@ -880,6 +884,19 @@ export default {
       a.download = "kenyabirdtrend_export_" + this.grid.join("_") + ".csv";
       a.click();
       window.URL.revokeObjectURL(url);
+    },
+    async promptInstall() {
+      if (this.deferredPrompt) {
+        // Show the install prompt
+        this.deferredPrompt.prompt();
+        // Wait for the user to respond to the prompt
+        const { outcome } = await this.deferredPrompt.userChoice;
+        console.log(`User response to the install prompt: ${outcome}`);
+        // We've used the prompt, and it can't be used again, so clear it
+        this.deferredPrompt = null;
+        // Hide the install button
+        this.showInstallButton = false;
+      }
     },
   },
   computed: {
@@ -1115,6 +1132,15 @@ export default {
   mounted() {
     if (JSON.parse(this.$cookie.get("taxonomy_selected")))
       this.taxonomy_selected = JSON.parse(this.$cookie.get("taxonomy_selected"));
+
+    window.addEventListener("beforeinstallprompt", (e) => {
+      // Prevent the mini-infobar from appearing on mobile
+      e.preventDefault();
+      // Stash the event so it can be triggered later.
+      this.deferredPrompt = e;
+      // Update UI to show the install button
+      this.showInstallButton = true;
+    });
   },
   created() {
     let qp = new URLSearchParams(window.location.search);

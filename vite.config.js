@@ -8,6 +8,21 @@ export default defineConfig({
   plugins: [
     vue(),
     VitePWA({
+      registerType: "autoUpdate",
+      devOptions: {
+        enabled: false,
+      },
+      workbox: {
+        globPatterns: ["**/*.{js,css,html,vue,png,svg,json}"],
+      },
+      includeAssets: [
+        "favicon.ico",
+        "apple-touch-icon-180x180.png",
+        "pwa-*.png",
+        "logo_*.png",
+        "bird_atlas_of_kenya.png",
+        "maskable-icon-512x512.png",
+      ],
       manifest: {
         name: "Kenya Bird Trends",
         description:
