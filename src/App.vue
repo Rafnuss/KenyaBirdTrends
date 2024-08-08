@@ -277,7 +277,7 @@
                 variant="primary"
                 class="ml-auto mr-1 btn-xs"
                 size="sm"
-                :href="'/species_map/' + species.SEQ + '.png'"
+                :href="'species_map/' + species.SEQ + '.png'"
                 target="_blank"
               >
                 <b-icon icon="download" /> Download map
