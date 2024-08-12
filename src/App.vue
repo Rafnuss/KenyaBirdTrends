@@ -8,7 +8,7 @@
           update_url();
         "
       >
-        <img src="pwa-64x64.png" width="30" height="30" class="d-inline-block align-top" />
+        <img :src="logo_png" width="30" height="30" class="d-inline-block align-top" />
         Kenya Bird Trends
       </b-navbar-brand>
       <b-button
@@ -702,6 +702,7 @@ import iucn_DD from "./assets/iucn_DD.png";
 import iucn_EN from "./assets/iucn_EN.png";
 import iucn_NT from "./assets/iucn_NT.png";
 import iucn_LC from "./assets/iucn_LC.png";
+import logo_png from "./assets/pwa-30x30.png";
 
 const init_lkgd = sp_base.reduce(
   (acc, sp) => {
@@ -843,6 +844,7 @@ export default {
       locate: null,
       deferredPrompt: null, // Store the 'beforeinstallprompt' event
       showInstallButton: false,
+      logo_png: logo_png,
     };
   },
   methods: {
