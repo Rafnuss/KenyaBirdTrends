@@ -6,30 +6,29 @@
         <b-img src="logo_test_large.png" class="pl-4 bg-white" height="139" align="right" />
       </h1>
       <p>
-        Kenya has seen <b>significant changes in its landscape</b> over the past 50 years:
-        exponential population increase has been accompanied by growing urbanisation, intensified
-        agriculture, deforestation, and increased pollution, among others. How has this has impacted
-        bird abundance and distribution on a large scale?
+        Kenya has seen significant changes in its landscape over the past 50 years: exponential
+        population increase has been accompanied by growing urbanisation, intensified agriculture,
+        deforestation, and increased pollution, among others.
+        <b>How have these changes impacted bird abundance and distribution on a large scale?</b>
+        Answering this question is key to better protecting birds today.
       </p>
       <p>
-        We use data from one of Africa's oldest and most comprehensive bird atlases and two citizen
-        science platforms to compare bird distributions between a historical time period (1970-1984)
-        and a more recent period (2009-2023), providing
-        <b>insights into bird distribution patterns across the past 50 years</b>. This work and key
-        results are described in detail in: <br /><span
-          >Nussbaumer et al. (in prep), Bird atlas and citizen science data reveal long-term changes
-          in range in Kenya</span
-        >.
-      </p>
-      <p>
-        On this tool, you can
-        <b>visualize the change in the spatial range of each bird species in Kenya</b>
-        between these two time periods. We compare bird presence information within each square to
-        define whether the species has gained, lost, or kept this square between the two periods
-        considered. Changes are displayed on a grid of 55x55 km squares spanning the entire country.
+        Thanks to the contributions of thousands of citizen scientists across the country, we can
+        now offer initial answers to this question. To do so, we compare citizen science data with
+        one of Africa's oldest and most comprehensive bird atlases to map changes in
+        <b>bird distribution patterns across the past 50 years</b>.
       </p>
 
-      <h2>How to navigate this tool</h2>
+      <p>
+        On this platform, you can
+        <b>visualize the change in the spatial range of each bird species in Kenya</b>
+        between the historical and recent time period. We compare bird presence information within
+        each square to define whether the species has gained, lost, or kept this square between the
+        two periods considered. Changes are displayed on a grid of 55x55 km squares spanning the
+        entire country.
+      </p>
+
+      <h2>How to navigate this platform</h2>
       <p>
         You can explore the changes in bird distribution using two views
         <span class="small">(accessible from the menu in the header above)</span>:
@@ -39,7 +38,7 @@
         <b-card class="bg-light">
           <p class="text-muted mb-0">Grid</p>
           <span class="small">
-            Select one or multiple grid squares (55x55km) on the map to view and export the list of
+            Select one or multiple grid squares (27x27km) on the map to view and export the list of
             species lost, kept, and gained in this area.
           </span>
           <template #footer>
@@ -53,7 +52,7 @@
         <b-card class="bg-light">
           <p class="text-muted mb-0">Species</p>
           <span class="small">
-            Visualize the map of the squares lost, kept, and gained for a specific species.
+            Visualize which squares were lost, kept, and gained for a specific species.
           </span>
           <template #footer>
             <div class="d-flex justify-content-center">
@@ -157,6 +156,28 @@
           view
         </li>
       </ol>
+      <h2>Resources</h2>
+      <a
+        href="https://www.canva.com/design/DAGJVNqdmGw/kqibyQ0Ly71C0xtWXUNmDw/edit?utm_content=DAGJVNqdmGw&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
+        target="_blank"
+      >
+        <b-card-img src="banner.png" alt="Image" class="rounded-0 p-2" />
+      </a>
+      <p>
+        View the banner describing the project
+        <a
+          href="https://www.canva.com/design/DAGJVNqdmGw/kqibyQ0Ly71C0xtWXUNmDw/edit?utm_content=DAGJVNqdmGw&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
+          >here</a
+        >.
+      </p>
+      <p>
+        This work and key results are described in detail in: <br /><em
+          ><span
+            >Nussbaumer et al. (in prep), Historical bird atlas and contemporary citizen science
+            data reveal long-term changes in geographic range of Kenyan birds</span
+          ></em
+        >.
+      </p>
     </b-container>
     <b-container fluid class="bg-light p-5">
       <!--<h6 class="text-muted text-uppercase">Implementing organisations</h6>-->

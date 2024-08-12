@@ -1,8 +1,8 @@
 {
   "title": "Kenya Bird Trends",
   "name": "kenyabirdtrends",
-  "description": "Visualisation of the distribution changes of birds in Kenya between 1980s and 2010s",
-  "version": "0.3.2",
+  "description": "Visualisation of the distribution changes of birds in Kenya between 1970s and 2010s",
+  "version": "0.3.3",
   "homepage": "https://kenyabirdtrends.co.ke/",
   "repository": {
     "type": "git",
