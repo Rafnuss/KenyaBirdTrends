@@ -8,6 +8,7 @@
           update_url();
         "
       >
+        <img src="public/pwa-64x64.png" width="30" height="30" class="d-inline-block align-top" />
         Kenya Bird Trends
       </b-navbar-brand>
       <b-button
