@@ -242,6 +242,7 @@ export default {
         { href: "https://www.kws.go.ke/", src: "logo_kws.png" },
         { href: "https://wrti.go.ke/", src: "logo_wrti.png" },
         { href: "https://nigeria.birdmap.africa/", src: "logo_nba.png" },
+        { href: "https://www.kenyabirdofpreytrust.org/", src: "logo_kbop.png" },
       ],
     };
   },
