@@ -8,7 +8,7 @@
           update_url();
         "
       >
-        <img src="public/pwa-64x64.png" width="30" height="30" class="d-inline-block align-top" />
+        <img src="pwa-64x64.png" width="30" height="30" class="d-inline-block align-top" />
         Kenya Bird Trends
       </b-navbar-brand>
       <b-button
@@ -204,13 +204,6 @@
         <b-container fluid class="d-flex flex-column h-100" v-if="mode == 'Species'">
           <b-row>
             <b-col cols="12" class="mt-2">
-              <!--<v-select
-                  v-model="species"
-                  :options="species_options"
-                  :reduce="(x) => x.SEQ"
-                  label="common_name"
-                  
-                ></v-select>-->
               <multiselect
                 v-model="species"
                 :options="sp_filter"

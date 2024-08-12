@@ -103,9 +103,9 @@
               <b-card no-body class="overflow-hidden">
                 <b-row no-gutters>
                   <b-col cols="4" class="align-self-center">
-                    <a href="https://ebird.org/region/KE" target="_blank"
-                      ><b-card-img src="logo_ebird.svg" alt="Image" class="rounded-0 p-2"
-                    /></a>
+                    <a href="https://ebird.org/region/KE" target="_blank">
+                      <b-card-img src="logo_ebird.svg" alt="Image" class="rounded-0 p-2" />
+                    </a>
                   </b-col>
                   <b-col cols="8">
                     <b-card-body title="eBird" sub-title="2009-2023">
@@ -125,9 +125,9 @@
               <b-card no-body class="overflow-hidden">
                 <b-row no-gutters>
                   <b-col cols="4" class="align-self-center">
-                    <a href="https://kenya.birdmap.africa/" target="_blank"
-                      ><b-card-img src="logo_kbm.png" alt="Image" class="rounded-0 p-2"
-                    /></a>
+                    <a href="https://kenya.birdmap.africa/" target="_blank">
+                      <b-card-img src="logo_kbm.png" alt="Image" class="rounded-0 p-2" />
+                    </a>
                   </b-col>
                   <b-col cols="8">
                     <b-card-body title="KBM" sub-title="2012-2023">
@@ -156,28 +156,6 @@
           view
         </li>
       </ol>
-      <h2>Resources</h2>
-      <a
-        href="https://www.canva.com/design/DAGJVNqdmGw/kqibyQ0Ly71C0xtWXUNmDw/edit?utm_content=DAGJVNqdmGw&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
-        target="_blank"
-      >
-        <b-card-img src="banner.png" alt="Image" class="rounded-0 p-2" />
-      </a>
-      <p>
-        View the banner describing the project
-        <a
-          href="https://www.canva.com/design/DAGJVNqdmGw/kqibyQ0Ly71C0xtWXUNmDw/edit?utm_content=DAGJVNqdmGw&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
-          >here</a
-        >.
-      </p>
-      <p>
-        This work and key results are described in detail in: <br /><em
-          ><span
-            >Nussbaumer et al. (in prep), Historical bird atlas and contemporary citizen science
-            data reveal long-term changes in geographic range of Kenyan birds</span
-          ></em
-        >.
-      </p>
     </b-container>
     <b-container fluid class="bg-light p-5">
       <!--<h6 class="text-muted text-uppercase">Implementing organisations</h6>-->
