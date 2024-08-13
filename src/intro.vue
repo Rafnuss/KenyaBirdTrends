@@ -166,8 +166,12 @@
             title="Banner"
             sub-title="Get a quick overview of the project with this infographic"
           >
-            <a href="public/Banner.pdf" target="_blank">
-              <b-card-img src="Banner_Thumbnail_large.png" alt="Image" class="rounded-0 p-2" />
+            <a href="banner.pdf" target="_blank" class="p-2">
+              <b-card-img
+                src="banner_thumbnail_large.png"
+                alt="Image"
+                class="rounded-0 hover-effect"
+              />
             </a>
           </b-card-body>
         </b-col>
@@ -176,19 +180,30 @@
             title="Video presentation"
             sub-title="Watch a short video to learn about the platform"
           >
-            <a href="" target="_blank">
-              <b-card-img src="Video_Thumbnail_large.png" alt="Image" class="rounded-0 p-2" />
+            <a href="" target="_blank" class="p-2">
+              <b-card-img
+                src="video_thumbnail_large.png"
+                alt="Image"
+                class="rounded-0 hover-effect"
+              />
             </a>
           </b-card-body>
         </b-col>
         <b-col lg="4" sm="12" class="align-self-center">
           <b-card-body
             title="Publication"
-            sub-title="Dive into the details with the full publication (coming soon)"
+            sub-title="Dive into the details with the full publication"
           >
-            <a href="" target="_blank">
-              <b-card-img src="Paper_Thumbnail_large.png" alt="Image" class="rounded-0 p-2" />
-            </a>
+            <b-card-text>
+              <b-link href="" target="_blank" disabled class="p-2 disabled-image-link">
+                <b-card-img
+                  src="paper_thumbnail_large.png"
+                  alt="Image"
+                  class="rounded-0 image-overlay"
+                />
+                <div class="overlay">Coming Soon!</div>
+              </b-link>
+            </b-card-text>
           </b-card-body>
         </b-col>
       </b-row>
