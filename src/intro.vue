@@ -156,6 +156,50 @@
           view
         </li>
       </ol>
+      <h2>Resources</h2>
+      <b-row>
+        <b-col lg="4" sm="12" class="align-self-center">
+          <b-card-body title="Banner" sub-title="View the banner describing the project">
+            <a
+              href="https://www.canva.com/design/DAGJVNqdmGw/kqibyQ0Ly71C0xtWXUNmDw/edit?utm_content=DAGJVNqdmGw&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
+              target="_blank"
+            >
+              <b-card-img src="banner.png" alt="Image" class="rounded-0 p-2" />
+            </a>
+          </b-card-body>
+        </b-col>
+        <b-col lg="4" sm="12" class="align-self-center">
+          <b-card-body
+            title="Video presentation"
+            sub-title="View the banner describing the project"
+          >
+            <a
+              href="https://www.canva.com/design/DAGJVNqdmGw/kqibyQ0Ly71C0xtWXUNmDw/edit?utm_content=DAGJVNqdmGw&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
+              target="_blank"
+            >
+              <b-card-img src="banner.png" alt="Image" class="rounded-0 p-2" />
+            </a>
+          </b-card-body>
+        </b-col>
+        <b-col lg="4" sm="12" class="align-self-center">
+          <b-card-body title="Publication" sub-title="View the banner describing the project">
+            <a
+              href="https://www.canva.com/design/DAGJVNqdmGw/kqibyQ0Ly71C0xtWXUNmDw/edit?utm_content=DAGJVNqdmGw&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
+              target="_blank"
+            >
+              <b-card-img src="banner.png" alt="Image" class="rounded-0 p-2" />
+            </a>
+          </b-card-body>
+        </b-col>
+      </b-row>
+      <p>
+        This work and key results are described in detail in: <br /><em
+          ><span
+            >Nussbaumer et al. (in prep), Historical bird atlas and contemporary citizen science
+            data reveal long-term changes in geographic range of Kenyan birds</span
+          ></em
+        >.
+      </p>
     </b-container>
     <b-container fluid class="bg-light p-5">
       <!--<h6 class="text-muted text-uppercase">Implementing organisations</h6>-->
