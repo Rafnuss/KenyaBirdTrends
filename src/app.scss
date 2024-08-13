@@ -130,3 +130,33 @@ h1 {
 .img-partners {
   max-height: 7rem;
 }
+.hover-effect {
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.hover-effect:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+.image-overlay {
+  opacity: 0.7; /* Makes the image appear faded */
+}
+.overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 1.2rem;
+  text-align: center;
+  pointer-events: none; /* Ensure the overlay is non-interactive */
+  box-sizing: border-box;
+}
+.disabled-image-link {
+  display: inline-block;
+  text-decoration: none;
+  position: relative; /* Ensure the link container is positioned correctly */
+}
