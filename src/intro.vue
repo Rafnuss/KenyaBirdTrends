@@ -9,23 +9,23 @@
         Kenya has seen significant changes in its landscape over the past 50 years: exponential
         population increase has been accompanied by growing urbanisation, intensified agriculture,
         deforestation, and increased pollution, among others.
-        <b>How have these changes impacted bird abundance and distribution on a large scale?</b>
+        <b>How have these changes impacted birds on a large scale?</b>
         Answering this question is key to better protecting birds today.
       </p>
       <p>
         Thanks to the contributions of thousands of citizen scientists across the country, we can
         now offer initial answers to this question. To do so, we compare citizen science data with
-        one of Africa's oldest and most comprehensive bird atlases to map changes in
-        <b>bird distribution patterns across the past 50 years</b>.
+        one of Africa's oldest and most comprehensive bird atlases to
+        <b>map changes in bird distribution patterns across the past 50 years</b>.
       </p>
 
       <p>
         On this platform, you can
-        <b>visualize the change in the spatial range of each bird species in Kenya</b>
-        between the historical and recent time period. We compare bird presence information within
-        each square to define whether the species has gained, lost, or kept this square between the
-        two periods considered. Changes are displayed on a grid of 55x55 km squares spanning the
-        entire country.
+        <b>visualize the change in the range of each bird species in Kenya</b>
+        between a historical and a recent time period. Changes are displayed on a grid of 27x27 km
+        squares spanning the entire country. We compare bird presence within each square to define
+        whether the species has gained, kept, or lost this square between the two periods
+        considered.
       </p>
 
       <h2>How to navigate this platform</h2>
@@ -39,7 +39,7 @@
           <p class="text-muted mb-0">Grid</p>
           <span class="small">
             Select one or multiple grid squares (27x27km) on the map to view and export the list of
-            species lost, kept, and gained in this area.
+            species gained, kept, and lost in this area.
           </span>
           <template #footer>
             <div class="d-flex justify-content-center">
@@ -52,7 +52,7 @@
         <b-card class="bg-light">
           <p class="text-muted mb-0">Species</p>
           <span class="small">
-            Visualize which squares were lost, kept, and gained for a specific species.
+            Visualize which squares were gained, kept, and lost for a specific species.
           </span>
           <template #footer>
             <div class="d-flex justify-content-center">
@@ -65,7 +65,7 @@
       <h2>Data sources</h2>
       <p>
         Presence data was extracted from the sources below to draw out changes in a species'
-        distribution. For the recent period, data from two sources was combined to create a single
+        distribution. For the recent period, we used data from two sources to create a single
         species map that was compared with the corresponding species map from the historical atlas.
       </p>
       <b-row>
@@ -133,8 +133,8 @@
                     <b-card-body title="KBM" sub-title="2012-2023">
                       <b-card-text>
                         <p class="small">
-                          Kenya Bird Map leads current efforts to establish a new bird atlas from
-                          citizen scientists. We used presence information (from full or ad-hoc
+                          Kenya Bird Map is leading current efforts to establish a new bird atlas
+                          from citizen scientists. We used presence information (from full or ad-hoc
                           protocols) for each species at the pentad level and upscaled each map to
                           match the spatial resolution of the historical atlas.
                         </p>
@@ -148,14 +148,65 @@
         </b-col>
       </b-row>
       <h2>Export products</h2>
-      <p>You can export two products from this website:</p>
+      <p>You can export two products from this platform:</p>
       <ol>
-        <li>A map of distribution change for each species (.jpg), from the species view</li>
         <li>
-          A list of species and their corresponding trend for a given area (.csv), from the grid
-          view
+          A map of distribution change for each species from the species view
+          <span class="small">(.jpg file)</span>
+        </li>
+        <li>
+          A list of species and their corresponding trend for a given area from the grid view
+          <span class="small">(.csv file)</span>
         </li>
       </ol>
+      <h2>Resources</h2>
+      <b-row>
+        <b-col lg="4" sm="12" class="align-self-center">
+          <b-card-body
+            title="Banner"
+            sub-title="Get a quick overview of the project with this infographic"
+          >
+            <a href="banner.pdf" target="_blank" class="p-2">
+              <b-card-img
+                src="banner_thumbnail_large.png"
+                alt="Image"
+                class="rounded-0 hover-effect"
+              />
+            </a>
+          </b-card-body>
+        </b-col>
+        <b-col lg="4" sm="12" class="align-self-center">
+          <b-card-body
+            title="Video presentation"
+            sub-title="Watch a short video to learn about the platform"
+          >
+            <a href="" target="_blank" class="p-2">
+              <b-card-img
+                src="video_thumbnail_large.png"
+                alt="Image"
+                class="rounded-0 hover-effect"
+              />
+            </a>
+          </b-card-body>
+        </b-col>
+        <b-col lg="4" sm="12" class="align-self-center">
+          <b-card-body
+            title="Publication"
+            sub-title="Dive into the details with the full publication"
+          >
+            <b-card-text>
+              <b-link href="" target="_blank" disabled class="p-2 disabled-image-link">
+                <b-card-img
+                  src="paper_thumbnail_large.png"
+                  alt="Image"
+                  class="rounded-0 image-overlay"
+                />
+                <div class="overlay">Coming Soon!</div>
+              </b-link>
+            </b-card-text>
+          </b-card-body>
+        </b-col>
+      </b-row>
     </b-container>
     <b-container fluid class="bg-light p-5">
       <!--<h6 class="text-muted text-uppercase">Implementing organisations</h6>-->
