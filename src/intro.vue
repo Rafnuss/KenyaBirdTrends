@@ -178,9 +178,9 @@
         <b-col lg="4" sm="12" class="align-self-center">
           <b-card-body
             title="Video presentation"
-            sub-title="Watch a short video to learn about the platform"
+            sub-title="Watch this short video to learn about the platform"
           >
-            <a href="" target="_blank" class="p-2">
+            <a href="https://www.youtube.com/watch?v=_h1KA6D6EuM" target="_blank" class="p-2">
               <b-card-img
                 src="video_thumbnail_large.png"
                 alt="Image"
