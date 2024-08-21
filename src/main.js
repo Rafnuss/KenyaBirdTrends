@@ -5,6 +5,9 @@ import { BootstrapVue, BootstrapVueIcons } from "bootstrap-vue";
 Vue.use(BootstrapVue);
 Vue.use(BootstrapVueIcons);
 
+import VueYouTubeEmbed from "vue-youtube-embed";
+Vue.use(VueYouTubeEmbed);
+
 import VueCookie from "vue-cookie";
 Vue.use(VueCookie);
 
