@@ -13,7 +13,7 @@ export default defineConfig({
         enabled: false,
       },
       workbox: {
-        globPatterns: ["**/*.{js,css,html,vue,png,svg,json}"],
+        globPatterns: ["**/*.{js,css,html,vue,png,svg,json,pdf}"],
       },
       includeAssets: [
         "favicon.ico",
