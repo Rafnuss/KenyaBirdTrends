@@ -2,7 +2,7 @@
   "title": "Kenya Bird Trends",
   "name": "kenyabirdtrends",
   "description": "Visualisation of the distribution changes of birds in Kenya between 1970s and 2010s",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "homepage": "https://kenyabirdtrends.co.ke/",
   "repository": {
     "type": "git",
@@ -27,6 +27,7 @@
     "vue": "~2.7.16",
     "vue-cookie": "~1.1.4",
     "vue-multiselect": "~2.1.9",
+    "vue-youtube-embed": "^2.2.2",
     "vue2-leaflet": "~2.7.1",
     "vue2-leaflet-geosearch": "~1.0.6",
     "vue2-leaflet-markercluster": "~3.1.0"

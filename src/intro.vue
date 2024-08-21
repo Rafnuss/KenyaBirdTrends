@@ -180,13 +180,38 @@
             title="Video presentation"
             sub-title="Watch this short video to learn about the platform"
           >
-            <a href="https://www.youtube.com/watch?v=_h1KA6D6EuM" target="_blank" class="p-2">
-              <b-card-img
-                src="video_thumbnail_large.png"
-                alt="Image"
-                class="rounded-0 hover-effect"
-              />
-            </a>
+            <b-card-img
+              src="video_thumbnail_large.png"
+              alt="Image"
+              class="rounded-0 hover-effect"
+              v-b-modal="'modal-youtube'"
+              @click="showModal = true"
+            />
+
+            <b-modal
+              title="Video presentation"
+              id="fullscreen-modal"
+              v-model="showModal"
+              hide-footer
+              no-close-on-esc
+              no-close-on-backdrop
+              centered
+              size="xl"
+              :modal-class="'fullscreen-modal'"
+              :dialog-class="'fullscreen-dialog'"
+            >
+              <div class="aspect-ratio-box">
+                <youtube
+                  video-id="_h1KA6D6EuM"
+                  :player-vars="{ autoplay: 1 }"
+                  player-width="100%"
+                  player-height="100%"
+                  width="100%"
+                  height="100%"
+                  class="responsive-iframe"
+                />
+              </div>
+            </b-modal>
           </b-card-body>
         </b-col>
         <b-col lg="4" sm="12" class="align-self-center">
@@ -273,6 +298,7 @@ export default {
         { href: "https://nigeria.birdmap.africa/", src: "logo_nba.png" },
         { href: "https://www.kenyabirdofpreytrust.org/", src: "logo_kbop.png" },
       ],
+      showModal: false,
     };
   },
 };
