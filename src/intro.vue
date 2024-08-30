@@ -250,11 +250,11 @@
         </b-col>
       </b-row>
       <!--<h6 class="text-muted text-uppercase">Partner organisations</h6>-->
-      <b-row class="justify-content-center">
+      <b-row class="justify-content-center mt-4">
         <b-col
           cols="6"
           md="4"
-          lg="2"
+          lg="3"
           v-for="p in partners"
           :key="p.href"
           class="mb-2"
@@ -288,10 +288,13 @@ export default {
       organisations: [
         { href: "https://tropical-biology.org/", src: "logo_tba.png" },
         { href: "https://www.arocha.or.ke/", src: "logo_ark.png" },
+
         { href: "https://museums.or.ke/", src: "logo_museums.png" },
       ],
       partners: [
         { href: "https://www.darwininitiative.org.uk/", src: "logo_darwin.png" },
+        { href: "https://www.vogelwarte.ch/", src: "logo_vowa.png" },
+        { href: "https://www.birds.cornell.edu/", src: "logo_lab.png" },
         { href: "https://naturekenya.org/", src: "logo_nature_kenya.png" },
         { href: "https://www.kws.go.ke/", src: "logo_kws.png" },
         { href: "https://wrti.go.ke/", src: "logo_wrti.png" },
