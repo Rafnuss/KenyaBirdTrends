@@ -220,13 +220,16 @@
             sub-title="Dive into the details with the full publication"
           >
             <b-card-text>
-              <b-link href="" target="_blank" disabled class="p-2 disabled-image-link">
+              <b-link
+                href="https://doi.org/10.1111/ddi.13935"
+                target="_blank"
+                class="p-2 disabled-image-link"
+              >
                 <b-card-img
                   src="paper_thumbnail_large.png"
                   alt="Image"
-                  class="rounded-0 image-overlay"
+                  class="rounded-0 hover-effect"
                 />
-                <div class="overlay">Coming Soon!</div>
               </b-link>
             </b-card-text>
           </b-card-body>
