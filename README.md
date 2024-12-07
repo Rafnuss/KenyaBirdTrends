@@ -1,6 +1,6 @@
 # Kenya Bird Trends
 
-:sparkles: This repository contains the source code to generate the website [kenyabirdtrends.co.ke](https://kenyabirdtrends.co.ke/). 
+:sparkles: This repository contains the source code to generate the website [kenyabirdtrends.co.ke](https://kenyabirdtrends.co.ke/).
 
 :metal: We're using the sweet combo [Vite](https://vitejs.dev/)+[Vue](https://vuejs.org/)+[BoostrapVue](https://bootstrap-vue.org/)+[VueLeaflet](https://vue2-leaflet.netlify.app/)!
 
@@ -16,7 +16,6 @@ _Selecting squares over Tsavo West allows you to then export a list of all speci
 
 ## Resources
 
-- :clapper: See the [introductory video](https://youtu.be/_h1KA6D6EuM) for the website.
+- :clapper: See the [introductory video](https://youtu.be/_h1KA6D6EuM) of the website.
 - :computer: You can find the MATLAB code use to generate the maps and species list at [Rafnuss/KenyaAtlasComparison](https://github.com/Rafnuss/KenyaAtlasComparison).
-- :page_facing_up: The associated publication is freely available  
-> 
+- :page_facing_up: The [associated publication](https://doi.org/10.1111/ddi.13935) is freely available
