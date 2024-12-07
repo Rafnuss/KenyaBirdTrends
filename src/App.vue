@@ -684,7 +684,7 @@ import { OpenStreetMapProvider } from "leaflet-geosearch";
 import VGeosearch from "vue2-leaflet-geosearch";
 
 //import 'leaflet.locatecontrol'
-import Locatecontrol from "leaflet.locatecontrol";
+import { LocateControl } from "leaflet.locatecontrol";
 import "leaflet.locatecontrol/dist/L.Control.Locate.css";
 
 import CircleTemplate from "./circle.vue";
@@ -1185,7 +1185,7 @@ export default {
         });
 
         if (this.locate == null) {
-          this.locate = new Locatecontrol({
+          this.locate = new LocateControl({
             strings: {
               title: "Explore target species at my location!",
             },
