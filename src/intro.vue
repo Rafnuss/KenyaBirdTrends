@@ -159,6 +159,19 @@
           <span class="small">(.csv file)</span>
         </li>
       </ol>
+      <h2>How to cite?</h2>
+      <p>When using any informations from this website, please use the following reference:</p>
+      <div style="border-left: 5px solid #ccc; padding-left: 10px">
+        <p>
+          Nussbaumer, R., Nussbaumer, A., Guchu, S., Hatfield, R. S., M. Kanga, E., Kung’u, G. N.,
+          Kuria, A., Miller, E., Ndang’ang’a, P. K., Njoroge, P., Ogada, D., Shema, S., & Jackson,
+          C. (2024). Historical Bird Atlas and Contemporary Citizen Science Data Reveal Long‐Term
+          Changes in Geographic Range of Kenyan Birds. <em>Diversity and Distributions</em>.
+          <a href="https://doi.org/10.1111/ddi.13935" target="_blank" rel="noopener noreferrer">
+            https://doi.org/10.1111/ddi.13935
+          </a>
+        </p>
+      </div>
       <h2>Resources</h2>
       <b-row>
         <b-col lg="4" sm="12" class="align-self-center">
@@ -166,7 +179,11 @@
             title="Banner"
             sub-title="Get a quick overview of the project with this infographic"
           >
-            <a href="banner.pdf" target="_blank" class="p-2">
+            <a
+              href="https://raw.githubusercontent.com/Rafnuss/KenyaBirdTrends/blob/main/public/banner.pdf"
+              target="_blank"
+              class="p-2"
+            >
               <b-card-img
                 src="banner_thumbnail_large.png"
                 alt="Image"
