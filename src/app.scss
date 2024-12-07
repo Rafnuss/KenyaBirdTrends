@@ -7,8 +7,8 @@ $gained: #45aa59;
 //https://coolors.co/d73027-ffffbf-45aa59-204e4a-404e7c
 
 // Then import Bootstrap and BootstrapVue SCSS files (order is important)
-@import "node_modules/bootstrap/scss/bootstrap.scss";
-@import "node_modules/bootstrap-vue/src/index.scss";
+@import "bootstrap/scss/bootstrap";
+@import "bootstrap-vue/src/index";
 //import "bootstrap/dist/css/bootstrap.css";
 //import "bootstrap/dist/css/bootstrap.css";
 
@@ -132,7 +132,9 @@ h1 {
 }
 .hover-effect {
   cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 .hover-effect:hover {
   transform: scale(1.05);
