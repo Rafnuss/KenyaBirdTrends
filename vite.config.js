@@ -14,6 +14,7 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ["**/*.{js,css,html,vue,png,svg,json,pdf}"],
+        maximumFileSizeToCacheInBytes: 10000000,
       },
       includeAssets: [
         "favicon.ico",
