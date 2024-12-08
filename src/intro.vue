@@ -180,12 +180,12 @@
             sub-title="Get a quick overview of the project with this infographic"
           >
             <a
-              href="https://raw.githubusercontent.com/Rafnuss/KenyaBirdTrends/blob/main/public/banner.pdf"
+              href="https://raw.githubusercontent.com/Rafnuss/KenyaBirdTrends/blob/main/public/banner_small.pdf"
               target="_blank"
               class="p-2"
             >
               <b-card-img
-                src="banner_thumbnail_large.png"
+                src="banner_thumbnail_small.png"
                 alt="Image"
                 class="rounded-0 hover-effect"
               />
@@ -198,7 +198,7 @@
             sub-title="Watch this short video to learn about the platform"
           >
             <b-card-img
-              src="video_thumbnail_large.png"
+              src="video_thumbnail_small.png"
               alt="Image"
               class="rounded-0 hover-effect"
               v-b-modal="'modal-youtube'"
@@ -243,7 +243,7 @@
                 class="p-2 disabled-image-link"
               >
                 <b-card-img
-                  src="paper_thumbnail_large.png"
+                  src="paper_thumbnail_small.png"
                   alt="Image"
                   class="rounded-0 hover-effect"
                 />

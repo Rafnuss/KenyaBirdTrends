@@ -21,7 +21,7 @@ export default defineConfig({
         "pwa-*.png",
         "logo_*.png",
         "bird_atlas_of_kenya.png",
-        "banner.pdf",
+        "banner_small.pdf",
         "maskable-icon-512x512.png",
       ],
       manifest: {
