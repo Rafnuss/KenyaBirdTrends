@@ -22,7 +22,7 @@
       <p>
         On this platform, you can
         <b>visualize the change in the range of each bird species in Kenya</b>
-        between a historical and a recent time period. Changes are displayed on a grid of 27x27 km
+        between a historical and a recent time period. Changes are displayed on a grid of 55x55 km
         squares spanning the entire country. We compare bird presence within each square to define
         whether the species has gained, kept, or lost this square between the two periods
         considered.
@@ -38,7 +38,7 @@
         <b-card class="bg-light">
           <p class="text-muted mb-0">Grid</p>
           <span class="small">
-            Select one or multiple grid squares (27x27km) on the map to view and export the list of
+            Select one or multiple grid squares (55x55km) on the map to view and export the list of
             species gained, kept, and lost in this area.
           </span>
           <template #footer>
@@ -84,7 +84,7 @@
                     <p class="small">
                       <em>A Bird Atlas of Kenya</em> (Lewis & Pomeroy, 1989) is the reference book
                       describing the status and distribution of 1 065 species at the scale of
-                      quarter square degree (QSD, 27 x 27 km).
+                      quarter square degree (QSD, 55x55 km).
                     </p>
                     <a href="https://doi.org/10.15468/2ga3wk">
                       <img src="https://zenodo.org/badge/DOI/10.15468/2ga3wk.svg" alt="DOI" />
