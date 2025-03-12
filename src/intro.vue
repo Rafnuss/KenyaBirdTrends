@@ -180,7 +180,7 @@
             sub-title="Get a quick overview of the project with this infographic"
           >
             <a
-              href="https://raw.githubusercontent.com/Rafnuss/KenyaBirdTrends/blob/main/public/banner_small.pdf"
+              href="https://raw.githubusercontent.com/Rafnuss/KenyaBirdTrends/main/public/banner_small.pdf"
               target="_blank"
               class="p-2"
             >
