@@ -174,7 +174,7 @@
       </div>
       <h2>Resources</h2>
       <b-row>
-        <b-col lg="4" sm="12" class="align-self-center">
+        <b-col lg="4" sm="12">
           <b-card-body
             title="Banner"
             sub-title="Get a quick overview of the project with this infographic"
@@ -192,7 +192,7 @@
             </a>
           </b-card-body>
         </b-col>
-        <b-col lg="4" sm="12" class="align-self-center">
+        <b-col lg="4" sm="12">
           <b-card-body
             title="Video presentation"
             sub-title="Watch this short video to learn about the platform"
@@ -231,17 +231,13 @@
             </b-modal>
           </b-card-body>
         </b-col>
-        <b-col lg="4" sm="12" class="align-self-center">
+        <b-col lg="4" sm="12">
           <b-card-body
             title="Publication"
             sub-title="Dive into the details with the full publication"
           >
             <b-card-text>
-              <b-link
-                href="https://doi.org/10.1111/ddi.13935"
-                target="_blank"
-                class="p-2 disabled-image-link"
-              >
+              <b-link href="https://doi.org/10.1111/ddi.13935" target="_blank">
                 <b-card-img
                   src="paper_thumbnail_small.png"
                   alt="Image"
