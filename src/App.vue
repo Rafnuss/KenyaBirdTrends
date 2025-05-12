@@ -1,5 +1,5 @@
 <template>
-  <b-container fluid class="h-100 d-flex flex-column p-0">
+  <b-container fluid class="d-flex flex-column p-0">
     <b-navbar toggleable="sm" variant="light" style="border-bottom: 1px solid #e5e9ef" sticky>
       <b-navbar-brand
         href="#"
