@@ -248,6 +248,93 @@
           </b-card-body>
         </b-col>
       </b-row>
+      <b-row>
+        <b-col lg="8" sm="12">
+          <b-card-body
+            title="Media Corner"
+            sub-title="Find all the press articles about the project here"
+          >
+            <ul>
+              <li>
+                <a href="https://www.youtube.com/watch?v=kqGpOYpu7qI" target="_blank">
+                  KTN News – News extract on the Kenya Bird Trends launch
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.standardmedia.co.ke/amp/opinion/article/2001501043/citizen-science-plays-major-role-in-monitoring-bird-species-in-kenya"
+                  target="_blank"
+                >
+                  Standard Media – Opinion: Citizen science’s role in monitoring Kenyan bird species
+                </a>
+              </li>
+              <li>
+                <a href="https://www.youtube.com/watch?v=PR4Y8N3lZog" target="_blank">
+                  Friday4birds – Scientific presentation of the Kenya Bird Trends project
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.standardmedia.co.ke/article/2001513008/innovative-online-platform-that-will-keep-kenyan-birds-in-the-skies"
+                  target="_blank"
+                >
+                  Standard Media – Launch of innovative platform for bird monitoring in Kenya
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.linkedin.com/posts/laikipia-wildlife-forum_lwf-birdconservation-citizenscience-activity-7300602763640553472-JJNX"
+                  target="_blank"
+                >
+                  Laikipia Wildlife Forum – Seminar on Citizen Science in Bird Conservation
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.facebook.com/100064520599052/posts/1029030849257592/?rdid=tOiD8Es1WahpPYv8#"
+                  target="_blank"
+                >
+                  Kenya Forest Service – Workshop on KBT platforms at the headquarters in Karura
+                </a>
+              </li>
+              <li>
+                <a href="https://ke.chm-cbd.net/news/welcome-kenya-bird-trends" target="_blank">
+                  Kenya Biodiversity National Clearing House Mechanis Kenya – Introduction to Kenya
+                  Bird Trends
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://tropical-biology.org/birds-bats-and-butterflies-fly-up-agenda-thanks-to-nigerias-citizens/"
+                  target="_blank"
+                >
+                  TBA – Workshop in Nigeria on improving Decision-making through Citizen Science
+                  Data
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://radionigeria.gov.ng/2025/02/01/experts-call-for-bird-data-to-boost-nigerias-biodiversity-protection/ "
+                  target="_blank"
+                >
+                  Radio Nigeria – Call for bird data to boost Nigeria’s biodiversity protection
+                </a>
+              </li>
+            </ul>
+          </b-card-body>
+        </b-col>
+        <b-col lg="4" sm="12">
+          <b-card-body title="Related publications">
+            <p>
+              Interested in citizen science, bird research, and conservation?
+              <a href="https://kenya.birdmap.africa/" target="_blank"
+                ><strong>Click here</strong></a
+              >
+              for more publications on these topics.
+            </p>
+          </b-card-body>
+        </b-col>
+      </b-row>
     </b-container>
     <b-container fluid class="bg-light p-5">
       <!--<h6 class="text-muted text-uppercase">Implementing organisations</h6>-->
