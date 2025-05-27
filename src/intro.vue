@@ -370,11 +370,13 @@
       </b-row>
     </b-container>
     <b-container fluid class="bg-dark p-3 small text-white">
-      For any questions or suggestions, please reach out to
-      <a href="mailto:rafnuss@gmail.com" target="_blank" class="text-white">Raphaël Nussbaumer</a>.
+      For any questions or suggestions, please reach out to the
+      <a href="mailto:kenyabirdmap@naturekenya.org " target="_blank" class="text-white"
+        >Kenya Bird Map manager</a
+      >. Created by <a href="mailto:rafnuss@gmail.com" class="text-white">Raphaël Nussbaumer </a>
       <a href="https://github.com/Rafnuss/KenyaBirdTrends" target="_blank">
-        <b-icon-github variant="white" />
-      </a>
+        <b-icon-github variant="white" /> </a
+      >.
     </b-container>
   </div>
 </template>
