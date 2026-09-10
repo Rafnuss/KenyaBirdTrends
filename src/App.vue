@@ -606,20 +606,10 @@
             name="Counties"
             @update:visible="() => $refs.countyGeojson?.mapObject?.bringToBack()"
           />
-          <l-circle
-            v-for="c in map_data_filtered"
-            :key="c.properties.Sq"
-            :lat-lng="c.geometry.coordinates"
-            :radius="c.style.radius"
-            :color="c.style.color"
-            :opacity="c.style.opacity"
-            :fill-color="c.style.fillColor"
-            :fill-opacity="c.style.fillOpacity"
-            :weight="c.style.weight"
-            :visible="c.style.visible"
-            :options="{ Sq: c.properties.Sq }"
-            @click="click_circle"
-          />
+          <!-- The grid circles are managed imperatively in `sync_circles`
+               rather than as ~215 <l-circle> components: the wrapper spent
+               ~120 ms per update patching their props, against ~1.5 ms for
+               the equivalent Leaflet setStyle/setRadius calls. -->
           <v-geosearch :options="geosearchOptions"></v-geosearch>
         </l-map>
       </b-col>
@@ -677,10 +667,9 @@ import {
   LTileLayer,
   LControlLayers,
   LControl,
-  LCircle,
   LGeoJson,
 } from "vue2-leaflet";
-import { latLngBounds } from "leaflet";
+import { latLngBounds, circle as lCircle, layerGroup } from "leaflet";
 import { OpenStreetMapProvider } from "leaflet-geosearch";
 import VGeosearch from "vue2-leaflet-geosearch";
 
@@ -756,7 +745,6 @@ export default {
     LTileLayer,
     LControlLayers,
     LControl,
-    LCircle,
     LGeoJson,
     CircleTemplate,
     Multiselect,
@@ -1049,18 +1037,6 @@ export default {
         });
       return m;
     },
-    click_circle() {
-      return (e) => {
-        if (this.mode == "Grid") {
-          let Sq = e.sourceTarget.options.Sq;
-          if (!this.grid.includes(Sq)) {
-            this.grid.push(Sq);
-          } else {
-            this.grid = this.grid.filter((i) => i != Sq);
-          }
-        }
-      };
-    },
     geojson_species_options() {
       return {
         onEachFeature: (feature, layer) => {
@@ -1125,6 +1101,8 @@ export default {
           }
         });
 
+        this.init_circles(map);
+
         this.locate = new LocateControl({
           strings: {
             title: "Explore target species at my location!",
@@ -1135,6 +1113,9 @@ export default {
         });
         this.locate.addTo(map);
       });
+    },
+    map_data_filtered() {
+      this.sync_circles();
     },
     // `update_url` used to be called from the `grid_list` computed, which meant
     // the URL only tracked state while that list happened to be re-evaluated.
@@ -1174,6 +1155,9 @@ export default {
     });
   },
   created() {
+    this.circle_layer = null;
+    this.circles = null;
+
     let qp = new URLSearchParams(window.location.search);
     let species = qp.get("species");
     if (species && species != "null" && species != "NaN" && !isNaN(Number(species))) {
@@ -1225,6 +1209,53 @@ export default {
       a.download = "kenyabirdtrend_export_" + this.grid.join("_") + ".csv";
       a.click();
       window.URL.revokeObjectURL(url);
+    },
+    // Create one Leaflet circle per grid square, once, and keep them in a
+    // Sq -> circle map. Updates then only restyle existing layers.
+    init_circles(map) {
+      this.circle_layer = layerGroup().addTo(map);
+      this.circles = new Map();
+      for (const c of this.map_data) {
+        const circle = lCircle(c.geometry.coordinates, { Sq: c.properties.Sq });
+        circle.on("click", (e) => {
+          if (this.mode != "Grid") return;
+          const Sq = e.target.options.Sq;
+          if (!this.grid.includes(Sq)) {
+            this.grid.push(Sq);
+          } else {
+            this.grid = this.grid.filter((i) => i != Sq);
+          }
+        });
+        this.circles.set(c.properties.Sq, circle);
+      }
+      this.sync_circles();
+    },
+    // Push the current `map_data_filtered` styles onto those layers. Adding
+    // and removing from the group is what `:visible` used to do.
+    sync_circles() {
+      if (!this.circle_layer) return;
+      const wanted = new Set();
+      for (const c of this.map_data_filtered) {
+        const circle = this.circles.get(c.properties.Sq);
+        if (!circle) continue;
+        const st = c.style;
+        if (!st.visible) continue;
+        wanted.add(c.properties.Sq);
+        circle.setStyle({
+          color: st.color,
+          weight: st.weight,
+          opacity: st.opacity,
+          fillColor: st.fillColor,
+          fillOpacity: st.fillOpacity,
+        });
+        circle.setRadius(st.radius);
+        if (!this.circle_layer.hasLayer(circle)) this.circle_layer.addLayer(circle);
+      }
+      for (const [Sq, circle] of this.circles) {
+        if (!wanted.has(Sq) && this.circle_layer.hasLayer(circle)) {
+          this.circle_layer.removeLayer(circle);
+        }
+      }
     },
     async promptInstall() {
       if (this.deferredPrompt) {
