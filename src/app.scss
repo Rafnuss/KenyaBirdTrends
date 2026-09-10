@@ -9,7 +9,6 @@ $gained: #45aa59;
 // Then import Bootstrap. bootstrap-vue-next ships no SCSS of its own; it
 // renders plain Bootstrap 5 markup.
 @import "bootstrap/scss/bootstrap";
-@import "bootstrap-icons/font/bootstrap-icons.css";
 
 html,
 body {
@@ -39,9 +38,7 @@ h1 {
   width: 100px;
   height: 1rem;
   margin-left: auto;
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
+  flex-shrink: 0;
 }
 .bar-left {
   float: left;

@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from "./AppIcon.vue";
 import { ref } from "vue";
 
 import logoPng from "../assets/pwa-30x30.png";
@@ -26,7 +27,7 @@ const navOpen = ref(false);
         :title="state.sidebar ? 'Show the map' : 'Show the list'"
         @click="state.sidebar = !state.sidebar"
       >
-        <i :class="state.sidebar ? 'bi bi-map-fill' : 'bi bi-list'" />
+        <AppIcon :name="state.sidebar ? 'map-fill' : 'list'" />
       </button>
 
       <button
@@ -60,7 +61,7 @@ const navOpen = ref(false);
             title="Settings"
             @click="state.settingsOpen = true"
           >
-            <i class="bi bi-gear" />
+            <AppIcon name="gear" />
           </button>
           <button
             v-if="canInstall"
@@ -69,7 +70,7 @@ const navOpen = ref(false);
             title="Install app"
             @click="promptInstall"
           >
-            <i class="bi bi-file-arrow-down" />
+            <AppIcon name="file-arrow-down" />
           </button>
         </div>
       </div>

@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from "./AppIcon.vue";
 import LegendCircle from "./LegendCircle.vue";
 import { state } from "../store";
 
@@ -34,7 +35,7 @@ const COVERAGE_HELP =
     title="Show legend"
     @click="state.legend = true"
   >
-    <i class="bi bi-question-circle-fill" />
+    <AppIcon name="question-circle-fill" />
   </button>
 
   <div
@@ -73,13 +74,11 @@ const COVERAGE_HELP =
 
     <div class="mb-1">
       <b>{{ state.mode === "Grid" ? "Change in effort" : "Confidence" }}</b>
-      <button
+      <AppIcon
         v-tooltip="state.mode === 'Grid' ? EFFORT_HELP : CONFIDENCE_HELP"
-        type="button"
-        class="btn btn-link btn-sm p-0 ms-1"
-      >
-        <i class="bi bi-question-circle-fill" />
-      </button>
+        name="question-circle-fill"
+        class="help-icon"
+      />
       <div class="d-flex align-items-center justify-content-between">
         <LegendCircle v-for="size in [12, 15, 18, 21, 24]" :key="size" :size="size" />
       </div>
@@ -91,9 +90,7 @@ const COVERAGE_HELP =
 
     <div>
       <b>Coverage</b>
-      <button v-tooltip="COVERAGE_HELP" type="button" class="btn btn-link btn-sm p-0 ms-1">
-        <i class="bi bi-question-circle-fill" />
-      </button>
+      <AppIcon v-tooltip="COVERAGE_HELP" name="question-circle-fill" class="help-icon" />
       <div class="d-flex align-items-center">
         <div style="width: 25px" class="d-flex">
           <LegendCircle size="7" opacity="0.7" class="m-auto" />
@@ -131,5 +128,13 @@ const COVERAGE_HELP =
 <style scoped>
 .legend-scale {
   font-size: 9px;
+}
+.help-icon {
+  margin-left: 0.25rem;
+  color: #6a6a6a;
+  cursor: help;
+}
+.help-icon:hover {
+  color: #204e4a;
 }
 </style>

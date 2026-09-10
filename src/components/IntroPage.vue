@@ -386,13 +386,14 @@
         >Kenya Bird Map manager</a
       >. Created by <a href="mailto:rafnuss@gmail.com" class="text-white">Raphaël Nussbaumer </a>
       <a href="https://github.com/Rafnuss/KenyaBirdTrends" target="_blank">
-        <i class="bi bi-github text-white" /> </a
+        <AppIcon name="github" class="text-white" /> </a
       >.
     </div>
   </div>
 </template>
 
 <script setup>
+import AppIcon from "./AppIcon.vue";
 import { ref } from "vue";
 
 import BaseModal from "./BaseModal.vue";
