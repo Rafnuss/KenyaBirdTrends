@@ -23,22 +23,32 @@ const parts = computed(() => [
 
 <template>
   <div>
-    {{ label }}
-    <span v-if="state.displayPoorCoverage" class="sublegend">(including poor coverage)</span>
-    <div class="kept d-flex w-100 p-0">
-      <div class="lost py-2" :style="{ width: pct(values[0]) + '%' }"></div>
-      <div class="gained py-2 ms-auto" :style="{ width: pct(values[2]) + '%' }"></div>
+    <div class="mb-1">
+      {{ label }}
+      <span v-if="state.displayPoorCoverage" class="sublegend">(including poor coverage)</span>
     </div>
-    <div class="row">
+    <div class="lkgd-bar kept d-flex w-100">
+      <div class="lost" :style="{ width: pct(values[0]) + '%' }"></div>
+      <div class="gained ms-auto" :style="{ width: pct(values[2]) + '%' }"></div>
+    </div>
+    <div class="d-flex justify-content-between mt-1">
       <div
         v-for="part in parts"
         :key="part.key"
-        class="col d-flex align-items-center justify-content-center"
+        class="d-flex align-items-center gap-1 flex-fill justify-content-center"
       >
-        <div class="box-sm me-1" :class="part.key"></div>
-        {{ formatNumber(part.value) }}
-        <span class="sublegend"> {{ part.label }}</span>
+        <div class="box-sm" :class="part.key"></div>
+        <span>{{ formatNumber(part.value) }}</span>
+        <span class="sublegend">{{ part.label }}</span>
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+.lkgd-bar {
+  height: 1rem;
+  border-radius: 0.25rem;
+  overflow: hidden;
+}
+</style>

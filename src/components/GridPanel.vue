@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from "./AppIcon.vue";
 import { computed } from "vue";
 
 import IucnBadge from "./IucnBadge.vue";
@@ -53,14 +54,14 @@ const TREND_FILTERS = [
           class="badge text-bg-danger border-0"
           @click="clearSquares()"
         >
-          <i class="bi bi-trash-fill" aria-hidden="true" />
+          <AppIcon name="trash-fill" />
         </button>
         <button
           type="button"
-          class="btn btn-primary btn-sm btn-xs ms-auto"
+          class="btn btn-primary btn-xs ms-auto"
           @click="exportGridListCsv(gridList, state.grid)"
         >
-          <i class="bi bi-download" /> Download list
+          <AppIcon name="download" /> Download list
         </button>
       </div>
 
@@ -76,7 +77,7 @@ const TREND_FILTERS = [
       <div class="flex-grow-1 overflow-hidden mb-2">
         <VirtualList :items="gridList" class="small border rounded">
           <template #default="{ item }">
-            <div class="d-flex align-items-center h-100 px-3 border-bottom">
+            <div class="d-flex align-items-center gap-2 h-100 ps-3 pe-2 border-bottom">
               <b class="text-truncate" :title="item.common_name">{{ item.common_name }}</b>
               <IucnBadge :category="item.IUCN" :iucn-id="item.IUCNID" />
               <div class="box-sm ms-auto flex-shrink-0" :class="item.trend" />

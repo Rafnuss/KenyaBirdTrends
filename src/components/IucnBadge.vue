@@ -33,8 +33,23 @@ const href = `https://apiv3.iucnredlist.org/api/v3/taxonredirect/${props.iucnId}
 </script>
 
 <template>
-  <a v-if="visible && link" :href="href" target="_blank" title="IUCN page">
-    <img :src="src" :alt="category" class="ms-1" style="width: 1rem" />
+  <a v-if="visible && link" class="iucn-badge" :href="href" target="_blank" title="IUCN page">
+    <img :src="src" :alt="category" />
   </a>
-  <img v-else-if="visible" :src="src" :alt="category" class="ms-1" style="width: 1rem" />
+  <span v-else-if="visible" class="iucn-badge">
+    <img :src="src" :alt="category" />
+  </span>
 </template>
+
+<style scoped>
+.iucn-badge {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.iucn-badge img {
+  width: 1rem;
+  height: 1rem;
+}
+</style>

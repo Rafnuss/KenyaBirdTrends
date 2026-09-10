@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from "./AppIcon.vue";
 import { computed, ref, useTemplateRef, watch } from "vue";
 import Multiselect from "vue-multiselect";
 
@@ -54,7 +55,7 @@ watch(
       >
         <template #option="{ option }">
           {{ option.common_name }}
-          <IucnBadge :category="option.IUCN" :link="false" />
+          <IucnBadge :category="option.IUCN" :link="false" class="ms-1" />
         </template>
         <template #singleLabel="{ option }">
           <b>{{ option.common_name }}</b>
@@ -65,12 +66,12 @@ watch(
       </Multiselect>
     </div>
 
-    <div v-if="species" class="d-flex flex-wrap align-items-center pt-1">
+    <div v-if="species" class="d-flex flex-wrap align-items-center gap-1 pt-2">
       <IucnBadge :category="species.IUCN" :iucn-id="species.IUCNID" always />
       <a
         v-for="(code, i) in species.ebird"
         :key="'ebird-' + i"
-        class="btn btn-outline-primary btn-sm btn-xs ms-1"
+        class="btn btn-outline-primary btn-xs"
         :href="`https://ebird.org/species/${code}/KE`"
         target="_blank"
       >
@@ -79,23 +80,23 @@ watch(
       <a
         v-for="(id, i) in species.kbm"
         :key="'kbm-' + i"
-        class="btn btn-outline-primary btn-sm btn-xs ms-1"
+        class="btn btn-outline-primary btn-xs"
         :href="`https://kenya.birdmap.africa/species/${id}`"
         target="_blank"
       >
         KBM-{{ id }}
       </a>
       <a
-        class="btn btn-primary btn-sm btn-xs ms-auto"
+        class="btn btn-primary btn-xs ms-auto"
         :href="`species_map/${species.SEQ}.png`"
         target="_blank"
       >
-        <i class="bi bi-download" /> Download map
+        <AppIcon name="download" /> Download map
       </a>
     </div>
 
     <div v-if="species?.flag" class="alert alert-warning my-2 small py-2 px-3">
-      <i class="bi bi-exclamation-triangle" />
+      <AppIcon name="exclamation-triangle" />
       {{ species.flag }}
     </div>
 
@@ -103,17 +104,17 @@ watch(
       <LkgdSummary :label="label" :values="lkgd" />
     </div>
 
-    <div class="d-flex align-items-center">
+    <div class="d-flex align-items-center gap-2">
       <button
         type="button"
-        class="btn btn-link btn-sm flex-grow-1 text-start ps-0"
+        class="btn btn-link btn-sm p-0 me-auto text-decoration-none"
         :aria-expanded="showFilters"
         @click="showFilters = !showFilters"
       >
-        <i :class="showFilters ? 'bi bi-caret-down-fill' : 'bi bi-caret-right-fill'" />
+        <AppIcon :name="showFilters ? 'caret-down-fill' : 'caret-right-fill'" />
         Filters list
       </button>
-      <small class="me-1">Sort by:</small>
+      <small class="text-muted">Sort by:</small>
       <select v-model="state.sortSelected" class="form-select form-select-sm w-auto">
         <option v-for="o in SORT_OPTIONS" :key="o" :value="o">{{ o }}</option>
       </select>
@@ -147,7 +148,7 @@ watch(
       <VirtualList ref="list" :items="spSorted" class="small border rounded">
         <template #default="{ item }">
           <div
-            class="species-row d-flex align-items-center h-100 px-3 border-bottom"
+            class="species-row d-flex align-items-center gap-2 h-100 ps-3 pe-2 border-bottom"
             :class="{ active: item.SEQ === state.speciesSeq }"
             role="button"
             @click="state.speciesSeq = item.SEQ"
