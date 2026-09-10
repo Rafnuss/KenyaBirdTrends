@@ -12,14 +12,14 @@
         Kenya Bird Trends
       </b-navbar-brand>
       <b-button
+        v-if="mode != 'Intro'"
         size="sm"
         variant="primary"
         class="mr-2 d-lg-none"
-        v-if="mode != 'Intro'"
         @click="sidebar = sidebar ? false : true"
       >
-        <b-icon icon="map-fill" v-if="sidebar" />
-        <b-icon icon="list" v-if="!sidebar" />
+        <b-icon v-if="sidebar" icon="map-fill" />
+        <b-icon v-if="!sidebar" icon="list" />
       </b-button>
       <b-navbar-toggle target="nav-collapse" />
       <b-collapse id="nav-collapse" is-nav>
@@ -36,21 +36,21 @@
           </b-nav-item>-->
           <b-nav-item
             href="#"
+            :active="mode == 'Grid'"
             @click="
               mode = 'Grid';
               update_url();
             "
-            :active="mode == 'Grid'"
           >
             Grid
           </b-nav-item>
           <b-nav-item
             href="#"
+            :active="mode == 'Species'"
             @click="
               mode = 'Species';
               update_url();
             "
-            :active="mode == 'Species'"
           >
             Species
           </b-nav-item>
@@ -61,7 +61,7 @@
           <b-button v-b-modal.modal-settings variant="light">
             <b-icon-gear />
           </b-button>
-          <b-button variant="light" @click="promptInstall" v-if="showInstallButton">
+          <b-button v-if="showInstallButton" variant="light" @click="promptInstall">
             <b-icon icon="file-arrow-down" />
           </b-button>
         </b-navbar-nav>
@@ -72,14 +72,14 @@
       @changeModeGrid="mode = 'Grid'"
       @changeModeSpecies="mode = 'Species'"
     />
-    <b-row class="flex-grow-1 no-gutters" v-else>
-      <b-col md="6" lg="4" fluid class="h-100-56" v-if="sidebar">
-        <b-container fluid class="d-flex flex-column h-100" v-if="mode == 'Grid'">
+    <b-row v-else class="flex-grow-1 no-gutters">
+      <b-col v-if="sidebar" md="6" lg="4" fluid class="h-100-56">
+        <b-container v-if="mode == 'Grid'" fluid class="d-flex flex-column h-100">
           <b-row class="px-0 py-0 my-2" align-v="center">
             <b-col>
               Number of
               {{ grid.length == 0 ? "squares for  all " : "" }}species
-              <span class="sublegend" v-if="display_poor_coverage">(including poor coverage)</span>
+              <span v-if="display_poor_coverage" class="sublegend">(including poor coverage)</span>
               <div class="kept d-flex w-100 p-0">
                 <div
                   class="lost py-2"
@@ -126,7 +126,7 @@
                 </p>
                 <p>You can export this species list as a CSV file.</p>
                 <div class="col text-center">
-                  <b-button @click="locate.start()" variant="primary">
+                  <b-button variant="primary" @click="locate.start()">
                     Find target list at my location
                   </b-button>
                 </div>
@@ -143,19 +143,19 @@
               </b-badge>
               <b-badge
                 v-if="grid.length > 0"
+                v-b-tooltip.hover
                 variant="danger"
                 class="mr-1"
                 style="cursor: pointer"
-                @click="grid = []"
-                v-b-tooltip.hover
                 title="Clear squares selection"
+                @click="grid = []"
               >
                 <b-icon icon="trash-fill" aria-hidden="true" />
               </b-badge>
 
               <b-button
-                class="float-right ml-auto mr-1 btn-xs"
                 v-if="grid.length > 0"
+                class="float-right ml-auto mr-1 btn-xs"
                 squared
                 variant="primary"
                 size="sm"
@@ -184,7 +184,7 @@
               <b-list-group class="small h-100">
                 <b-list-group-item
                   v-for="i in grid_list"
-                  :key="i.Id"
+                  :key="i.SEQ"
                   class="d-flex align-items-center py-1 px-3"
                 >
                   <b class="ml-1">{{ i.common_name }}</b>
@@ -201,7 +201,7 @@
             </b-col>
           </b-row>
         </b-container>
-        <b-container fluid class="d-flex flex-column h-100" v-if="mode == 'Species'">
+        <b-container v-if="mode == 'Species'" fluid class="d-flex flex-column h-100">
           <b-row>
             <b-col cols="12" class="mt-2">
               <multiselect
@@ -210,13 +210,12 @@
                 placeholder="Select a species"
                 :custom-label="selectLabel"
                 track-by="SEQ"
-                @input="update_url()"
                 :show-labels="false"
+                @input="update_url()"
               >
                 <template slot="option" slot-scope="props">
                   {{ props.option.common_name }}
                   <img
-                    :src="iucn[props.option.IUCN]"
                     v-if="
                       [
                         'Critically Endangered',
@@ -225,6 +224,7 @@
                         'Vulnerable',
                       ].includes(props.option.IUCN)
                     "
+                    :src="iucn[props.option.IUCN]"
                     class="ml-1"
                     style="width: 1rem"
                   />
@@ -247,24 +247,24 @@
                 <img :src="iucn[species.IUCN]" class="ml-1" style="width: 1rem" />
               </a>
               <b-button
+                v-for="(i, u) in species.ebird"
+                :key="'sp-ebird-' + u"
                 squared
                 variant="outline-primary"
                 class="ml-1 btn-xs d-flex align-items-center justify-content-center"
                 size="sm"
-                v-for="(i, u) in species.ebird"
-                :key="'sp-ebird-' + u"
                 :href="'https://ebird.org/species/' + i + '/KE'"
                 target="_blank"
               >
                 eBird-{{ species.ebird.length > 1 ? i : i[0] }}
               </b-button>
               <b-button
+                v-for="(i, u) in species.kbm"
+                :key="'sp-kbm-' + u"
                 squared
                 variant="outline-primary"
                 class="ml-1 btn-xs d-flex align-items-center justify-content-center"
                 size="sm"
-                v-for="(i, u) in species.kbm"
-                :key="'sp-kbm-' + u"
                 :href="'https://kenya.birdmap.africa/species/' + i"
                 target="_blank"
               >
@@ -283,9 +283,9 @@
             </b-col>
           </b-row>
           <b-alert
+            v-if="species && species.flag != null"
             show
             variant="warning"
-            v-if="species && species.flag != null"
             class="m-2 small py-2 px-3"
           >
             <b-icon icon="exclamation-triangle"></b-icon>
@@ -339,8 +339,8 @@
               <small>Sort by:</small>
               <b-form inline>
                 <b-form-select
-                  class="flex-grow-0 ml-1"
                   v-model="sort_selected"
+                  class="flex-grow-0 ml-1"
                   :options="sort_options"
                   size="sm"
                 />
@@ -372,15 +372,15 @@
               <b-list-group class="small h-100">
                 <b-list-group-item
                   v-for="i in sp_sort"
-                  :key="i.Id"
+                  :key="i.SEQ"
                   class="d-flex align-items-center py-1 px-3"
                   :active="species == null ? false : i.SEQ == species.SEQ"
+                  :action="true"
+                  role="button"
                   @click="
                     species = i;
                     update_url();
                   "
-                  :action="true"
-                  role="button"
                 >
                   <b class="ml-1">{{ i.common_name }}</b>
                   <a
@@ -398,14 +398,13 @@
                         ].includes(i.IUCN)
                       "
                       :src="iucn[i.IUCN]"
-                      v-bind:alt="i.IUCN"
+                      :alt="i.IUCN"
                       class="ml-1"
                       style="width: 1rem"
                     />
                   </a>
                   <div
                     v-if="i.nb_lkgd[0] + i.nb_lkgd[1] + i.nb_lkgd[2] > 0"
-                    class="bar kept"
                     v-b-tooltip.right.hover.html="
                       '<b>Lost:</b> ' +
                       i.nb_lkgd[0] +
@@ -414,6 +413,7 @@
                       '<br><b>Gained:</b> ' +
                       i.nb_lkgd[2]
                     "
+                    class="bar kept"
                   >
                     <div
                       class="bar-left lost"
@@ -438,8 +438,11 @@
           </b-row>
         </b-container>
       </b-col>
-      <b-col class="flex-grow-1" @shown="reloadMap()" v-if="mode != 'Intro'">
-        <l-map :bounds="bounds" ref="map">
+      <!-- `h-100-56` must be on the map column too: it is the only height
+           source in this row, so without it hiding the sidebar collapsed the
+           map to zero height and left a blank screen. -->
+      <b-col v-if="mode != 'Intro'" class="flex-grow-1 h-100-56">
+        <l-map ref="map" :bounds="bounds">
           <l-tile-layer
             v-for="tileProvider in tile_providers"
             :key="tileProvider.name"
@@ -452,10 +455,10 @@
           <l-control-layers />
           <l-control position="bottomright">
             <b-button
+              v-if="legend == false"
               size="sm"
               variant="primary"
               class="d-lg-none"
-              v-if="legend == false"
               @click="legend = true"
             >
               <b-icon icon="question-circle-fill"></b-icon>
@@ -482,29 +485,29 @@
                   <span>200</span>
                 </div>
               </div>
-              <div class="mb-1" v-if="mode == 'Species'">
+              <div v-if="mode == 'Species'" class="mb-1">
                 <b>Circle color</b>
                 <b-row no-gutters>
                   <b-col
+                    v-b-tooltip.top.hover
                     cols="4"
                     class="d-inline-flex justify-content-center"
-                    v-b-tooltip.top.hover
                     title="The species was present in the historical atlas but was not recorded in the recent period."
                   >
                     <CircleTemplate size="18" class="lost mr-1" /> Lost
                   </b-col>
                   <b-col
+                    v-b-tooltip.top.hover
                     cols="4"
                     class="d-inline-flex justify-content-center"
-                    v-b-tooltip.top.hover
                     title="The species was present in both time periods."
                   >
                     <CircleTemplate size="18" class="kept mr-1" /> Kept
                   </b-col>
                   <b-col
+                    v-b-tooltip.top.hover
                     cols="4"
                     class="d-inline-flex justify-content-center"
-                    v-b-tooltip.top.hover
                     title="The species was not present in the historical atlas but was recorded in the recent period."
                   >
                     <CircleTemplate size="18" class="gained mr-1" />
@@ -516,10 +519,10 @@
                 <span v-if="mode == 'Grid'">
                   <b>Change in effort</b>
                   <b-button
+                    v-b-tooltip.top.hover
                     size="sm"
                     class="p-0 ml-1"
                     variant="link"
-                    v-b-tooltip.top.hover
                     title="Change in effort is based on the difference between estimated coverage of the old atlas and the total duration of the new atlas."
                     ><b-icon-question-circle-fill> </b-icon-question-circle-fill>
                   </b-button>
@@ -527,10 +530,10 @@
                 <span v-if="mode == 'Species'">
                   <b>Confidence</b>
                   <b-button
+                    v-b-tooltip.top.hover
                     size="sm"
                     class="p-0 ml-1"
                     variant="link"
-                    v-b-tooltip.top.hover
                     title="The confidence is based on the change in effort between the old and new atlases. For example, a small red circle indicates an unlikely loss of the species, while a large green circle indicates a likely gain."
                     ><b-icon-question-circle-fill> </b-icon-question-circle-fill>
                   </b-button>
@@ -562,10 +565,10 @@
               <div>
                 <b>Coverage</b>
                 <b-button
+                  v-b-tooltip.top.hover
                   size="sm"
                   class="p-0 ml-1"
                   variant="link"
-                  v-b-tooltip.top.hover
                   title="Coverage is considered good if it had a modelled coverage >30% in the old atlas and at least 24hr of total observation time in the new atlas."
                   ><b-icon-question-circle-fill> </b-icon-question-circle-fill>
                 </b-button>
@@ -574,15 +577,15 @@
                     <CircleTemplate size="7" opacity="0.7" class="m-auto" />
                   </div>
                   <span class="ml-1">Poor coverage </span>
-                  <b-checkbox class="ml-1" v-model="display_poor_coverage" switch></b-checkbox>
+                  <b-checkbox v-model="display_poor_coverage" class="ml-1" switch></b-checkbox>
                 </div>
 
-                <div class="d-flex align-items-center" v-if="mode == 'Species'">
+                <div v-if="mode == 'Species'" class="d-flex align-items-center">
                   <div style="width: 25px" class="d-flex">
                     <CircleTemplate size="18" opacity="0.3" class="m-auto" />
                   </div>
                   <span class="ml-1">Never observed</span>
-                  <b-checkbox class="ml-1" v-model="display_never_observed" switch></b-checkbox>
+                  <b-checkbox v-model="display_never_observed" class="ml-1" switch></b-checkbox>
                 </div>
               </div>
             </div>
@@ -590,18 +593,18 @@
           <l-geo-json
             :geojson="grid_geojson"
             :visible="grid_geojson_visible"
-            :optionsStyle="{ color: '#555555', weight: 2, opacity: 0.65, fill: 0 }"
-            layerType="overlay"
+            :options-style="{ color: '#555555', weight: 2, opacity: 0.65, fill: 0 }"
+            layer-type="overlay"
             name="Grid square"
           />
           <l-geo-json
+            ref="countyGeojson"
             :geojson="county_geojson"
             :visible="county_geojson_visible"
-            ref="countyGeojson"
-            :optionsStyle="{ color: '#555555', weight: 1.2, opacity: 0.65, fill: 0 }"
-            layerType="overlay"
+            :options-style="{ color: '#555555', weight: 1.2, opacity: 0.65, fill: 0 }"
+            layer-type="overlay"
             name="Counties"
-            @update:visible="() => this.$refs.countyGeojson.mapObject.bringToBack()"
+            @update:visible="() => $refs.countyGeojson?.mapObject?.bringToBack()"
           />
           <l-circle
             v-for="c in map_data_filtered"
@@ -610,8 +613,8 @@
             :radius="c.style.radius"
             :color="c.style.color"
             :opacity="c.style.opacity"
-            :fillColor="c.style.fillColor"
-            :fillOpacity="c.style.fillOpacity"
+            :fill-color="c.style.fillColor"
+            :fill-opacity="c.style.fillOpacity"
             :weight="c.style.weight"
             :visible="c.style.visible"
             :options="{ Sq: c.properties.Sq }"
@@ -674,10 +677,8 @@ import {
   LTileLayer,
   LControlLayers,
   LControl,
-  LPopup,
   LCircle,
   LGeoJson,
-  LTooltip,
 } from "vue2-leaflet";
 import { latLngBounds } from "leaflet";
 import { OpenStreetMapProvider } from "leaflet-geosearch";
@@ -694,7 +695,6 @@ import chroma from "chroma-js";
 import map_data from "./assets/map_data.json";
 import sp_base from "./assets/sp_base.json";
 import grid_geojson from "./assets/grid.json";
-import county_geojson from "./assets/county.json";
 
 import iucn_CR from "./assets/iucn_CR.png";
 import iucn_VU from "./assets/iucn_VU.png";
@@ -728,16 +728,36 @@ const init_lkgd_gc = sp_base.reduce(
 
 const colorscale_grid = chroma.scale("RdYlGn").domain([-200, 200]);
 
+const empty_geojson = { type: "FeatureCollection", features: [] };
+
+// Field names in sp_base.json for each selectable taxonomy.
+const taxonomy_fields = {
+  "Clements/eBird": {
+    sn: "clements_scientific_name",
+    cn: "clements_common_name",
+    s: "clements_sort",
+  },
+  "Checklist of the Birds of Kenya (2019)": {
+    sn: "checklist_scientific_name",
+    cn: "checklist_common_name",
+    s: "checklist_sort",
+  },
+  "A Bird Atlas of Kenya (1989)": {
+    sn: "scientific_name",
+    cn: "common_name",
+    s: "SEQ",
+  },
+};
+const default_taxonomy_fields = taxonomy_fields["Checklist of the Birds of Kenya (2019)"];
+
 export default {
   components: {
     LMap,
     LTileLayer,
     LControlLayers,
     LControl,
-    LPopup,
     LCircle,
     LGeoJson,
-    LTooltip,
     CircleTemplate,
     Multiselect,
     Intro,
@@ -747,7 +767,7 @@ export default {
     return {
       grid_geojson: grid_geojson,
       grid_geojson_visible: false,
-      county_geojson: county_geojson,
+      county_geojson: empty_geojson,
       county_geojson_visible: false,
       sidebar: true,
       legend: true,
@@ -847,54 +867,6 @@ export default {
       logo_png: logo_png,
     };
   },
-  methods: {
-    number_with_commas(x) {
-      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    },
-    update_url() {
-      let qp = new URLSearchParams();
-      if ((this.mode != "") & (this.mode != null)) qp.set("mode", this.mode);
-      if ((this.grid != "") & (this.grid != null)) qp.set("grid", this.grid);
-      if (this.species != null) qp.set("species", this.species.SEQ);
-      history.replaceState(null, null, "?" + qp.toString());
-    },
-    selectLabel({ common_name, scientific_name }) {
-      return `${common_name} — [${scientific_name}]`;
-    },
-    export_csv() {
-      let l = this.grid_list.map(
-        ({ IUCNID, per_lkgd, per_lkgd_gc, nb_lkgd, nb_lkgd_gc, sort, kbm, ebird, SEQ, ...item }) =>
-          item
-      );
-      let keys = Object.keys(l[0]);
-
-      let csv = keys.join(",") + "\n";
-      l.forEach((obj) => {
-        csv += keys.map((k) => obj[k]).join(",") + "\n";
-      });
-
-      const blob = new Blob([csv], { type: "text/csv" });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "kenyabirdtrend_export_" + this.grid.join("_") + ".csv";
-      a.click();
-      window.URL.revokeObjectURL(url);
-    },
-    async promptInstall() {
-      if (this.deferredPrompt) {
-        // Show the install prompt
-        this.deferredPrompt.prompt();
-        // Wait for the user to respond to the prompt
-        const { outcome } = await this.deferredPrompt.userChoice;
-        console.log(`User response to the install prompt: ${outcome}`);
-        // We've used the prompt, and it can't be used again, so clear it
-        this.deferredPrompt = null;
-        // Hide the install button
-        this.showInstallButton = false;
-      }
-    },
-  },
   computed: {
     SEQ_grid() {
       let map_data_filtered = this.map_data.filter((y) => this.grid.includes(y.properties.Sq));
@@ -927,14 +899,12 @@ export default {
       }
     },
     grid_list() {
-      this.update_url();
       let f = this.SEQ_grid;
-      let sp_base_returned = this.sp_taxo.sort((a, b) => a.sort - b.sort);
+      let sp_base_returned = [...this.sp_taxo].sort((a, b) => a.sort - b.sort);
       sp_base_returned = sp_base_returned.map((y) => {
-        var n = f.SEQ_new.includes(y.SEQ);
-        let o = f.SEQ_old.includes(y.SEQ);
-        y.trend = n & o ? "kept" : n ? "gained" : o ? "lost" : "";
-        return y;
+        const n = f.SEQ_new.includes(y.SEQ);
+        const o = f.SEQ_old.includes(y.SEQ);
+        return { ...y, trend: n && o ? "kept" : n ? "gained" : o ? "lost" : "" };
       });
       return sp_base_returned.filter((y) => {
         if (y.trend == "lost") {
@@ -949,20 +919,7 @@ export default {
       });
     },
     sp_taxo() {
-      console.log("run sp_taxo()");
-      if (this.taxonomy_selected == "Clements/eBird") {
-        var sn = "clements_scientific_name";
-        var cn = "clements_common_name";
-        var s = "clements_sort";
-      } else if (this.taxonomy_selected == "Checklist of the Birds of Kenya (2019)") {
-        var sn = "checklist_scientific_name";
-        var cn = "checklist_common_name";
-        var s = "checklist_sort";
-      } else if (this.taxonomy_selected == "A Bird Atlas of Kenya (1989)") {
-        var sn = "scientific_name";
-        var cn = "common_name";
-        var s = "SEQ";
-      }
+      const { sn, cn, s } = taxonomy_fields[this.taxonomy_selected] ?? default_taxonomy_fields;
       return sp_base.map((sp) => {
         return {
           scientific_name: sp[sn],
@@ -986,7 +943,6 @@ export default {
       });
     },
     sp_filter() {
-      console.log("run sp_filter()");
       let spf = this.sp_taxo;
       if (this.filter_checkbox_selected.includes("Endemic")) {
         spf = spf.filter((sp) => sp.endemic);
@@ -1016,24 +972,25 @@ export default {
       return spf;
     },
     sp_sort() {
-      console.log("run sp_sort()");
+      // Copy before sorting: `sp_filter` may hand back the `sp_taxo` array
+      // itself, and sorting in place would corrupt that cached computed.
       let disp_lkgd = this.sort_selected.includes("%") ? "per_lkgd" : "nb_lkgd";
+      let spf = [...this.sp_filter];
       if (this.sort_selected == "Taxonomy") {
-        return this.sp_filter.sort((a, b) => a.sort - b.sort);
+        return spf.sort((a, b) => a.sort - b.sort);
       } else if (this.sort_selected.includes("Lost")) {
-        return this.sp_filter.sort((a, b) => b[disp_lkgd][0] - a[disp_lkgd][0]);
+        return spf.sort((a, b) => b[disp_lkgd][0] - a[disp_lkgd][0]);
       } else if (this.sort_selected.includes("Gained")) {
-        return this.sp_filter.sort((a, b) => b[disp_lkgd][2] - a[disp_lkgd][2]);
+        return spf.sort((a, b) => b[disp_lkgd][2] - a[disp_lkgd][2]);
       } else if (this.sort_selected.includes("Kept")) {
-        return this.sp_filter.sort((a, b) => b[disp_lkgd][1] - a[disp_lkgd][1]);
+        return spf.sort((a, b) => b[disp_lkgd][1] - a[disp_lkgd][1]);
       } else if (this.sort_selected.includes("Difference")) {
-        return this.sp_filter.sort((a, b) => b[disp_lkgd][3] - a[disp_lkgd][3]);
+        return spf.sort((a, b) => b[disp_lkgd][3] - a[disp_lkgd][3]);
       } else {
-        return this.sp_filter;
+        return spf;
       }
     },
     map_data_filtered() {
-      console.log("run map_data_filtered()");
       let m = this.map_data
         .filter((x) => !((x.properties.cov_old == "0") & (x.properties.cov_new == 0)))
         .map((x) => {
@@ -1124,47 +1081,31 @@ export default {
       };
     },
   },
-  mounted() {
-    if (JSON.parse(this.$cookie.get("taxonomy_selected")))
-      this.taxonomy_selected = JSON.parse(this.$cookie.get("taxonomy_selected"));
-
-    window.addEventListener("beforeinstallprompt", (e) => {
-      // Prevent the mini-infobar from appearing on mobile
-      e.preventDefault();
-      // Stash the event so it can be triggered later.
-      this.deferredPrompt = e;
-      // Update UI to show the install button
-      this.showInstallButton = true;
-    });
-  },
-  created() {
-    let qp = new URLSearchParams(window.location.search);
-    let species = qp.get("species");
-    if ((species != "null") & (species != "NaN")) {
-      this.species = sp_base.filter((x) => x.SEQ == Number(species))[0];
-    }
-    let mode = qp.get("mode");
-    if (mode) this.mode = mode;
-    let grid = qp.get("grid");
-    if (grid) this.grid = grid.split(",");
-  },
   watch: {
     sidebar: function (val) {
       if (!val) {
         setTimeout(() => {
-          this.$refs.map.mapObject.invalidateSize();
-          this.$refs.map.mapObject.fitBounds(
+          const map = this.$refs.map?.mapObject;
+          if (!map) return;
+          map.invalidateSize();
+          map.fitBounds(
             latLngBounds([
               [5.615985, 43.50585],
               [-5.353521, 32.958984],
             ])
           );
-        }, "10");
+        }, 10);
       }
     },
     mode: function (val) {
-      if (val != "Intro") {
-        const map = this.$refs.map.mapObject;
+      this.update_url();
+      if (val == "Intro") return;
+      // <l-map> is inside `v-if="mode != 'Intro'"`, so on the Intro -> Grid
+      // transition it is not in the DOM yet when this watcher runs.
+      this.$nextTick(() => {
+        const map = this.$refs.map?.mapObject;
+        if (!map || this.locate != null) return;
+
         // This does not work with this: https://github.com/vue-leaflet/Vue2Leaflet/issues/476
         map.on("locationfound", (e) => {
           const dist = this.map_data.map(
@@ -1184,21 +1125,119 @@ export default {
           }
         });
 
-        if (this.locate == null) {
-          this.locate = new LocateControl({
-            strings: {
-              title: "Explore target species at my location!",
-            },
-            locateOptions: {
-              maxZoom: 9,
-            },
-          });
-        }
+        this.locate = new LocateControl({
+          strings: {
+            title: "Explore target species at my location!",
+          },
+          locateOptions: {
+            maxZoom: 9,
+          },
+        });
         this.locate.addTo(map);
-      }
+      });
+    },
+    // `update_url` used to be called from the `grid_list` computed, which meant
+    // the URL only tracked state while that list happened to be re-evaluated.
+    grid: {
+      handler() {
+        this.update_url();
+      },
+      deep: true,
+    },
+    species() {
+      this.update_url();
     },
     taxonomy_selected() {
       this.$cookie.set("taxonomy_selected", JSON.stringify(this.taxonomy_selected), 365);
+    },
+    async county_geojson_visible(val) {
+      if (!val || this.county_geojson.features.length > 0) return;
+      const { default: county_geojson } = await import("./assets/county.json");
+      this.county_geojson = county_geojson;
+    },
+  },
+  mounted() {
+    try {
+      const saved = JSON.parse(this.$cookie.get("taxonomy_selected"));
+      if (this.taxonomy_options.includes(saved)) this.taxonomy_selected = saved;
+    } catch {
+      // Malformed cookie: keep the default taxonomy.
+    }
+
+    window.addEventListener("beforeinstallprompt", (e) => {
+      // Prevent the mini-infobar from appearing on mobile
+      e.preventDefault();
+      // Stash the event so it can be triggered later.
+      this.deferredPrompt = e;
+      // Update UI to show the install button
+      this.showInstallButton = true;
+    });
+  },
+  created() {
+    let qp = new URLSearchParams(window.location.search);
+    let species = qp.get("species");
+    if (species && species != "null" && species != "NaN" && !isNaN(Number(species))) {
+      this.species = sp_base.find((x) => x.SEQ == Number(species)) ?? null;
+    }
+    let mode = qp.get("mode");
+    if (mode) this.mode = mode;
+    let grid = qp.get("grid");
+    if (grid) this.grid = grid.split(",");
+  },
+  methods: {
+    number_with_commas(x) {
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
+    update_url() {
+      let qp = new URLSearchParams();
+      if (this.mode) qp.set("mode", this.mode);
+      if (this.grid && this.grid.length > 0) qp.set("grid", this.grid.join(","));
+      if (this.species != null) qp.set("species", this.species.SEQ);
+      history.replaceState(null, "", "?" + qp.toString());
+    },
+    selectLabel({ common_name, scientific_name }) {
+      return `${common_name} — [${scientific_name}]`;
+    },
+    export_csv() {
+      let l = this.grid_list.map(
+        ({ IUCNID, per_lkgd, per_lkgd_gc, nb_lkgd, nb_lkgd_gc, sort, kbm, ebird, SEQ, ...item }) =>
+          item
+      );
+      if (l.length == 0) return;
+      let keys = Object.keys(l[0]);
+
+      // 26 species carry a comma inside `flag`, which shifts every later
+      // column unless the value is quoted.
+      const escape = (v) => {
+        const str = v == null ? "" : String(v);
+        return /[",\n\r]/.test(str) ? '"' + str.replaceAll('"', '""') + '"' : str;
+      };
+
+      let csv = keys.map(escape).join(",") + "\n";
+      l.forEach((obj) => {
+        csv += keys.map((k) => escape(obj[k])).join(",") + "\n";
+      });
+
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "kenyabirdtrend_export_" + this.grid.join("_") + ".csv";
+      a.click();
+      window.URL.revokeObjectURL(url);
+    },
+    async promptInstall() {
+      if (this.deferredPrompt) {
+        // Show the install prompt
+        this.deferredPrompt.prompt();
+        // Wait for the user to respond to the prompt
+        const { outcome } = await this.deferredPrompt.userChoice;
+        console.log(`User response to the install prompt: ${outcome}`);
+        // We've used the prompt, and it can't be used again, so clear it
+        this.deferredPrompt = null;
+        // Hide the install button
+        this.showInstallButton = false;
+      }
     },
   },
 };
