@@ -1,16 +1,11 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
-import Components from "unplugin-vue-components/vite";
-import { BootstrapVueNextResolver } from "bootstrap-vue-next";
 import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
-    // bootstrap-vue-next has no register-everything plugin: components and
-    // directives are auto-imported per use, which also keeps them tree-shaken.
-    Components({ resolvers: [BootstrapVueNextResolver()] }),
     VitePWA({
       registerType: "autoUpdate",
       devOptions: {

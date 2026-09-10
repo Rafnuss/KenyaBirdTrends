@@ -1,9 +1,9 @@
 <template>
   <div>
-    <b-container class="py-3">
+    <div class="container py-3">
       <h1 class="pb-3">
         Welcome to Kenya Bird Trends!
-        <b-img src="logo_test_large.png" class="ps-4 bg-white" height="139" align="right" />
+        <img src="/logo_test_large.png" alt="" class="ps-4 bg-white float-end" height="139" />
       </h1>
       <p>
         Kenya has seen significant changes in its landscape over the past 50 years: exponential
@@ -34,33 +34,35 @@
         <span class="small">(accessible from the menu in the header above)</span>:
       </p>
 
-      <b-card-group class="mb-2">
-        <b-card class="bg-light">
-          <p class="text-muted mb-0">Grid</p>
-          <span class="small">
-            Select one or multiple grid squares (55x55km) on the map to view and export the list of
-            species gained, kept, and lost in this area.
-          </span>
-          <template #footer>
-            <div class="d-flex justify-content-center">
-              <b-button class="align-self-center" @click="$emit('changeModeGrid')"
-                >Go to Grid view</b-button
-              >
-            </div>
-          </template>
-        </b-card>
-        <b-card class="bg-light">
-          <p class="text-muted mb-0">Species</p>
-          <span class="small">
-            Visualize which squares were gained, kept, and lost for a specific species.
-          </span>
-          <template #footer>
-            <div class="d-flex justify-content-center">
-              <b-button @click="$emit('changeModeSpecies')">Go to Species view</b-button>
-            </div>
-          </template>
-        </b-card>
-      </b-card-group>
+      <div class="card-group mb-2">
+        <div class="card bg-light">
+          <div class="card-body">
+            <p class="text-muted mb-0">Grid</p>
+            <span class="small">
+              Select one or multiple grid squares (55x55km) on the map to view and export the list
+              of species gained, kept, and lost in this area.
+            </span>
+          </div>
+          <div class="card-footer d-flex justify-content-center">
+            <button type="button" class="btn btn-secondary" @click="$emit('changeModeGrid')">
+              Go to Grid view
+            </button>
+          </div>
+        </div>
+        <div class="card bg-light">
+          <div class="card-body">
+            <p class="text-muted mb-0">Species</p>
+            <span class="small">
+              Visualize which squares were gained, kept, and lost for a specific species.
+            </span>
+          </div>
+          <div class="card-footer d-flex justify-content-center">
+            <button type="button" class="btn btn-secondary" @click="$emit('changeModeSpecies')">
+              Go to Species view
+            </button>
+          </div>
+        </div>
+      </div>
 
       <h2>Data sources</h2>
       <p>
@@ -68,19 +70,21 @@
         distribution. For the recent period, we used data from two sources to create a single
         species map that was compared with the corresponding species map from the historical atlas.
       </p>
-      <b-row>
-        <b-col md="6">
+      <div class="row">
+        <div class="col-md-6">
           <h5 style="text-align: center">HISTORICAL ATLAS</h5>
-          <b-card no-body class="overflow-hidden">
-            <b-row g-0>
-              <b-col cols="4">
+          <div class="card overflow-hidden">
+            <div class="row g-0">
+              <div class="col-4">
                 <a href="https://doi.org/10.1201/9781315136264" target="_blank">
-                  <b-card-img src="bird_atlas_of_kenya.png" alt="Image" class="rounded-0" />
+                  <img src="/bird_atlas_of_kenya.png" alt="Image" class="img-fluid rounded-0" />
                 </a>
-              </b-col>
-              <b-col cols="8">
-                <b-card-body title="A Bird Atlas of Kenya" sub-title="1970-1984">
-                  <b-card-text>
+              </div>
+              <div class="col-8">
+                <div class="card-body">
+                  <h5 class="card-title">A Bird Atlas of Kenya</h5>
+                  <h6 class="card-subtitle text-muted mb-2">1970-1984</h6>
+                  <div class="card-text">
                     <p class="small">
                       <em>A Bird Atlas of Kenya</em> (Lewis & Pomeroy, 1989) is the reference book
                       describing the status and distribution of 1 065 species at the scale of
@@ -89,64 +93,68 @@
                     <a href="https://doi.org/10.15468/2ga3wk">
                       <img src="https://zenodo.org/badge/DOI/10.15468/2ga3wk.svg" alt="DOI" />
                     </a>
-                  </b-card-text>
-                </b-card-body>
-              </b-col>
-            </b-row>
-          </b-card>
-        </b-col>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-        <b-col md="6">
+        <div class="col-md-6">
           <h5 style="text-align: center">RECENT ATLAS</h5>
-          <b-row>
-            <b-col cols="12">
-              <b-card no-body class="overflow-hidden">
-                <b-row g-0>
-                  <b-col cols="4" class="align-self-center">
+          <div class="row">
+            <div class="col-12">
+              <div class="card overflow-hidden">
+                <div class="row g-0">
+                  <div class="col-4 align-self-center">
                     <a href="https://ebird.org/region/KE" target="_blank">
-                      <b-card-img src="logo_ebird.svg" alt="Image" class="rounded-0 p-2" />
+                      <img src="/logo_ebird.svg" alt="Image" class="img-fluid rounded-0 p-2" />
                     </a>
-                  </b-col>
-                  <b-col cols="8">
-                    <b-card-body title="eBird" sub-title="2009-2023">
-                      <b-card-text>
+                  </div>
+                  <div class="col-8">
+                    <div class="card-body">
+                      <h5 class="card-title">eBird</h5>
+                      <h6 class="card-subtitle text-muted mb-2">2009-2023</h6>
+                      <div class="card-text">
                         <p class="small">
                           eBird is the largest online bird database. We used all data entered in
                           Kenya since 2009 to produce species maps of presence at the QSD
                           resolution.
                         </p>
-                      </b-card-text>
-                    </b-card-body>
-                  </b-col>
-                </b-row>
-              </b-card>
-            </b-col>
-            <b-col cols="12 mt-2">
-              <b-card no-body class="overflow-hidden">
-                <b-row g-0>
-                  <b-col cols="4" class="align-self-center">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 mt-2">
+              <div class="card overflow-hidden">
+                <div class="row g-0">
+                  <div class="col-4 align-self-center">
                     <a href="https://kenya.birdmap.africa/" target="_blank">
-                      <b-card-img src="logo_kbm.png" alt="Image" class="rounded-0 p-2" />
+                      <img src="/logo_kbm.png" alt="Image" class="img-fluid rounded-0 p-2" />
                     </a>
-                  </b-col>
-                  <b-col cols="8">
-                    <b-card-body title="KBM" sub-title="2012-2023">
-                      <b-card-text>
+                  </div>
+                  <div class="col-8">
+                    <div class="card-body">
+                      <h5 class="card-title">KBM</h5>
+                      <h6 class="card-subtitle text-muted mb-2">2012-2023</h6>
+                      <div class="card-text">
                         <p class="small">
                           Kenya Bird Map is leading current efforts to establish a new bird atlas
                           from citizen scientists. We used presence information (from full or ad-hoc
                           protocols) for each species at the pentad level and upscaled each map to
                           match the spatial resolution of the historical atlas.
                         </p>
-                      </b-card-text>
-                    </b-card-body>
-                  </b-col>
-                </b-row>
-              </b-card>
-            </b-col>
-          </b-row>
-        </b-col>
-      </b-row>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <h2>Export products</h2>
       <p>You can export two products from this platform:</p>
       <ol>
@@ -173,48 +181,45 @@
         </p>
       </div>
       <h2>Resources</h2>
-      <b-row>
-        <b-col lg="4" sm="12">
-          <b-card-body
-            title="Banner"
-            sub-title="Get a quick overview of the project with this infographic"
-          >
+      <div class="row">
+        <div class="col-sm-12 col-lg-4">
+          <div class="card-body">
+            <h5 class="card-title">Banner</h5>
+            <h6 class="card-subtitle text-muted mb-2">
+              Get a quick overview of the project with this infographic
+            </h6>
             <a
               href="https://raw.githubusercontent.com/Rafnuss/KenyaBirdTrends/main/public/banner_small.pdf"
               target="_blank"
               class="p-2"
             >
-              <b-card-img
-                src="banner_thumbnail_small.png"
+              <img
+                src="/banner_thumbnail_small.png"
                 alt="Image"
-                class="rounded-0 hover-effect"
+                class="img-fluid rounded-0 hover-effect"
               />
             </a>
-          </b-card-body>
-        </b-col>
-        <b-col lg="4" sm="12">
-          <b-card-body
-            title="Video presentation"
-            sub-title="Watch this short video to learn about the platform"
-          >
-            <b-card-img
-              src="video_thumbnail_small.png"
-              alt="Image"
-              class="rounded-0 hover-effect"
+          </div>
+        </div>
+        <div class="col-sm-12 col-lg-4">
+          <div class="card-body">
+            <h5 class="card-title">Video presentation</h5>
+            <h6 class="card-subtitle text-muted mb-2">
+              Watch this short video to learn about the platform
+            </h6>
+            <img
+              src="/video_thumbnail_small.png"
+              alt="Play the video presentation"
+              class="img-fluid rounded-0 hover-effect"
+              role="button"
               @click="showModal = true"
             />
 
-            <b-modal
-              id="fullscreen-modal"
+            <BaseModal
               v-model="showModal"
               title="Video presentation"
-              no-footer
-              no-close-on-esc
-              no-close-on-backdrop
-              centered
               size="xl"
-              :modal-class="'fullscreen-modal'"
-              :dialog-class="'fullscreen-dialog'"
+              dialog-class="fullscreen-dialog"
             >
               <div class="aspect-ratio-box">
                 <iframe
@@ -225,36 +230,45 @@
                   src="https://www.youtube-nocookie.com/embed/_h1KA6D6EuM?autoplay=1"
                   title="Kenya Bird Trends video presentation"
                   frameborder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allow="
+                    accelerometer;
+                    autoplay;
+                    clipboard-write;
+                    encrypted-media;
+                    gyroscope;
+                    picture-in-picture;
+                  "
                   allowfullscreen
                 ></iframe>
               </div>
-            </b-modal>
-          </b-card-body>
-        </b-col>
-        <b-col lg="4" sm="12">
-          <b-card-body
-            title="Publication"
-            sub-title="Dive into the details with the full publication"
-          >
-            <b-card-text>
-              <b-link href="https://doi.org/10.1111/ddi.13935" target="_blank">
-                <b-card-img
-                  src="paper_thumbnail_small.png"
+            </BaseModal>
+          </div>
+        </div>
+        <div class="col-sm-12 col-lg-4">
+          <div class="card-body">
+            <h5 class="card-title">Publication</h5>
+            <h6 class="card-subtitle text-muted mb-2">
+              Dive into the details with the full publication
+            </h6>
+            <div class="card-text">
+              <a href="https://doi.org/10.1111/ddi.13935" target="_blank">
+                <img
+                  src="/paper_thumbnail_small.png"
                   alt="Image"
-                  class="rounded-0 hover-effect"
+                  class="img-fluid rounded-0 hover-effect"
                 />
-              </b-link>
-            </b-card-text>
-          </b-card-body>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col lg="8" sm="12">
-          <b-card-body
-            title="Media Corner"
-            sub-title="Find all the press articles about the project here"
-          >
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-lg-8">
+          <div class="card-body">
+            <h5 class="card-title">Media Corner</h5>
+            <h6 class="card-subtitle text-muted mb-2">
+              Find all the press articles about the project here
+            </h6>
             <ul>
               <li>
                 <a href="https://www.youtube.com/watch?v=kqGpOYpu7qI" target="_blank">
@@ -322,10 +336,11 @@
                 </a>
               </li>
             </ul>
-          </b-card-body>
-        </b-col>
-        <b-col lg="4" sm="12">
-          <b-card-body title="Related publications">
+          </div>
+        </div>
+        <div class="col-sm-12 col-lg-4">
+          <div class="card-body">
+            <h5 class="card-title">Related publications</h5>
             <p>
               Interested in citizen science, bird research, and conservation?
               <a href="https://kenya.birdmap.africa/" target="_blank"
@@ -333,44 +348,39 @@
               >
               for more publications on these topics.
             </p>
-          </b-card-body>
-        </b-col>
-      </b-row>
-    </b-container>
-    <b-container fluid class="bg-light p-5">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid bg-light p-5">
       <!--<h6 class="text-muted text-uppercase">Implementing organisations</h6>-->
-      <b-row class="pb-2 justify-content-center">
-        <b-col
+      <div class="row pb-2 justify-content-center">
+        <div
           v-for="o in organisations"
           :key="o.href"
-          lg="3"
-          sm="6"
-          class="mb-2"
+          class="col-sm-6 col-lg-3 mb-2"
           style="height: 9rem"
         >
           <a :href="o.href" target="_blank" class="logo-link px-2 bg-white rounded h-100">
-            <b-img fluid :src="o.src" alt="Image" class="img-organisations" />
+            <img :src="o.src" alt="Image" class="img-fluid img-organisations" />
           </a>
-        </b-col>
-      </b-row>
+        </div>
+      </div>
       <!--<h6 class="text-muted text-uppercase">Partner organisations</h6>-->
-      <b-row class="justify-content-center mt-4">
-        <b-col
+      <div class="row justify-content-center mt-4">
+        <div
           v-for="p in partners"
           :key="p.href"
-          cols="6"
-          md="4"
-          lg="3"
-          class="mb-2"
+          class="col-6 col-md-4 col-lg-3 mb-2"
           style="height: 7rem"
         >
           <a class="logo-link px-2 bg-white rounded h-100" :href="p.href" target="_blank">
-            <b-img fluid :src="p.src" alt="Image" class="img-partners" />
+            <img :src="p.src" alt="Image" class="img-fluid img-partners" />
           </a>
-        </b-col>
-      </b-row>
-    </b-container>
-    <b-container fluid class="bg-dark p-3 small text-white">
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid bg-dark p-3 small text-white">
       For any questions or suggestions, please reach out to the
       <a href="mailto:kenyabirdmap@naturekenya.org " target="_blank" class="text-white"
         >Kenya Bird Map manager</a
@@ -378,33 +388,33 @@
       <a href="https://github.com/Rafnuss/KenyaBirdTrends" target="_blank">
         <i class="bi bi-github text-white" /> </a
       >.
-    </b-container>
+    </div>
   </div>
 </template>
 
-<script>
-export default {
-  emits: ["changeModeGrid", "changeModeSpecies"],
-  data() {
-    return {
-      organisations: [
-        { href: "https://tropical-biology.org/", src: "logo_tba.png" },
-        { href: "https://www.arocha.or.ke/", src: "logo_ark.png" },
+<script setup>
+import { ref } from "vue";
 
-        { href: "https://museums.or.ke/", src: "logo_museums.png" },
-      ],
-      partners: [
-        { href: "https://www.darwininitiative.org.uk/", src: "logo_darwin.png" },
-        { href: "https://www.vogelwarte.ch/", src: "logo_vowa.png" },
-        { href: "https://www.birds.cornell.edu/", src: "logo_lab.png" },
-        { href: "https://naturekenya.org/", src: "logo_nature_kenya.png" },
-        { href: "https://www.kws.go.ke/", src: "logo_kws.png" },
-        { href: "https://wrti.go.ke/", src: "logo_wrti.png" },
-        { href: "https://nigeria.birdmap.africa/", src: "logo_nba.png" },
-        { href: "https://www.kenyabirdofpreytrust.org/", src: "logo_kbop.png" },
-      ],
-      showModal: false,
-    };
-  },
-};
+import BaseModal from "./BaseModal.vue";
+
+defineEmits(["changeModeGrid", "changeModeSpecies"]);
+
+const organisations = [
+  { href: "https://tropical-biology.org/", src: "/logo_tba.png" },
+  { href: "https://www.arocha.or.ke/", src: "/logo_ark.png" },
+  { href: "https://museums.or.ke/", src: "/logo_museums.png" },
+];
+
+const partners = [
+  { href: "https://www.darwininitiative.org.uk/", src: "/logo_darwin.png" },
+  { href: "https://www.vogelwarte.ch/", src: "/logo_vowa.png" },
+  { href: "https://www.birds.cornell.edu/", src: "/logo_lab.png" },
+  { href: "https://naturekenya.org/", src: "/logo_nature_kenya.png" },
+  { href: "https://www.kws.go.ke/", src: "/logo_kws.png" },
+  { href: "https://wrti.go.ke/", src: "/logo_wrti.png" },
+  { href: "https://nigeria.birdmap.africa/", src: "/logo_nba.png" },
+  { href: "https://www.kenyabirdofpreytrust.org/", src: "/logo_kbop.png" },
+];
+
+const showModal = ref(false);
 </script>
