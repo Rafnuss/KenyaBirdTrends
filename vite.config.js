@@ -13,7 +13,54 @@ export default defineConfig({
         enabled: false,
       },
       workbox: {
-        globPatterns: ["**/*.{js,css,html,vue,png,svg,json,pdf}"],
+        globPatterns: ["**/*.{js,css,html,ico,png,svg,gif,json}"],
+        // Everything below is either not needed offline or far too large to
+        // precache: `species_map/` alone is ~1 GB across 1065 files, and the
+        // PDFs / *_large thumbnails / store screenshots are never shown in the
+        // app. Without this the service worker downloads the whole 1 GB on the
+        // first visit.
+        globIgnores: [
+          "species_map/**",
+          "**/*.pdf",
+          "**/*_thumbnail_large.png",
+          "**/screenshot_*.png",
+          "**/logo_test_large.png",
+          "**/.DS_Store",
+          // Lazily imported county outlines (~7 MB): fetched only if the user
+          // turns the county overlay on, and runtime-cached below.
+          "**/county-*.js",
+        ],
+        // Species distribution maps are opened one at a time from a download
+        // link, so cache them as they are actually requested.
+        runtimeCaching: [
+          {
+            urlPattern: ({ url }) => url.pathname.startsWith("/species_map/"),
+            handler: "CacheFirst",
+            options: {
+              cacheName: "species-maps",
+              expiration: { maxEntries: 50, maxAgeSeconds: 60 * 60 * 24 * 30 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
+            urlPattern: ({ url }) => /\/assets\/county-[\w-]+\.js$/.test(url.pathname),
+            handler: "CacheFirst",
+            options: {
+              cacheName: "county-geojson",
+              expiration: { maxEntries: 2, maxAgeSeconds: 60 * 60 * 24 * 30 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
+            urlPattern: ({ url }) => url.hostname === "api.mapbox.com",
+            handler: "StaleWhileRevalidate",
+            options: {
+              cacheName: "mapbox-tiles",
+              expiration: { maxEntries: 500, maxAgeSeconds: 60 * 60 * 24 * 30 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+        ],
         maximumFileSizeToCacheInBytes: 10000000,
       },
       includeAssets: [
@@ -22,7 +69,6 @@ export default defineConfig({
         "pwa-*.png",
         "logo_*.png",
         "bird_atlas_of_kenya.png",
-        "banner_small.pdf",
         "maskable-icon-512x512.png",
       ],
       manifest: {

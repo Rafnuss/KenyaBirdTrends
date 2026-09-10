@@ -43,7 +43,7 @@
           </span>
           <template #footer>
             <div class="d-flex justify-content-center">
-              <b-button @click="$emit('changeModeGrid')" align-self="center"
+              <b-button align-self="center" @click="$emit('changeModeGrid')"
                 >Go to Grid view</b-button
               >
             </div>
@@ -198,17 +198,17 @@
             sub-title="Watch this short video to learn about the platform"
           >
             <b-card-img
+              v-b-modal="'modal-youtube'"
               src="video_thumbnail_small.png"
               alt="Image"
               class="rounded-0 hover-effect"
-              v-b-modal="'modal-youtube'"
               @click="showModal = true"
             />
 
             <b-modal
-              title="Video presentation"
               id="fullscreen-modal"
               v-model="showModal"
+              title="Video presentation"
               hide-footer
               no-close-on-esc
               no-close-on-backdrop
@@ -340,10 +340,10 @@
       <!--<h6 class="text-muted text-uppercase">Implementing organisations</h6>-->
       <b-row class="pb-2 justify-content-center">
         <b-col
-          lg="3"
-          sm="6"
           v-for="o in organisations"
           :key="o.href"
+          lg="3"
+          sm="6"
           class="mb-2"
           style="height: 9rem"
         >
@@ -355,11 +355,11 @@
       <!--<h6 class="text-muted text-uppercase">Partner organisations</h6>-->
       <b-row class="justify-content-center mt-4">
         <b-col
+          v-for="p in partners"
+          :key="p.href"
           cols="6"
           md="4"
           lg="3"
-          v-for="p in partners"
-          :key="p.href"
           class="mb-2"
           style="height: 7rem"
         >
@@ -382,12 +382,7 @@
 </template>
 
 <script>
-import CircleTemplate from "./circle.vue";
-
 export default {
-  components: {
-    CircleTemplate,
-  },
   data() {
     return {
       organisations: [

@@ -1,41 +1,26 @@
 <script>
 export default {
   props: {
-    size: { default: 0 },
-    opacity: { default: 1 },
-    color: { default: "#7d7d7d" },
+    size: { type: [Number, String], default: 0 },
+    opacity: { type: [Number, String], default: 1 },
+    color: { type: String, default: "#7d7d7d" },
+  },
+  computed: {
+    circleStyle() {
+      const size = Number(this.size);
+      return {
+        width: `${size}px`,
+        height: `${size}px`,
+        borderRadius: `${size / 2}px`,
+        background: this.color,
+        border: "1px solid #212529",
+        opacity: this.opacity,
+      };
+    },
   },
 };
 </script>
 
 <template>
-  <div
-    class="legend-gradient-3"
-    :style="
-      `
-      width: ` +
-      size +
-      `px;
-      height: ` +
-      size +
-      `px;
-      -webkit-border-radius: ` +
-      size / 2 +
-      `px;
-      -moz-border-radius: ` +
-      size / 2 +
-      `px;
-      border-radius: ` +
-      size +
-      `px;
-      background: ` +
-      color +
-      `;
-      border: 1px solid #212529;
-      opacity: ` +
-      opacity +
-      `;
-    `
-    "
-  ></div>
+  <div class="legend-gradient-3" :style="circleStyle"></div>
 </template>
