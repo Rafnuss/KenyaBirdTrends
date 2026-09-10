@@ -1,19 +1,18 @@
-import Vue from "vue";
+import { createApp } from "vue";
 import App from "./App.vue";
 
-import { BootstrapVue, BootstrapVueIcons } from "bootstrap-vue";
-Vue.use(BootstrapVue);
-Vue.use(BootstrapVueIcons);
+// @vue-leaflet resolves Leaflet from `window.L` by default. Publishing our
+// own copy there guarantees it and the layers we build imperatively share a
+// single Leaflet instance; otherwise its dynamic import pulls in a second
+// pre-bundled copy and the two prototype chains get mixed.
+import * as L from "leaflet";
+window.L = L;
 
-import VueYouTubeEmbed from "vue-youtube-embed";
-Vue.use(VueYouTubeEmbed);
-
-import VueCookie from "vue-cookie";
-Vue.use(VueCookie);
+import { createBootstrap } from "bootstrap-vue-next";
 
 import { registerSW } from "virtual:pwa-register";
 registerSW({ immediate: true });
 
-new Vue({
-  render: (h) => h(App),
-}).$mount("#app");
+const app = createApp(App);
+app.use(createBootstrap());
+app.mount("#app");

@@ -3,7 +3,7 @@
     <b-container class="py-3">
       <h1 class="pb-3">
         Welcome to Kenya Bird Trends!
-        <b-img src="logo_test_large.png" class="pl-4 bg-white" height="139" align="right" />
+        <b-img src="logo_test_large.png" class="ps-4 bg-white" height="139" align="right" />
       </h1>
       <p>
         Kenya has seen significant changes in its landscape over the past 50 years: exponential
@@ -34,7 +34,7 @@
         <span class="small">(accessible from the menu in the header above)</span>:
       </p>
 
-      <b-card-group deck class="mb-2">
+      <b-card-group class="mb-2">
         <b-card class="bg-light">
           <p class="text-muted mb-0">Grid</p>
           <span class="small">
@@ -43,7 +43,7 @@
           </span>
           <template #footer>
             <div class="d-flex justify-content-center">
-              <b-button align-self="center" @click="$emit('changeModeGrid')"
+              <b-button class="align-self-center" @click="$emit('changeModeGrid')"
                 >Go to Grid view</b-button
               >
             </div>
@@ -72,7 +72,7 @@
         <b-col md="6">
           <h5 style="text-align: center">HISTORICAL ATLAS</h5>
           <b-card no-body class="overflow-hidden">
-            <b-row no-gutters>
+            <b-row g-0>
               <b-col cols="4">
                 <a href="https://doi.org/10.1201/9781315136264" target="_blank">
                   <b-card-img src="bird_atlas_of_kenya.png" alt="Image" class="rounded-0" />
@@ -101,7 +101,7 @@
           <b-row>
             <b-col cols="12">
               <b-card no-body class="overflow-hidden">
-                <b-row no-gutters>
+                <b-row g-0>
                   <b-col cols="4" class="align-self-center">
                     <a href="https://ebird.org/region/KE" target="_blank">
                       <b-card-img src="logo_ebird.svg" alt="Image" class="rounded-0 p-2" />
@@ -123,7 +123,7 @@
             </b-col>
             <b-col cols="12 mt-2">
               <b-card no-body class="overflow-hidden">
-                <b-row no-gutters>
+                <b-row g-0>
                   <b-col cols="4" class="align-self-center">
                     <a href="https://kenya.birdmap.africa/" target="_blank">
                       <b-card-img src="logo_kbm.png" alt="Image" class="rounded-0 p-2" />
@@ -198,7 +198,6 @@
             sub-title="Watch this short video to learn about the platform"
           >
             <b-card-img
-              v-b-modal="'modal-youtube'"
               src="video_thumbnail_small.png"
               alt="Image"
               class="rounded-0 hover-effect"
@@ -209,7 +208,7 @@
               id="fullscreen-modal"
               v-model="showModal"
               title="Video presentation"
-              hide-footer
+              no-footer
               no-close-on-esc
               no-close-on-backdrop
               centered
@@ -218,15 +217,17 @@
               :dialog-class="'fullscreen-dialog'"
             >
               <div class="aspect-ratio-box">
-                <youtube
-                  video-id="_h1KA6D6EuM"
-                  :player-vars="{ autoplay: 1 }"
-                  player-width="100%"
-                  player-height="100%"
+                <iframe
+                  v-if="showModal"
+                  class="responsive-iframe"
                   width="100%"
                   height="100%"
-                  class="responsive-iframe"
-                />
+                  src="https://www.youtube-nocookie.com/embed/_h1KA6D6EuM?autoplay=1"
+                  title="Kenya Bird Trends video presentation"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen
+                ></iframe>
               </div>
             </b-modal>
           </b-card-body>
@@ -375,7 +376,7 @@
         >Kenya Bird Map manager</a
       >. Created by <a href="mailto:rafnuss@gmail.com" class="text-white">Raphaël Nussbaumer </a>
       <a href="https://github.com/Rafnuss/KenyaBirdTrends" target="_blank">
-        <b-icon-github variant="white" /> </a
+        <i class="bi bi-github text-white" /> </a
       >.
     </b-container>
   </div>
@@ -383,6 +384,7 @@
 
 <script>
 export default {
+  emits: ["changeModeGrid", "changeModeSpecies"],
   data() {
     return {
       organisations: [
