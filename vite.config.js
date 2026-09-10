@@ -1,12 +1,16 @@
 import { defineConfig } from "vite";
-import vue from "@vitejs/plugin-vue2";
-//import { createVuePlugin as vue } from "vite-plugin-vue2";
+import vue from "@vitejs/plugin-vue";
+import Components from "unplugin-vue-components/vite";
+import { BootstrapVueNextResolver } from "bootstrap-vue-next";
 import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
+    // bootstrap-vue-next has no register-everything plugin: components and
+    // directives are auto-imported per use, which also keeps them tree-shaken.
+    Components({ resolvers: [BootstrapVueNextResolver()] }),
     VitePWA({
       registerType: "autoUpdate",
       devOptions: {
@@ -115,5 +119,15 @@ export default defineConfig({
       },
     }),
   ],
+  // @vue-leaflet dynamically imports "leaflet" itself when use-global-leaflet
+  // is false. Without deduping, that resolves to a second pre-bundled copy and
+  // layers we create end up with a mixed prototype chain (Leaflet A's
+  // _updateCircle calling Leaflet B's _empty).
+  resolve: {
+    dedupe: ["leaflet"],
+  },
+  optimizeDeps: {
+    include: ["leaflet"],
+  },
   base: "/",
 });

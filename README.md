@@ -2,7 +2,7 @@
 
 :sparkles: This repository contains the source code to generate the website [kenyabirdtrends.co.ke](https://kenyabirdtrends.co.ke/).
 
-:metal: We're using the sweet combo [Vite](https://vitejs.dev/)+[Vue](https://vuejs.org/)+[BoostrapVue](https://bootstrap-vue.org/)+[VueLeaflet](https://vue2-leaflet.netlify.app/)!
+:metal: We're using the sweet combo [Vite](https://vitejs.dev/)+[Vue 3](https://vuejs.org/)+[BootstrapVueNext](https://bootstrap-vue-next.github.io/bootstrap-vue-next/)+[VueLeaflet](https://vue-leaflet.github.io/vue-leaflet/)!
 
 ## Species View
 

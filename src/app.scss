@@ -6,11 +6,10 @@ $kept: #fee08b;
 $gained: #45aa59;
 //https://coolors.co/d73027-ffffbf-45aa59-204e4a-404e7c
 
-// Then import Bootstrap and BootstrapVue SCSS files (order is important)
+// Then import Bootstrap. bootstrap-vue-next ships no SCSS of its own; it
+// renders plain Bootstrap 5 markup.
 @import "bootstrap/scss/bootstrap";
-@import "bootstrap-vue/src/index";
-//import "bootstrap/dist/css/bootstrap.css";
-//import "bootstrap/dist/css/bootstrap.css";
+@import "bootstrap-icons/font/bootstrap-icons.css";
 
 html,
 body {

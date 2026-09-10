@@ -8,8 +8,7 @@ export default [
     ignores: ["dist/**", "dev-dist/**", "node_modules/**", "public/**"],
   },
   js.configs.recommended,
-  // This app is Vue 2 (bootstrap-vue / vue2-leaflet), not Vue 3.
-  ...pluginVue.configs["flat/vue2-recommended"],
+  ...pluginVue.configs["flat/recommended"],
   {
     files: ["**/*.{js,vue}"],
     languageOptions: {
