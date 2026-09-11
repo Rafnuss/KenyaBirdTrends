@@ -8,11 +8,23 @@ on:
   pull_request:
     branches:
       - main
+  # Republish without a code change - e.g. after syncing new species data.
+  workflow_dispatch:
+
+# Publishing used to push the built site to a gh-pages branch, which needed
+# contents: write for the whole workflow. Now only the deploy job writes, and
+# it asks for that itself.
 permissions:
-  contents: write
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  # A superseded pull-request build can be dropped, but never cancel a
+  # deployment that is already publishing.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
-  build-and-deploy:
-    concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
@@ -36,10 +48,27 @@ jobs:
       - name: Build 🔧
         run: npm run build
 
-      - name: Deploy 🚀
-        # Only publish from main; on a pull request the steps above are the point.
-        if: github.event_name == 'push'
-        uses: JamesIves/github-pages-deploy-action@v4
+      # Uploaded on pull requests too, so a PR exercises the whole deploy path
+      # bar the publish itself.
+      - name: Upload artifact 📤
+        uses: actions/upload-pages-artifact@v3
         with:
-          branch: gh-pages # The branch the action should deploy to.
-          folder: dist # The folder the action should deploy.
+          path: dist
+
+  deploy:
+    # The site is served from this artifact rather than from a gh-pages
+    # branch, so the built output is no longer committed and `dist` never
+    # enters the repository's history.
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write # publish the artifact
+      id-token: write # prove the deployment came from this workflow
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages 🚀
+        id: deployment
+        uses: actions/deploy-pages@v4
