@@ -20,9 +20,11 @@ const TRAIT_FIELDS = {
 const SORT_INDEX = { Lost: 0, Kept: 1, Gained: 2, Difference: 3 };
 
 /**
- * sp_base.json uses the string "0" as a placeholder for "no value" in a few
- * text columns (29 species have IUCN "0", one has scientific_name "0"). Left
- * alone it renders literally, and exports as a bogus IUCN category.
+ * The pre-AviList sp_base.json used the string "0" as a placeholder for "no
+ * value" in a few text columns (29 species had IUCN "0", one had
+ * scientific_name "0"). The current pipeline emits null instead, but this
+ * stays as a cheap guard: left unhandled a "0" renders literally and exports
+ * as a bogus IUCN category.
  */
 const blank = (value) => (value === "0" || value === 0 ? null : value);
 
@@ -40,8 +42,9 @@ export const spTaxo = computed(() => {
     nb_lkgd_gc: sp.nb_lkgd_gc,
     kbm: sp.kbm,
     ebird: sp.ebird,
+    avibase_id: sp.avibase_id,
     IUCN: blank(sp.IUCN),
-    IUCNID: sp.IUCNID,
+    birdlife_url: sp.birdlife_url,
     SEQ: sp.SEQ,
     endemic: sp.endemic,
     afrotropical: sp.afrotropical,

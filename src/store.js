@@ -4,17 +4,22 @@ import map_data from "./assets/map_data.json";
 import sp_base from "./assets/sp_base.json";
 import grid_geojson from "./assets/grid.json";
 
-// Field names in sp_base.json for each selectable taxonomy.
+/**
+ * Field names in sp_base.json for each selectable taxonomy.
+ *
+ * Two namings, not the previous four (2026-09). The pipeline now resolves
+ * every atlas concept against AviList v2025b and keeps that one reference
+ * current, so the "Clements/eBird" and "Checklist of the Birds of Kenya
+ * (2019)" columns it used to carry are gone: both were frozen at the vintage
+ * they were last hand-edited. What remains is the current name and the
+ * historical one the atlas itself used, which is the comparison the site is
+ * actually about. See data/taxonomy/SOURCES.md in Rafnuss/KenyaAtlasComparison.
+ */
 export const TAXONOMY_FIELDS = {
-  "Clements/eBird": {
-    sn: "clements_scientific_name",
-    cn: "clements_common_name",
-    s: "clements_sort",
-  },
-  "Checklist of the Birds of Kenya (2019)": {
-    sn: "checklist_scientific_name",
-    cn: "checklist_common_name",
-    s: "checklist_sort",
+  AviList: {
+    sn: "avilist_scientific_name",
+    cn: "avilist_common_name",
+    s: "avilist_sort",
   },
   "A Bird Atlas of Kenya (1989)": {
     sn: "scientific_name",
@@ -23,7 +28,7 @@ export const TAXONOMY_FIELDS = {
   },
 };
 export const TAXONOMY_OPTIONS = Object.keys(TAXONOMY_FIELDS);
-export const DEFAULT_TAXONOMY = "Checklist of the Birds of Kenya (2019)";
+export const DEFAULT_TAXONOMY = "AviList";
 
 export const SORT_OPTIONS = [
   "Taxonomy",

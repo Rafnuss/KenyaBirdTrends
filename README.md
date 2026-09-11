@@ -54,3 +54,47 @@ setting is ever lost.
 `data/county.raw.json` is the survey-grade source. `npm run build:county`
 simplifies it into `src/assets/county.json` (183k points -> 18k, 9.6 MB ->
 352 kB), which is what the app bundles.
+
+## Species data and the taxonomy contract
+
+`src/assets/sp_base.json`, `map_data.json` and `grid.json` are **generated**,
+not edited here: `E_export_website.m` in
+[Rafnuss/KenyaAtlasComparison](https://github.com/Rafnuss/KenyaAtlasComparison)
+writes them. Copy them across with:
+
+```sh
+npm run sync:data                      # defaults to ../KenyaAtlasComparison
+KAC=/path/to/repo npm run sync:data
+```
+
+Each row of `sp_base.json` is one **atlas concept**, keyed by `SEQ`. A concept
+is not always one species: the 1970-84 atlas recorded 35 of them at a coarser
+resolution than today's checklists — its "Ostrich" predates Somali Ostrich
+being split off — so a row can stand for several modern species. That is why
+the file carries two namings side by side rather than one:
+
+| columns | naming |
+| --- | --- |
+| `common_name`, `scientific_name`, `SEQ` | A Bird Atlas of Kenya (1989) — historical |
+| `avilist_common_name`, `avilist_scientific_name`, `avilist_sort` | AviList v2025b — current |
+
+`TAXONOMY_FIELDS` in `src/store.js` maps the taxonomy toggle onto those two
+triplets. A lump gets an eBird-style slash name (`European Pied/Collared/
+Semicollared Flycatcher`) and a collapsed binomial (`Ficedula sp.`).
+
+The rest of the contract, asserted by `tests/dataSchema.test.js`:
+
+- `avibase_id` — the stable [Avibase](https://avibase.bsc-eoc.org) concept id,
+  present for **every** row, lumps included. Names change between checklists
+  and a lump has no single binomial, so this is the only field that says
+  exactly which taxon a row means. Kept in the CSV export for that reason.
+- `ebird` — flat array of current eBird species codes, one working
+  `ebird.org/species/<code>/KE` link each. It used to include slash/spuh codes
+  (`y00820`), which have no species page and rendered as dead links.
+- `birdlife_url` — AviList's BirdLife DataZone factsheet, `null` for a lump
+  (no single factsheet to point at, so the badge renders unlinked).
+- `IUCN` — spelled-out category. A lump reports its most severe member, so a
+  Critically Endangered species inside one is not hidden.
+- `endemic`, `afrotropical`, `palearctic`, `waterbird` — the trait filters.
+- A missing value is `null`. The pre-2026 export spelled it `"0"`, which
+  rendered literally and exported as a bogus IUCN category.
