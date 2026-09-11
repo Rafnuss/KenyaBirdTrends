@@ -8,7 +8,7 @@ import LkgdSummary from "./LkgdSummary.vue";
 import SpeciesTrendBar from "./SpeciesTrendBar.vue";
 import VirtualList from "./VirtualList.vue";
 import { lkgd, spFiltered, spSorted, species } from "../composables/useSpeciesLists";
-import { RED_LIST_OPTIONS, SORT_OPTIONS, TRAIT_OPTIONS, state } from "../store";
+import { RED_LIST_OPTIONS, SORT_OPTIONS, TRAIT_OPTIONS, speciesMapUrl, state } from "../store";
 
 const list = useTemplateRef("list");
 const showFilters = ref(false);
@@ -96,7 +96,7 @@ watch(
       </a>
       <a
         class="btn btn-primary btn-xs ms-auto"
-        :href="`species_map/${species.SEQ}.png`"
+        :href="speciesMapUrl(species.SEQ)"
         target="_blank"
       >
         <AppIcon name="download" /> Download map

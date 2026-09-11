@@ -13,27 +13,23 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg,gif,json}"],
-        // Everything below is either not needed offline or far too large to
-        // precache: `species_map/` alone is ~1 GB across 1065 files, and the
-        // PDFs / *_large thumbnails / store screenshots are never shown in the
-        // app. Without this the service worker downloads the whole 1 GB on the
-        // first visit.
+        // The store screenshots are only read by the install UI, and the PWA
+        // icons are already listed in includeAssets.
         globIgnores: [
-          "species_map/**",
           "**/*.pdf",
-          "**/*_thumbnail_large.png",
           "**/screenshot_*.png",
           "**/logo_test_large.png",
           "**/.DS_Store",
-          // Lazily imported county outlines (~7 MB): fetched only if the user
-          // turns the county overlay on, and runtime-cached below.
+          // Lazily imported county outlines: fetched only if the user turns
+          // the county overlay on, and runtime-cached below.
           "**/county-*.js",
         ],
-        // Species distribution maps are opened one at a time from a download
-        // link, so cache them as they are actually requested.
+        // Species distribution maps live on a CDN (see SPECIES_MAP_BASE) and
+        // are opened one at a time from a download link, so cache them as they
+        // are actually requested rather than up front.
         runtimeCaching: [
           {
-            urlPattern: ({ url }) => url.pathname.startsWith("/species_map/"),
+            urlPattern: ({ url }) => /\/species_map\/[^/]+\.png$/.test(url.pathname),
             handler: "CacheFirst",
             options: {
               cacheName: "species-maps",
