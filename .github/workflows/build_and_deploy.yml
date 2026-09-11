@@ -3,6 +3,11 @@ on:
   push:
     branches:
       - main
+  # Validate pull requests too: gating only on push to main means a broken
+  # change is caught after it has already landed.
+  pull_request:
+    branches:
+      - main
 permissions:
   contents: write
 jobs:
@@ -13,12 +18,27 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v4
 
-      - name: Install and Build 🔧 # This example project is built using npm and outputs the result to the 'build' folder. Replace with the commands required to build your project, or remove this step entirely if your site is pre-built.
-        run: |
-          npm ci
-          npm run build
+      - name: Set up Node ⚙️ # Vite 7 requires Node ^20.19 || >=22.12, so pin it rather than relying on the runner default.
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install 📦
+        run: npm ci
+
+      - name: Lint 🔍
+        run: npm run lint:check
+
+      - name: Test 🧪
+        run: npm test
+
+      - name: Build 🔧
+        run: npm run build
 
       - name: Deploy 🚀
+        # Only publish from main; on a pull request the steps above are the point.
+        if: github.event_name == 'push'
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages # The branch the action should deploy to.

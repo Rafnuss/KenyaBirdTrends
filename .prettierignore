@@ -1,0 +1,6 @@
+# Large generated data files: reformatting them creates huge, meaningless diffs.
+src/assets/*.json
+dist
+dev-dist
+package-lock.json
+data/*.json

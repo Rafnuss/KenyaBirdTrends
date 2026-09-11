@@ -1,19 +1,9 @@
-import Vue from "vue";
+import { createApp } from "vue";
 import App from "./App.vue";
 
-import { BootstrapVue, BootstrapVueIcons } from "bootstrap-vue";
-Vue.use(BootstrapVue);
-Vue.use(BootstrapVueIcons);
-
-import VueYouTubeEmbed from "vue-youtube-embed";
-Vue.use(VueYouTubeEmbed);
-
-import VueCookie from "vue-cookie";
-Vue.use(VueCookie);
+import { tooltip } from "./directives/tooltip";
 
 import { registerSW } from "virtual:pwa-register";
 registerSW({ immediate: true });
 
-new Vue({
-  render: (h) => h(App),
-}).$mount("#app");
+createApp(App).directive("tooltip", tooltip).mount("#app");
