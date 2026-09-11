@@ -114,16 +114,6 @@ export default defineConfig({
       },
     }),
   ],
-  // @vue-leaflet dynamically imports "leaflet" itself when use-global-leaflet
-  // is false. Without deduping, that resolves to a second pre-bundled copy and
-  // layers we create end up with a mixed prototype chain (Leaflet A's
-  // _updateCircle calling Leaflet B's _empty).
-  resolve: {
-    dedupe: ["leaflet"],
-  },
-  optimizeDeps: {
-    include: ["leaflet"],
-  },
   base: "/",
   test: {
     // store.js touches localStorage and window.location at import time.
