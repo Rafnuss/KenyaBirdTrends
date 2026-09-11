@@ -84,3 +84,15 @@ describe("defaults", () => {
     expect(state.taxonomySelected).toBe(DEFAULT_TAXONOMY);
   });
 });
+
+describe("speciesMapUrl", () => {
+  it("builds a URL under the configured base", async () => {
+    const { SPECIES_MAP_BASE, speciesMapUrl } = await import("../src/store");
+    expect(speciesMapUrl(42)).toBe(`${SPECIES_MAP_BASE}/42.png`);
+  });
+
+  it("is absolute, so it survives being served from a subpath", async () => {
+    const { speciesMapUrl } = await import("../src/store");
+    expect(() => new URL(speciesMapUrl(1))).not.toThrow();
+  });
+});
