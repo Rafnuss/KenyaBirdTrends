@@ -52,10 +52,10 @@ export const MODES = ["Intro", "Grid", "Species"];
 /**
  * Where the per-species distribution maps are served from.
  *
- * The 1065 PNGs are ~1 GB, which made every gh-pages deploy push the whole
- * lot. They stay in the repository (outside `public/`, so the build does not
- * copy them) and are served from a CDN instead. Override with
- * VITE_SPECIES_MAP_BASE to point somewhere else.
+ * The 1065 PNGs are ~1 GB, which would go into every deploy. They stay in the
+ * repository (outside `public/`, so the build does not copy them into `dist`)
+ * and are served from a CDN instead. Override with VITE_SPECIES_MAP_BASE to
+ * point somewhere else.
  *
  * Note that jsDelivr caches a branch ref for several hours, so the first
  * requests after this path changes can 404 until it catches up. Either purge
