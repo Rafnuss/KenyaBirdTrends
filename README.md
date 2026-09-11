@@ -23,12 +23,31 @@ _Selecting squares over Tsavo West allows you to then export a list of all speci
 ## Species distribution maps
 
 The 1065 per-species PNGs in `species_map/` are deliberately **outside**
-`public/`: at ~1 GB they would otherwise be copied into `dist/` and pushed to
-`gh-pages` on every deploy. They are served from jsDelivr instead — see
-`SPECIES_MAP_BASE` in `src/store.js`, overridable with `VITE_SPECIES_MAP_BASE`.
+`public/`: at ~1 GB they would otherwise be copied into `dist/` and shipped in
+every deploy. They are served from jsDelivr instead — see `SPECIES_MAP_BASE`
+in `src/store.js`, overridable with `VITE_SPECIES_MAP_BASE`.
 
-After changing that path, purge jsDelivr or pin a release tag: it caches a
-branch ref for several hours.
+jsDelivr serves them from the `main` branch, so they are unaffected by how the
+site itself is deployed. After changing that path, purge jsDelivr or pin a
+release tag: it caches a branch ref for several hours.
+
+## Deployment
+
+`.github/workflows/build_and_deploy.yml` lints, tests and builds on every push
+and pull request, then publishes `dist/` to GitHub Pages **as a workflow
+artifact** (`actions/upload-pages-artifact` + `actions/deploy-pages`). Pull
+requests run everything except the final publish, so a PR exercises the deploy
+path without touching the live site. `workflow_dispatch` republishes without a
+code change, which is handy after `npm run sync:data`.
+
+This replaced pushing the built site to a `gh-pages` branch. The build output
+is no longer committed anywhere, so `dist` never enters the repository's
+history, and the workflow no longer needs `contents: write`.
+
+`public/CNAME` pins the custom domain into the build. The domain is also set
+in the repository's Pages settings, which is what actually serves it; keeping
+the file means the domain is visible in the source and survives if that
+setting is ever lost.
 
 ## Regenerating the county outlines
 
