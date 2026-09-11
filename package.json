@@ -10,38 +10,48 @@
   },
   "type": "module",
   "private": true,
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
-    "generate-pwa-assets": "pwa-assets-generator --preset minimal-2023 public/logo_crane.svg"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint --fix .",
+    "lint:check": "eslint .",
+    "format": "prettier --write src index.html vite.config.js",
+    "generate-pwa-assets": "pwa-assets-generator --preset minimal-2023 public/logo_crane.svg",
+    "build:county": "node scripts/build-county-geojson.mjs"
   },
   "dependencies": {
-    "bootstrap": "~4.6.2",
-    "bootstrap-vue": "~2.23.1",
-    "chroma-js": "~3.1.2",
+    "@popperjs/core": "^2.11.8",
+    "bootstrap": "^5.3.8",
+    "chroma-js": "~3.2.0",
     "leaflet": "~1.9.4",
-    "leaflet-geosearch": "~4.2.0",
-    "leaflet.locatecontrol": "~0.83.1",
-    "vue": "~2.7.16",
-    "vue-cookie": "~1.1.4",
-    "vue-multiselect": "~2.1.9",
-    "vue-youtube-embed": "^2.2.2",
-    "vue2-leaflet": "~2.7.1",
-    "vue2-leaflet-geosearch": "~1.0.6",
-    "vue2-leaflet-markercluster": "~3.1.0"
+    "leaflet-geosearch": "~4.4.0",
+    "leaflet.locatecontrol": "~0.90.1",
+    "vue": "^3.5.42",
+    "vue-multiselect": "^3.5.0"
   },
   "devDependencies": {
-    "@vite-pwa/assets-generator": "^0.2.6",
-    "@vitejs/plugin-vue2": "~2.3.3",
-    "@vue/eslint-config-prettier": "~7.1.0",
-    "eslint": "~9.22.0",
-    "eslint-plugin-prettier": "5.2.3",
-    "eslint-plugin-vue": "~9.32.0",
-    "prettier": "~3.5.3",
-    "sass": "~1.85.1",
-    "vite": "~6.2.1",
-    "vite-plugin-pwa": "^0.21.1"
+    "@vite-pwa/assets-generator": "~1.0.2",
+    "@vitejs/plugin-vue": "^6.0.8",
+    "@vue/eslint-config-prettier": "~10.2.0",
+    "eslint": "~9.39.0",
+    "eslint-plugin-prettier": "~5.5.6",
+    "eslint-plugin-vue": "~10.11.0",
+    "globals": "^17.12.0",
+    "happy-dom": "^20.14.3",
+    "prettier": "~3.9.6",
+    "sass": "~1.104.0",
+    "vite": "~7.3.6",
+    "vite-plugin-pwa": "~1.3.0",
+    "vitest": "^5.0.0",
+    "vue-eslint-parser": "~10.4.1"
+  },
+  "overrides": {
+    "sharp": "^0.35.4"
   }
 }
