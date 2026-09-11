@@ -75,9 +75,16 @@ const TREND_FILTERS = [
 
       <!-- Windowed: the unfiltered list is ~1000 rows. -->
       <div class="flex-grow-1 overflow-hidden mb-2">
-        <VirtualList :items="gridList" class="small border rounded">
+        <VirtualList
+          :items="gridList"
+          label="Species in the selected squares"
+          class="small border rounded"
+        >
           <template #default="{ item }">
-            <div class="d-flex align-items-center gap-2 h-100 ps-3 pe-2 border-bottom">
+            <div
+              class="d-flex align-items-center gap-2 h-100 ps-3 pe-2 border-bottom"
+              role="gridcell"
+            >
               <b class="text-truncate" :title="item.common_name">{{ item.common_name }}</b>
               <IucnBadge :category="item.IUCN" :iucn-id="item.IUCNID" />
               <div class="box-sm ms-auto flex-shrink-0" :class="item.trend" />

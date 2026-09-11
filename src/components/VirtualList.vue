@@ -16,6 +16,8 @@ const props = defineProps({
   itemHeight: { type: Number, default: 31 },
   /** Rows rendered beyond each edge, to cover fast scrolling. */
   overscan: { type: Number, default: 8 },
+  /** Announced name for the list. */
+  label: { type: String, default: "List" },
 });
 
 const viewport = useTemplateRef("viewport");
@@ -88,7 +90,16 @@ defineExpose({
 </script>
 
 <template>
-  <div ref="viewport" class="virtual-viewport" @scroll.passive="onScroll">
+  <!-- Only the visible window is in the DOM, so the full length and each
+       row's position have to be stated explicitly for assistive tech. -->
+  <div
+    ref="viewport"
+    class="virtual-viewport"
+    role="grid"
+    :aria-rowcount="items.length"
+    :aria-label="label"
+    @scroll.passive="onScroll"
+  >
     <!-- Spacer carries the full scroll height; only `windowed` rows exist. -->
     <div :style="{ height: totalHeight + 'px', position: 'relative' }">
       <div :style="{ transform: `translateY(${offset}px)` }">
@@ -96,6 +107,8 @@ defineExpose({
           v-for="entry in windowed"
           :key="entry.index"
           class="virtual-row"
+          role="row"
+          :aria-rowindex="entry.index + 1"
           :style="{ height: itemHeight + 'px' }"
         >
           <slot :item="entry.item" :index="entry.index" />

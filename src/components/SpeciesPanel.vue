@@ -23,7 +23,15 @@ const selected = computed({
 
 const label = computed(() => `Number of squares${species.value ? "" : " for all species"}`);
 
-const selectLabel = ({ common_name, scientific_name }) => `${common_name} — [${scientific_name}]`;
+/**
+ * sp_base.json is inconsistent here: most species nest their eBird codes
+ * ([["golher1"]]) while a few list them flat (["ostric2", "ostric3"]).
+ * Flattening covers both without the template having to guess.
+ */
+const ebirdCodes = computed(() => (species.value?.ebird ?? []).flat(Infinity).filter(Boolean));
+
+const selectLabel = ({ common_name, scientific_name }) =>
+  scientific_name ? `${common_name} — [${scientific_name}]` : common_name;
 
 function toggleTrait(trait) {
   const i = state.traitsSelected.indexOf(trait);
@@ -59,7 +67,7 @@ watch(
         </template>
         <template #singleLabel="{ option }">
           <b>{{ option.common_name }}</b>
-          <span class="sublegend ms-2">
+          <span v-if="option.scientific_name" class="sublegend ms-2">
             <i>{{ option.scientific_name }}</i>
           </span>
         </template>
@@ -69,13 +77,13 @@ watch(
     <div v-if="species" class="d-flex flex-wrap align-items-center gap-1 pt-2">
       <IucnBadge :category="species.IUCN" :iucn-id="species.IUCNID" always />
       <a
-        v-for="(code, i) in species.ebird"
-        :key="'ebird-' + i"
+        v-for="code in ebirdCodes"
+        :key="'ebird-' + code"
         class="btn btn-outline-primary btn-xs"
         :href="`https://ebird.org/species/${code}/KE`"
         target="_blank"
       >
-        eBird-{{ species.ebird.length > 1 ? code : code[0] }}
+        eBird-{{ code }}
       </a>
       <a
         v-for="(id, i) in species.kbm"
@@ -145,13 +153,17 @@ watch(
 
     <!-- Windowed: ~1065 rows, and every row used to re-render on selection. -->
     <div class="flex-grow-1 overflow-hidden mt-2 mb-2">
-      <VirtualList ref="list" :items="spSorted" class="small border rounded">
+      <VirtualList ref="list" :items="spSorted" label="Species" class="small border rounded">
         <template #default="{ item }">
           <div
             class="species-row d-flex align-items-center gap-2 h-100 ps-3 pe-2 border-bottom"
             :class="{ active: item.SEQ === state.speciesSeq }"
-            role="button"
+            role="gridcell"
+            tabindex="0"
+            :aria-selected="item.SEQ === state.speciesSeq"
             @click="state.speciesSeq = item.SEQ"
+            @keydown.enter="state.speciesSeq = item.SEQ"
+            @keydown.space.prevent="state.speciesSeq = item.SEQ"
           >
             <b class="text-truncate" :title="item.common_name">{{ item.common_name }}</b>
             <IucnBadge :category="item.IUCN" :iucn-id="item.IUCNID" />

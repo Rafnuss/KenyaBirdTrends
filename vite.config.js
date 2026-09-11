@@ -125,4 +125,9 @@ export default defineConfig({
     include: ["leaflet"],
   },
   base: "/",
+  test: {
+    // store.js touches localStorage and window.location at import time.
+    environment: "happy-dom",
+    include: ["tests/**/*.test.js"],
+  },
 });

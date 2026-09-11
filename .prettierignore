@@ -3,3 +3,4 @@ src/assets/*.json
 dist
 dev-dist
 package-lock.json
+data/*.json
