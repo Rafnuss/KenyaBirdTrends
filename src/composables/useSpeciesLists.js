@@ -19,12 +19,19 @@ const TRAIT_FIELDS = {
 /** Index into nb_lkgd / per_lkgd for each sort option. */
 const SORT_INDEX = { Lost: 0, Kept: 1, Gained: 2, Difference: 3 };
 
+/**
+ * sp_base.json uses the string "0" as a placeholder for "no value" in a few
+ * text columns (29 species have IUCN "0", one has scientific_name "0"). Left
+ * alone it renders literally, and exports as a bogus IUCN category.
+ */
+const blank = (value) => (value === "0" || value === 0 ? null : value);
+
 /** Species renamed into the selected taxonomy. */
 export const spTaxo = computed(() => {
   const { sn, cn, s } =
     TAXONOMY_FIELDS[state.taxonomySelected] ?? TAXONOMY_FIELDS[DEFAULT_TAXONOMY];
   return spBase.map((sp) => ({
-    scientific_name: sp[sn],
+    scientific_name: blank(sp[sn]),
     common_name: sp[cn],
     sort: sp[s],
     per_lkgd: sp.per_lkgd,
@@ -33,7 +40,7 @@ export const spTaxo = computed(() => {
     nb_lkgd_gc: sp.nb_lkgd_gc,
     kbm: sp.kbm,
     ebird: sp.ebird,
-    IUCN: sp.IUCN,
+    IUCN: blank(sp.IUCN),
     IUCNID: sp.IUCNID,
     SEQ: sp.SEQ,
     endemic: sp.endemic,

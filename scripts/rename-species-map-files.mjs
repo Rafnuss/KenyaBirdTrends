@@ -1,3 +1,8 @@
+/**
+ * One-off maintenance: rename public/species_map/*.png down to "<SEQ>.png".
+ *
+ * Not part of the build; run by hand after regenerating the species maps.
+ */
 import fs from "fs";
 import path from "path";
 

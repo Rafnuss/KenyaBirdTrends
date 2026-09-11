@@ -27,5 +27,14 @@ export default [
       "vue/multi-word-component-names": "off",
     },
   },
+  {
+    // Build-time Node scripts, not app code.
+    files: ["scripts/**/*.mjs", "*.config.js"],
+    languageOptions: { globals: { ...globals.node } },
+  },
+  {
+    files: ["tests/**/*.js"],
+    languageOptions: { globals: { ...globals.node } },
+  },
   prettierSkipFormatting,
 ];
