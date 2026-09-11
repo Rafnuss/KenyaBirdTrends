@@ -3,6 +3,11 @@ on:
   push:
     branches:
       - main
+  # Validate pull requests too: gating only on push to main means a broken
+  # change is caught after it has already landed.
+  pull_request:
+    branches:
+      - main
 permissions:
   contents: write
 jobs:
@@ -32,6 +37,8 @@ jobs:
         run: npm run build
 
       - name: Deploy 🚀
+        # Only publish from main; on a pull request the steps above are the point.
+        if: github.event_name == 'push'
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages # The branch the action should deploy to.
