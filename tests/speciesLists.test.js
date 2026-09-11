@@ -195,8 +195,10 @@ describe("lkgd", () => {
     state.mode = "Grid";
     state.grid = ["51b", "63a"];
     expect(lkgd.value).toEqual(oracle(["51b", "63a"]).lkgd);
-    // Regression anchor from a hand-checked run.
-    expect(lkgd.value).toEqual([21, 528, 101, 80]);
+    // Regression anchor, recomputed 2026-09 after the taxonomy pass: the
+    // old-atlas fold fix added 49 squares, the eBird join stopped silently
+    // dropping renamed taxa, and empty squares no longer emit a nested [[]].
+    expect(lkgd.value).toEqual([16, 533, 178, 162]);
   });
 
   it("falls back to totals in grid mode with nothing selected", () => {
@@ -227,7 +229,7 @@ describe("gridList", () => {
   it("lists every species present in either period", () => {
     const expected = oracle(["51b", "63a"]);
     expect(gridList.value).toHaveLength(expected.involved);
-    expect(gridList.value).toHaveLength(650); // regression anchor
+    expect(gridList.value).toHaveLength(727); // regression anchor
   });
 
   it("tags each species with a trend", () => {
@@ -241,11 +243,11 @@ describe("gridList", () => {
 
     state.showKept = false;
     expect(gridList.value).toHaveLength(expected.lostOnly + expected.gainedOnly);
-    expect(gridList.value).toHaveLength(122); // regression anchor
+    expect(gridList.value).toHaveLength(194); // regression anchor
 
     state.showGained = false;
     expect(gridList.value).toHaveLength(expected.lostOnly);
-    expect(gridList.value).toHaveLength(21); // regression anchor
+    expect(gridList.value).toHaveLength(16); // regression anchor
 
     state.showLost = false;
     expect(gridList.value).toHaveLength(0);
@@ -262,24 +264,32 @@ describe("gridList", () => {
 });
 
 describe("eBird codes in sp_base.json", () => {
-  it("are reachable by flattening, whichever shape a species uses", () => {
-    // 1025 species nest their codes ([["golher1"]]); 40 list them flat.
-    const shapes = new Set(
-      rawSpBase.map((sp) => (sp.ebird ?? []).some((e) => Array.isArray(e)) ? "nested" : "flat")
-    );
-    expect(shapes.size).toBeGreaterThan(1);
+  // Until the 2026-09 taxonomy pass these arrived unevenly nested (1025
+  // species as [["golher1"]], 40 flat) and included slash/spuh codes such as
+  // y00820, which have no eBird species page and rendered as dead links.
+  // Both are fixed upstream now; the panel still flattens defensively.
+  it("are a flat array of species codes", () => {
+    for (const sp of rawSpBase) {
+      expect(Array.isArray(sp.ebird)).toBe(true);
+      expect(sp.ebird.every((c) => typeof c === "string")).toBe(true);
+    }
+  });
+
+  it("survive the flattening the panel applies", () => {
     for (const sp of rawSpBase) {
       const codes = (sp.ebird ?? []).flat(Infinity).filter(Boolean);
       expect(codes.every((c) => typeof c === "string" && c.length > 1)).toBe(true);
+      expect(codes).toHaveLength(sp.ebird.length);
     }
   });
 });
 
 describe("placeholder values in sp_base.json", () => {
-  it('treats the string "0" as no value', () => {
-    // 29 species carry IUCN "0" and one a scientific_name of "0"; these used
-    // to render literally and export as a bogus IUCN category.
-    expect(rawSpBase.some((sp) => sp.IUCN === "0")).toBe(true);
+  it('no longer carries the string "0" as a value', () => {
+    // The pre-AviList export spelled "no value" as "0" (29 species for IUCN,
+    // one for scientific_name); it rendered literally and exported as a bogus
+    // IUCN category. The pipeline emits null now, and spTaxo still guards.
+    expect(rawSpBase.some((sp) => sp.IUCN === "0")).toBe(false);
     expect(spTaxo.value.some((sp) => sp.IUCN === "0")).toBe(false);
     expect(spTaxo.value.some((sp) => sp.scientific_name === "0")).toBe(false);
   });

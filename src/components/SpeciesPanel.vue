@@ -24,9 +24,10 @@ const selected = computed({
 const label = computed(() => `Number of squares${species.value ? "" : " for all species"}`);
 
 /**
- * sp_base.json is inconsistent here: most species nest their eBird codes
- * ([["golher1"]]) while a few list them flat (["ostric2", "ostric3"]).
- * Flattening covers both without the template having to guess.
+ * eBird codes for the concept. The pipeline now emits a flat array of
+ * species-level codes only (2026-09) - it used to nest them unevenly and to
+ * include slash/spuh codes like `y00820`, which have no eBird species page
+ * and rendered as dead links. Flattening stays as a cheap guard.
  */
 const ebirdCodes = computed(() => (species.value?.ebird ?? []).flat(Infinity).filter(Boolean));
 
@@ -75,7 +76,16 @@ watch(
     </div>
 
     <div v-if="species" class="d-flex flex-wrap align-items-center gap-1 pt-2">
-      <IucnBadge :category="species.IUCN" :iucn-id="species.IUCNID" always />
+      <IucnBadge :category="species.IUCN" :birdlife-url="species.birdlife_url" always />
+      <a
+        v-if="species.avibase_id"
+        class="btn btn-outline-primary btn-xs"
+        :href="`https://avibase.bsc-eoc.org/species.jsp?avibaseid=${species.avibase_id}`"
+        target="_blank"
+        title="Avibase taxon page - the concept this row refers to"
+      >
+        Avibase
+      </a>
       <a
         v-for="code in ebirdCodes"
         :key="'ebird-' + code"
@@ -166,7 +176,7 @@ watch(
             @keydown.space.prevent="state.speciesSeq = item.SEQ"
           >
             <b class="text-truncate" :title="item.common_name">{{ item.common_name }}</b>
-            <IucnBadge :category="item.IUCN" :iucn-id="item.IUCNID" />
+            <IucnBadge :category="item.IUCN" :birdlife-url="item.birdlife_url" />
             <SpeciesTrendBar :values="item.nb_lkgd" />
           </div>
         </template>

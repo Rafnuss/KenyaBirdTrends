@@ -25,14 +25,44 @@ describe("sp_base.json matches what the app expects", () => {
     }
   );
 
-  it("provides the species link columns the panels render", () => {
-    // IucnBadge builds the IUCN redirect from IUCNID. When the pipeline moves
-    // to the AviList schema this fails loudly, which is the point: the app
-    // would otherwise render `undefined` for every species in silence.
-    expect(fields).toContain("IUCNID");
+  it.each(["avibase_id", "birdlife_url"])("provides the %s link column", (field) => {
+    // The panels build the Avibase and BirdLife links straight from these.
+    // They replaced IUCNID when the pipeline moved to AviList (2026-09).
+    expect(fields).toContain(field);
   });
+
+  it.each(["endemic", "afrotropical", "palearctic", "waterbird"])(
+    "provides the %s trait filter column",
+    (field) => {
+      expect(fields).toContain(field);
+    }
+  );
 
   it("has a unique SEQ per species", () => {
     expect(new Set(rawSpBase.map((s) => s.SEQ)).size).toBe(rawSpBase.length);
+  });
+
+  it("gives every species an Avibase id", () => {
+    // The point of the 2026 taxonomy pass: every concept resolves to a stable
+    // Avibase id, lumps included - and no binomial can name a lump.
+    const missing = rawSpBase.filter((s) => !/^avibase-[0-9A-F]{8}$/i.test(s.avibase_id ?? ""));
+    expect(missing.map((s) => s.SEQ)).toEqual([]);
+  });
+
+  it("lists eBird codes as a flat array of species codes", () => {
+    // Slash/spuh codes (y00820, ficedu1) have no eBird species page and used
+    // to render as dead links; nesting also varied per row. Both fixed
+    // upstream, so the panel can render one working link per entry.
+    for (const sp of rawSpBase) {
+      expect(Array.isArray(sp.ebird)).toBe(true);
+      for (const code of sp.ebird) expect(typeof code).toBe("string");
+    }
+  });
+
+  it("spells a missing value as null, not a placeholder", () => {
+    // The pre-AviList export used the string "0", which rendered literally
+    // and exported as a bogus IUCN category.
+    const placeholders = rawSpBase.filter((s) => s.IUCN === "0" || s.scientific_name === "0");
+    expect(placeholders.map((s) => s.SEQ)).toEqual([]);
   });
 });
