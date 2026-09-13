@@ -195,10 +195,13 @@ describe("lkgd", () => {
     state.mode = "Grid";
     state.grid = ["51b", "63a"];
     expect(lkgd.value).toEqual(oracle(["51b", "63a"]).lkgd);
-    // Regression anchor, recomputed 2026-09 after the taxonomy pass: the
-    // old-atlas fold fix added 49 squares, the eBird join stopped silently
-    // dropping renamed taxa, and empty squares no longer emit a nested [[]].
-    expect(lkgd.value).toEqual([16, 533, 178, 162]);
+    // Regression anchor, recomputed 2026-09 after the taxonomy pass. Moved
+    // again later the same month once kbmatlas.mat was rebuilt from a
+    // species list sorted to match old/eBird - it had been built from an
+    // unsorted list, so map_kbm|map_ebird combined every species' KBM layer
+    // with the wrong neighbour by array position (see
+    // functions/check_seq_alignment.m in KenyaAtlasComparison).
+    expect(lkgd.value).toEqual([21, 528, 101, 80]);
   });
 
   it("falls back to totals in grid mode with nothing selected", () => {
@@ -229,7 +232,7 @@ describe("gridList", () => {
   it("lists every species present in either period", () => {
     const expected = oracle(["51b", "63a"]);
     expect(gridList.value).toHaveLength(expected.involved);
-    expect(gridList.value).toHaveLength(727); // regression anchor
+    expect(gridList.value).toHaveLength(650); // regression anchor, see note above
   });
 
   it("tags each species with a trend", () => {
@@ -243,11 +246,11 @@ describe("gridList", () => {
 
     state.showKept = false;
     expect(gridList.value).toHaveLength(expected.lostOnly + expected.gainedOnly);
-    expect(gridList.value).toHaveLength(194); // regression anchor
+    expect(gridList.value).toHaveLength(122); // regression anchor, see note above
 
     state.showGained = false;
     expect(gridList.value).toHaveLength(expected.lostOnly);
-    expect(gridList.value).toHaveLength(16); // regression anchor
+    expect(gridList.value).toHaveLength(21); // regression anchor, see note above
 
     state.showLost = false;
     expect(gridList.value).toHaveLength(0);
