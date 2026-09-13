@@ -16,9 +16,10 @@ import { TAXONOMY_OPTIONS, state } from "../store";
           <option v-for="t in TAXONOMY_OPTIONS" :key="t" :value="t">{{ t }}</option>
         </select>
         <p class="small mb-0">
-          <b>Note: </b>In order to match the taxonomies used in the old atlas with eBird and KBM, we
-          had to align species name to the lowest taxonomical resolution (i.e. lump species),
-          explaining some unusual species names.
+          <b>Note: </b>an atlas concept sometimes covers several current species (e.g. a
+          historical lump later split by AviList). Its AviList name then shows all of them, such
+          as "Common/Somali Ostrich" or "Ficedula sp." — the atlas name is always a single
+          species.
         </p>
       </div>
     </div>
