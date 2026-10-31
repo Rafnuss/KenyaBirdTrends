@@ -1,6 +1,13 @@
-/** Columns dropped from the export: ids, ratios and per-source links. */
+/**
+ * Columns dropped from the export: ratios, raw counts and per-source links.
+ *
+ * avibase_id is deliberately kept. It is the one stable identifier for the
+ * concept a row refers to - names change between checklists and a lumped row
+ * has no single binomial - so an exported list carrying it can be matched up
+ * again unambiguously later.
+ */
 const OMIT = new Set([
-  "IUCNID",
+  "birdlife_url",
   "per_lkgd",
   "per_lkgd_gc",
   "nb_lkgd",

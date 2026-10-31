@@ -7,13 +7,13 @@ describe("toCsv", () => {
     expect(toCsv([])).toBe("");
   });
 
-  it("drops the ids, ratios and per-source link columns", () => {
+  it("drops the ratios, counts and per-source link columns", () => {
     const csv = toCsv([
       {
         common_name: "Bateleur",
         IUCN: "Endangered",
         SEQ: 1,
-        IUCNID: 2,
+        birdlife_url: "https://datazone.birdlife.org/species/factsheet/22695289",
         per_lkgd: [1],
         per_lkgd_gc: [1],
         nb_lkgd: [1],
@@ -24,6 +24,13 @@ describe("toCsv", () => {
       },
     ]);
     expect(csv.split("\n")[0]).toBe("common_name,IUCN");
+  });
+
+  it("keeps avibase_id, the one stable identifier for the concept", () => {
+    // Names change between checklists and a lumped row has no single
+    // binomial, so an exported list needs this to be matched up again later.
+    const csv = toCsv([{ common_name: "Ostrich", avibase_id: "avibase-5D14080C", SEQ: 1 }]);
+    expect(csv.split("\n")[0]).toBe("common_name,avibase_id");
   });
 
   it("quotes values containing a comma", () => {

@@ -4,17 +4,12 @@ import map_data from "./assets/map_data.json";
 import sp_base from "./assets/sp_base.json";
 import grid_geojson from "./assets/grid.json";
 
-// Field names in sp_base.json for each selectable taxonomy.
+// Both naming systems describe the same Avibase-keyed comparison taxa.
 export const TAXONOMY_FIELDS = {
-  "Clements/eBird": {
-    sn: "clements_scientific_name",
-    cn: "clements_common_name",
-    s: "clements_sort",
-  },
-  "Checklist of the Birds of Kenya (2019)": {
-    sn: "checklist_scientific_name",
-    cn: "checklist_common_name",
-    s: "checklist_sort",
+  AviList: {
+    sn: "avilist_scientific_name",
+    cn: "avilist_common_name",
+    s: "avilist_sort",
   },
   "A Bird Atlas of Kenya (1989)": {
     sn: "scientific_name",
@@ -23,7 +18,7 @@ export const TAXONOMY_FIELDS = {
   },
 };
 export const TAXONOMY_OPTIONS = Object.keys(TAXONOMY_FIELDS);
-export const DEFAULT_TAXONOMY = "Checklist of the Birds of Kenya (2019)";
+export const DEFAULT_TAXONOMY = "AviList";
 
 export const SORT_OPTIONS = [
   "Taxonomy",
@@ -48,25 +43,6 @@ export const RED_LIST_OPTIONS = [
 export const TRAIT_OPTIONS = ["Endemic", "Afrotropical migrant", "Palearctic migrant", "Waterbird"];
 
 export const MODES = ["Intro", "Grid", "Species"];
-
-/**
- * Where the per-species distribution maps are served from.
- *
- * The 1065 PNGs are ~1 GB, which would go into every deploy. They stay in the
- * repository (outside `public/`, so the build does not copy them into `dist`)
- * and are served from a CDN instead. Override with VITE_SPECIES_MAP_BASE to
- * point somewhere else.
- *
- * Note that jsDelivr caches a branch ref for several hours, so the first
- * requests after this path changes can 404 until it catches up. Either purge
- * it (https://purge.jsdelivr.net/gh/Rafnuss/KenyaBirdTrends@main/species_map/1.png)
- * or pin a release tag in place of @main for a stable, explicitly bumped URL.
- */
-export const SPECIES_MAP_BASE =
-  import.meta.env.VITE_SPECIES_MAP_BASE ??
-  "https://cdn.jsdelivr.net/gh/Rafnuss/KenyaBirdTrends@main/species_map";
-
-export const speciesMapUrl = (seq) => `${SPECIES_MAP_BASE}/${seq}.png`;
 
 // [[north, east], [south, west]]
 export const KENYA_BOUNDS = [
@@ -96,18 +72,17 @@ export const state = reactive({
   mode: "Intro",
   sidebar: true,
   legend: true,
-  settingsOpen: false,
 
   /** Selected grid squares, e.g. ["51b", "63a"]. */
   grid: [],
 
   /**
-   * The selected species is stored as a SEQ rather than an object: the species
+   * The selected species is stored as an Avibase ID rather than an object: the species
    * objects are rebuilt whenever the taxonomy changes, so holding one would go
    * stale. It also means a deep-linked ?species= and a click through the list
    * resolve to exactly the same record.
    */
-  speciesSeq: null,
+  speciesId: null,
 
   displayPoorCoverage: true,
   displayNeverObserved: true,
@@ -168,10 +143,8 @@ export function restoreFromUrl(search = window.location.search) {
   }
 
   const urlSpecies = qp.get("species");
-  if (urlSpecies && /^\d+$/.test(urlSpecies)) {
-    const seq = Number(urlSpecies);
-    if (spBase.some((s) => s.SEQ === seq)) state.speciesSeq = seq;
-  }
+  const selected = urlSpecies && spBase.find((s) => s.avibase_id === urlSpecies || String(s.SEQ) === urlSpecies || String(s.atlas_seq ?? "").split("|").includes(urlSpecies) || (s.atlas_concepts ?? []).some((c) => c.avibase_id === urlSpecies));
+  if (selected) state.speciesId = selected.avibase_id;
 }
 
 /**
@@ -181,12 +154,15 @@ export function restoreFromUrl(search = window.location.search) {
  */
 export function syncUrl() {
   watch(
-    () => [state.mode, state.grid.join(","), state.speciesSeq],
+    () => [state.mode, state.grid.join(","), state.speciesId],
     () => {
       const qp = new URLSearchParams();
       if (state.mode) qp.set("mode", state.mode);
       if (state.grid.length) qp.set("grid", state.grid.join(","));
-      if (state.speciesSeq != null) qp.set("species", String(state.speciesSeq));
+      if (state.speciesId != null) {
+        const selected = spBase.find((s) => s.avibase_id === state.speciesId);
+        if (selected) qp.set("species", String(selected.SEQ));
+      }
       history.replaceState(null, "", "?" + qp.toString());
     },
     { immediate: true }

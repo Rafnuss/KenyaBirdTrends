@@ -86,7 +86,7 @@ const TREND_FILTERS = [
               role="gridcell"
             >
               <b class="text-truncate" :title="item.common_name">{{ item.common_name }}</b>
-              <IucnBadge :category="item.IUCN" :iucn-id="item.IUCNID" />
+              <IucnBadge :category="item.IUCN" :birdlife-url="item.birdlife_url" />
               <div class="box-sm ms-auto flex-shrink-0" :class="item.trend" />
             </div>
           </template>
