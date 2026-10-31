@@ -6,7 +6,7 @@ import { DEFAULT_TAXONOMY, TAXONOMY_FIELDS, TAXONOMY_OPTIONS, state } from "../s
 import {
   gridList,
   lkgd,
-  seqInGrid,
+  taxaInGrid,
   spFiltered,
   spSorted,
   spTaxo,
@@ -22,14 +22,14 @@ const features = rawMapData.features;
  */
 function oracle(squares) {
   const selected = features.filter((f) => squares.includes(f.properties.Sq));
-  const nw = new Set(selected.flatMap((f) => f.properties.SEQ_new));
-  const old = new Set(selected.flatMap((f) => f.properties.SEQ_old));
+  const nw = new Set(selected.flatMap((f) => f.properties.taxa_new));
+  const old = new Set(selected.flatMap((f) => f.properties.taxa_old));
   const kept = [...old].filter((s) => nw.has(s)).length;
   return {
     lkgd: [old.size - kept, kept, nw.size - kept, nw.size - old.size],
-    involved: rawSpBase.filter((sp) => nw.has(sp.SEQ) || old.has(sp.SEQ)).length,
-    lostOnly: rawSpBase.filter((sp) => old.has(sp.SEQ) && !nw.has(sp.SEQ)).length,
-    gainedOnly: rawSpBase.filter((sp) => nw.has(sp.SEQ) && !old.has(sp.SEQ)).length,
+    involved: rawSpBase.filter((sp) => nw.has(sp.avibase_id) || old.has(sp.avibase_id)).length,
+    lostOnly: rawSpBase.filter((sp) => old.has(sp.avibase_id) && !nw.has(sp.avibase_id)).length,
+    gainedOnly: rawSpBase.filter((sp) => nw.has(sp.avibase_id) && !old.has(sp.avibase_id)).length,
   };
 }
 
@@ -42,7 +42,7 @@ const totals = (field) =>
 function reset() {
   state.mode = "Species";
   state.grid = [];
-  state.speciesSeq = null;
+  state.speciesId = null;
   state.taxonomySelected = DEFAULT_TAXONOMY;
   state.sortSelected = "Taxonomy";
   state.redListSelected = "All";
@@ -71,7 +71,7 @@ describe("spTaxo", () => {
       const raw = rawSpBase.find((s) => s.SEQ === 1);
       const first = spTaxo.value.find((s) => s.SEQ === 1);
       expect(first.scientific_name).toBe(blank(raw[sn]));
-      expect(first.common_name).toBe(raw[cn]);
+      expect(first.common_name).toBe(taxonomy === "AviList" ? "Common / Somali Ostrich" : raw[cn]);
     }
   });
 
@@ -92,7 +92,7 @@ describe("species", () => {
     // Same bird throughout; the name must follow the taxonomy rather than go
     // stale, which is why the store holds a SEQ and not a species object.
     const raw = rawSpBase.find((s) => s.SEQ === 42);
-    state.speciesSeq = 42;
+    state.speciesId = rawSpBase.find((s) => s.SEQ === 42).avibase_id;
     for (const taxonomy of TAXONOMY_OPTIONS) {
       state.taxonomySelected = taxonomy;
       expect(species.value.SEQ).toBe(42);
@@ -101,7 +101,7 @@ describe("species", () => {
   });
 
   it("is null for a SEQ that does not exist", () => {
-    state.speciesSeq = 999999;
+    state.speciesId = 999999;
     expect(species.value).toBeNull();
   });
 });
@@ -123,7 +123,9 @@ describe("spFiltered", () => {
     expect(cr).toBeLessThanOrEqual(en);
     expect(en).toBeLessThanOrEqual(vu);
     expect(vu).toBeLessThanOrEqual(nt);
-    expect(en).toBe(rawSpBase.filter((s) => ["Critically Endangered", "Endangered"].includes(s.IUCN)).length);
+    expect(en).toBe(
+      rawSpBase.filter((s) => ["Critically Endangered", "Endangered"].includes(s.IUCN)).length
+    );
   });
 
   it("narrows by trait", () => {
@@ -187,7 +189,7 @@ describe("lkgd", () => {
   });
 
   it("uses the selected species' own figures", () => {
-    state.speciesSeq = 42;
+    state.speciesId = rawSpBase.find((s) => s.SEQ === 42).avibase_id;
     expect(lkgd.value).toEqual(rawSpBase.find((s) => s.SEQ === 42).nb_lkgd);
   });
 
@@ -195,13 +197,8 @@ describe("lkgd", () => {
     state.mode = "Grid";
     state.grid = ["51b", "63a"];
     expect(lkgd.value).toEqual(oracle(["51b", "63a"]).lkgd);
-    // Regression anchor, recomputed 2026-09 after the taxonomy pass. Moved
-    // again later the same month once kbmatlas.mat was rebuilt from a
-    // species list sorted to match old/eBird - it had been built from an
-    // unsorted list, so map_kbm|map_ebird combined every species' KBM layer
-    // with the wrong neighbour by array position (see
-    // functions/check_seq_alignment.m in KenyaAtlasComparison).
-    expect(lkgd.value).toEqual([21, 528, 101, 80]);
+    // Updated for the explicit 2026 associations and separate modern taxa.
+    expect(lkgd.value).toEqual([21, 528, 102, 81]);
   });
 
   it("falls back to totals in grid mode with nothing selected", () => {
@@ -210,16 +207,16 @@ describe("lkgd", () => {
   });
 });
 
-describe("seqInGrid", () => {
+describe("taxaInGrid", () => {
   it("is empty with no selection", () => {
-    expect(seqInGrid.value.new.size).toBe(0);
-    expect(seqInGrid.value.old.size).toBe(0);
+    expect(taxaInGrid.value.new.size).toBe(0);
+    expect(taxaInGrid.value.old.size).toBe(0);
   });
 
   it("unions the squares", () => {
     state.grid = ["51b", "63a"];
     const selected = features.filter((f) => ["51b", "63a"].includes(f.properties.Sq));
-    expect(seqInGrid.value.new).toEqual(new Set(selected.flatMap((f) => f.properties.SEQ_new)));
+    expect(taxaInGrid.value.new).toEqual(new Set(selected.flatMap((f) => f.properties.taxa_new)));
   });
 });
 
@@ -232,7 +229,7 @@ describe("gridList", () => {
   it("lists every species present in either period", () => {
     const expected = oracle(["51b", "63a"]);
     expect(gridList.value).toHaveLength(expected.involved);
-    expect(gridList.value).toHaveLength(650); // regression anchor, see note above
+    expect(gridList.value).toHaveLength(651); // regression anchor, see note above
   });
 
   it("tags each species with a trend", () => {
@@ -246,7 +243,7 @@ describe("gridList", () => {
 
     state.showKept = false;
     expect(gridList.value).toHaveLength(expected.lostOnly + expected.gainedOnly);
-    expect(gridList.value).toHaveLength(122); // regression anchor, see note above
+    expect(gridList.value).toHaveLength(123); // regression anchor, see note above
 
     state.showGained = false;
     expect(gridList.value).toHaveLength(expected.lostOnly);
