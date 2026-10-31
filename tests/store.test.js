@@ -1,3 +1,4 @@
+import rawSpBase from "../src/assets/sp_base.json";
 import { beforeEach, describe, expect, it } from "vitest";
 
 import { DEFAULT_TAXONOMY, clearSquares, restoreFromUrl, state, toggleSquare } from "../src/store";
@@ -5,7 +6,7 @@ import { DEFAULT_TAXONOMY, clearSquares, restoreFromUrl, state, toggleSquare } f
 beforeEach(() => {
   state.mode = "Intro";
   state.grid = [];
-  state.speciesSeq = null;
+  state.speciesId = null;
 });
 
 describe("restoreFromUrl", () => {
@@ -21,7 +22,7 @@ describe("restoreFromUrl", () => {
 
   it("reads a species SEQ", () => {
     restoreFromUrl("?species=42");
-    expect(state.speciesSeq).toBe(42);
+    expect(state.speciesId).toBe(rawSpBase.find((s) => s.SEQ === 42).avibase_id);
   });
 
   it.each(["notanumber", "", "null", "NaN", "-1", "4.2", "999999"])(
@@ -30,7 +31,7 @@ describe("restoreFromUrl", () => {
       // A non-numeric or unknown SEQ used to resolve to `undefined`, which is
       // not the same as "nothing selected".
       restoreFromUrl(`?species=${value}`);
-      expect(state.speciesSeq).toBeNull();
+      expect(state.speciesId).toBeNull();
     }
   );
 
@@ -46,12 +47,16 @@ describe("restoreFromUrl", () => {
 
   it("reads all three together", () => {
     restoreFromUrl("?mode=Species&grid=51b&species=42");
-    expect([state.mode, state.grid, state.speciesSeq]).toEqual(["Species", ["51b"], 42]);
+    expect([state.mode, state.grid, state.speciesId]).toEqual([
+      "Species",
+      ["51b"],
+      rawSpBase.find((s) => s.SEQ === 42).avibase_id,
+    ]);
   });
 
   it("leaves state alone for an empty query", () => {
     restoreFromUrl("");
-    expect([state.mode, state.grid, state.speciesSeq]).toEqual(["Intro", [], null]);
+    expect([state.mode, state.grid, state.speciesId]).toEqual(["Intro", [], null]);
   });
 });
 
@@ -85,14 +90,13 @@ describe("defaults", () => {
   });
 });
 
-describe("speciesMapUrl", () => {
-  it("builds a URL under the configured base", async () => {
-    const { SPECIES_MAP_BASE, speciesMapUrl } = await import("../src/store");
-    expect(speciesMapUrl(42)).toBe(`${SPECIES_MAP_BASE}/42.png`);
-  });
+it("restores an Avibase deep link", () => {
+  const id = rawSpBase[0].avibase_id;
+  restoreFromUrl(`?mode=Species&species=${id}`);
+  expect(state.speciesId).toBe(id);
+});
 
-  it("is absolute, so it survives being served from a subpath", async () => {
-    const { speciesMapUrl } = await import("../src/store");
-    expect(() => new URL(speciesMapUrl(1))).not.toThrow();
-  });
+it.each(["498", "avibase-55E9B668"])("resolves merged atlas alias %s to the current barbet", (alias) => {
+  restoreFromUrl(`?mode=Species&species=${alias}`);
+  expect(state.speciesId).toBe("avibase-1953C1D6");
 });

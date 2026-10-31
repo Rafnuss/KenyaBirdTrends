@@ -11,7 +11,6 @@ import AppNavbar from "./components/AppNavbar.vue";
 import GridPanel from "./components/GridPanel.vue";
 import IntroPage from "./components/IntroPage.vue";
 import MapView from "./components/MapView.vue";
-import SettingsModal from "./components/SettingsModal.vue";
 import SpeciesPanel from "./components/SpeciesPanel.vue";
 import { restoreFromUrl, state, syncUrl } from "./store";
 
@@ -44,6 +43,5 @@ const map = useTemplateRef("map");
       </div>
     </div>
 
-    <SettingsModal />
   </div>
 </template>

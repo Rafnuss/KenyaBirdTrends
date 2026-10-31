@@ -22,14 +22,7 @@ _Selecting squares over Tsavo West allows you to then export a list of all speci
 
 ## Species distribution maps
 
-The 1065 per-species PNGs in `species_map/` are deliberately **outside**
-`public/`: at ~1 GB they would otherwise be copied into `dist/` and shipped in
-every deploy. They are served from jsDelivr instead — see `SPECIES_MAP_BASE`
-in `src/store.js`, overridable with `VITE_SPECIES_MAP_BASE`.
-
-jsDelivr serves them from the `main` branch, so they are unaffected by how the
-site itself is deployed. After changing that path, purge jsDelivr or pin a
-release tag: it caches a branch ref for several hours.
+The download button generates a fresh PNG in the browser from the current comparison data. It uses Mapbox terrain tiles when available and falls back to a simplified map if they cannot be loaded. The historical `species_map/` PNGs are an archive and may contain outdated taxonomy or maps; they are not used by the site or included in its deployment artifact.
 
 ## Deployment
 
@@ -67,34 +60,24 @@ npm run sync:data                      # defaults to ../KenyaAtlasComparison
 KAC=/path/to/repo npm run sync:data
 ```
 
-Each row of `sp_base.json` is one **atlas concept**, keyed by `SEQ`. A concept
-is not always one species: the 1970-84 atlas recorded 35 of them at a coarser
-resolution than today's checklists — its "Ostrich" predates Somali Ostrich
-being split off — so a row can stand for several modern species. That is why
-the file carries two namings side by side rather than one:
+Each row of `sp_base.json` is one comparison taxon, uniquely keyed by `avibase_id`. `SEQ` remains a legacy reference for historical sorting and older links. A historical concept can cover several modern species, so both naming systems are retained:
 
-| columns | naming |
+| Columns | Naming |
 | --- | --- |
-| `common_name`, `scientific_name`, `SEQ` | A Bird Atlas of Kenya (1989) — historical |
-| `avilist_common_name`, `avilist_scientific_name`, `avilist_sort` | AviList v2025b — current |
+| `common_name`, `scientific_name` | Original atlas name |
+| `avilist_common_name`, `avilist_scientific_name`, `avilist_sort` | AviList 2026 or an explicitly labelled historical group |
+| `avilist_members`, `name_source` | Modern member names and the name's provenance |
 
-`TAXONOMY_FIELDS` in `src/store.js` maps the taxonomy toggle onto those two
-triplets. A lump gets an eBird-style slash name (`European Pied/Collared/
-Semicollared Flycatcher`) and a collapsed binomial (`Ficedula sp.`).
+`TAXONOMY_FIELDS` in `src/store.js` controls the selected naming. Historical groups list their explicit modern member names; the species panel links to the original atlas concepts.
 
-The rest of the contract, asserted by `tests/dataSchema.test.js`:
+The remaining contract is checked by `tests/dataSchema.test.js`:
 
-- `avibase_id` — the stable [Avibase](https://avibase.bsc-eoc.org) concept id,
-  present for **every** row, lumps included. Names change between checklists
-  and a lump has no single binomial, so this is the only field that says
-  exactly which taxon a row means. Kept in the CSV export for that reason.
-- `ebird` — flat array of current eBird species codes, one working
-  `ebird.org/species/<code>/KE` link each. It used to include slash/spuh codes
-  (`y00820`), which have no species page and rendered as dead links.
-- `birdlife_url` — AviList's BirdLife DataZone factsheet, `null` for a lump
-  (no single factsheet to point at, so the badge renders unlinked).
-- `IUCN` — spelled-out category. A lump reports its most severe member, so a
-  Critically Endangered species inside one is not hidden.
-- `endemic`, `afrotropical`, `palearctic`, `waterbird` — the trait filters.
-- A missing value is `null`. The pre-2026 export spelled it `"0"`, which
-  rendered literally and exported as a bogus IUCN category.
+- `avibase_id`: unique comparison concept ID, retained in CSV exports and map memberships. Species URLs use the numeric `SEQ`; historical Avibase links and merged atlas SEQs still resolve.
+- `atlas_concepts`: original atlas names and Avibase IDs for each comparison entry.
+- `taxa_old` / `taxa_new` in map features: flat arrays of Avibase IDs for the two periods.
+- `ebird` / `kbm`: flat arrays of associated species-page codes and KBM references, derived from the curated source mappings.
+- `birdlife_url` / `IUCN`: available member assessment information. Groups use the most severe available status; a missing value is `null`.
+- `endemic`, `afrotropical`, `palearctic`, `waterbird`: curated trait filters.
+- `nb_lkgd` / `nb_lkgd_gc`: lost, kept, gained and gained-minus-lost counts, for all squares and the coverage-filtered view.
+
+Run `npm run sync:data` after rebuilding KenyaAtlasComparison with `AA_wrapper_all.m`. eBird and Birds of Kenya 2019 naming systems are retired; eBird observations and KBM observations remain data sources. Download map renders a PNG from the current taxon's exported data and does not use the archived `species_map` PNGs.

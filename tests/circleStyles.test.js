@@ -1,3 +1,4 @@
+import rawSpBase from "../src/assets/sp_base.json";
 import { beforeEach, describe, expect, it } from "vitest";
 
 import rawMapData from "../src/assets/map_data.json";
@@ -5,15 +6,13 @@ import { state } from "../src/store";
 import { circleStyles } from "../src/composables/useCircleLayer";
 
 const features = rawMapData.features;
-const covered = features.filter(
-  (f) => !(f.properties.cov_old == "0" && f.properties.cov_new == 0)
-);
+const covered = features.filter((f) => !(f.properties.cov_old == "0" && f.properties.cov_new == 0));
 const styleFor = (Sq) => circleStyles.value.find((c) => c.Sq === Sq)?.style;
 
 beforeEach(() => {
   state.mode = "Species";
   state.grid = [];
-  state.speciesSeq = null;
+  state.speciesId = null;
   state.displayPoorCoverage = true;
   state.displayNeverObserved = true;
 });
@@ -37,7 +36,7 @@ describe("circleStyles", () => {
   });
 
   it("colours by lost/kept/gained in species mode", () => {
-    state.speciesSeq = 42;
+    state.speciesId = rawSpBase.find((s) => s.SEQ === 42).avibase_id;
     const colours = new Set(circleStyles.value.map((c) => c.style.fillColor));
     // amber kept, red lost, green gained, black never-observed
     expect([...colours].sort()).toEqual(
@@ -46,7 +45,7 @@ describe("circleStyles", () => {
   });
 
   it("hides never-observed squares when that toggle is off", () => {
-    state.speciesSeq = 42;
+    state.speciesId = rawSpBase.find((s) => s.SEQ === 42).avibase_id;
     const before = circleStyles.value.filter((c) => c.style.visible).length;
     state.displayNeverObserved = false;
     const after = circleStyles.value.filter((c) => c.style.visible).length;
@@ -54,7 +53,7 @@ describe("circleStyles", () => {
   });
 
   it("hides poorly covered squares when that toggle is off", () => {
-    state.speciesSeq = 42;
+    state.speciesId = rawSpBase.find((s) => s.SEQ === 42).avibase_id;
     const before = circleStyles.value.filter((c) => c.style.visible).length;
     state.displayPoorCoverage = false;
     expect(circleStyles.value.filter((c) => c.style.visible).length).toBeLessThan(before);
