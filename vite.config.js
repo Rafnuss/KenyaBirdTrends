@@ -24,19 +24,7 @@ export default defineConfig({
           // the county overlay on, and runtime-cached below.
           "**/county-*.js",
         ],
-        // Species distribution maps live on a CDN (see SPECIES_MAP_BASE) and
-        // are opened one at a time from a download link, so cache them as they
-        // are actually requested rather than up front.
         runtimeCaching: [
-          {
-            urlPattern: ({ url }) => /\/species_map\/[^/]+\.png$/.test(url.pathname),
-            handler: "CacheFirst",
-            options: {
-              cacheName: "species-maps",
-              expiration: { maxEntries: 50, maxAgeSeconds: 60 * 60 * 24 * 30 },
-              cacheableResponse: { statuses: [0, 200] },
-            },
-          },
           {
             urlPattern: ({ url }) => /\/assets\/county-[\w-]+\.js$/.test(url.pathname),
             handler: "CacheFirst",

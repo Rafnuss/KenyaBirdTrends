@@ -23,7 +23,8 @@
     "lint:check": "eslint .",
     "format": "prettier --write src index.html vite.config.js",
     "generate-pwa-assets": "pwa-assets-generator --preset minimal-2023 public/logo_crane.svg",
-    "build:county": "node scripts/build-county-geojson.mjs"
+    "build:county": "node scripts/build-county-geojson.mjs",
+    "sync:data": "node scripts/sync-species-data.mjs"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",

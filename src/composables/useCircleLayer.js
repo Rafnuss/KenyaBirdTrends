@@ -41,9 +41,9 @@ export const circleStyles = computed(() =>
           }
         }
       } else {
-        const seq = state.speciesSeq;
-        const isNew = p.SEQ_new.includes(seq);
-        const isOld = p.SEQ_old.includes(seq);
+        const seq = state.speciesId;
+        const isNew = p.taxa_new.includes(seq);
+        const isOld = p.taxa_old.includes(seq);
         if (isOld && isNew) {
           style.fillColor = TREND_COLORS.kept;
         } else if (isOld) {

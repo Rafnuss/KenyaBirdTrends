@@ -22,14 +22,7 @@ _Selecting squares over Tsavo West allows you to then export a list of all speci
 
 ## Species distribution maps
 
-The 1065 per-species PNGs in `species_map/` are deliberately **outside**
-`public/`: at ~1 GB they would otherwise be copied into `dist/` and shipped in
-every deploy. They are served from jsDelivr instead — see `SPECIES_MAP_BASE`
-in `src/store.js`, overridable with `VITE_SPECIES_MAP_BASE`.
-
-jsDelivr serves them from the `main` branch, so they are unaffected by how the
-site itself is deployed. After changing that path, purge jsDelivr or pin a
-release tag: it caches a branch ref for several hours.
+The download button generates a fresh PNG in the browser from the current comparison data. It uses Mapbox terrain tiles when available and falls back to a simplified map if they cannot be loaded. The historical `species_map/` PNGs are an archive and may contain outdated taxonomy or maps; they are not used by the site or included in its deployment artifact.
 
 ## Deployment
 
@@ -54,3 +47,37 @@ setting is ever lost.
 `data/county.raw.json` is the survey-grade source. `npm run build:county`
 simplifies it into `src/assets/county.json` (183k points -> 18k, 9.6 MB ->
 352 kB), which is what the app bundles.
+
+## Species data and the taxonomy contract
+
+`src/assets/sp_base.json`, `map_data.json` and `grid.json` are **generated**,
+not edited here: `E_export_website.m` in
+[Rafnuss/KenyaAtlasComparison](https://github.com/Rafnuss/KenyaAtlasComparison)
+writes them. Copy them across with:
+
+```sh
+npm run sync:data                      # defaults to ../KenyaAtlasComparison
+KAC=/path/to/repo npm run sync:data
+```
+
+Each row of `sp_base.json` is one comparison taxon, uniquely keyed by `avibase_id`. `SEQ` remains a legacy reference for historical sorting and older links. A historical concept can cover several modern species, so both naming systems are retained:
+
+| Columns | Naming |
+| --- | --- |
+| `common_name`, `scientific_name` | Original atlas name |
+| `avilist_common_name`, `avilist_scientific_name`, `avilist_sort` | AviList 2026 or an explicitly labelled historical group |
+| `avilist_members`, `name_source` | Modern member names and the name's provenance |
+
+`TAXONOMY_FIELDS` in `src/store.js` controls the selected naming. Historical groups list their explicit modern member names; the species panel links to the original atlas concepts.
+
+The remaining contract is checked by `tests/dataSchema.test.js`:
+
+- `avibase_id`: unique comparison concept ID, retained in CSV exports and map memberships. Species URLs use the numeric `SEQ`; historical Avibase links and merged atlas SEQs still resolve.
+- `atlas_concepts`: original atlas names and Avibase IDs for each comparison entry.
+- `taxa_old` / `taxa_new` in map features: flat arrays of Avibase IDs for the two periods.
+- `ebird` / `kbm`: flat arrays of associated species-page codes and KBM references, derived from the curated source mappings.
+- `birdlife_url` / `IUCN`: available member assessment information. Groups use the most severe available status; a missing value is `null`.
+- `endemic`, `afrotropical`, `palearctic`, `waterbird`: curated trait filters.
+- `nb_lkgd` / `nb_lkgd_gc`: lost, kept, gained and gained-minus-lost counts, for all squares and the coverage-filtered view.
+
+Run `npm run sync:data` after rebuilding KenyaAtlasComparison with `AA_wrapper_all.m`. eBird and Birds of Kenya 2019 naming systems are retired; eBird observations and KBM observations remain data sources. Download map renders a PNG from the current taxon's exported data and does not use the archived `species_map` PNGs.

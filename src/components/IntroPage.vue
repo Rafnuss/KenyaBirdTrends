@@ -160,7 +160,7 @@
       <ol>
         <li>
           A map of distribution change for each species from the species view
-          <span class="small">(.jpg file)</span>
+          <span class="small">(.png file)</span>
         </li>
         <li>
           A list of species and their corresponding trend for a given area from the grid view

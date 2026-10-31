@@ -20,8 +20,18 @@ const BADGED = ["Critically Endangered", "Data Deficient", "Endangered", "Vulner
 
 const props = defineProps({
   category: { type: String, default: null },
-  iucnId: { type: [Number, String], default: null },
-  /** When false, render the icon without the IUCN link. */
+  /**
+   * AviList's BirdLife DataZone factsheet URL for this species, or null.
+   *
+   * Replaced the numeric IUCNID this used to build an
+   * apiv3.iucnredlist.org/taxonredirect link from (2026-09): that id was
+   * frozen at whatever vintage it was last hand-entered, while this URL comes
+   * from the same AviList pass that resolves the species' Red List category.
+   * It is null for a lumped concept, which has no single factsheet to point
+   * at - so the badge renders unlinked rather than pointing somewhere wrong.
+   */
+  birdlifeUrl: { type: String, default: null },
+  /** When false, render the icon without the link. */
   link: { type: Boolean, default: true },
   /** When true, render any known category rather than only the badged ones. */
   always: { type: Boolean, default: false },
@@ -29,11 +39,16 @@ const props = defineProps({
 
 const src = ICONS[props.category];
 const visible = props.always ? Boolean(src) : BADGED.includes(props.category);
-const href = `https://apiv3.iucnredlist.org/api/v3/taxonredirect/${props.iucnId}`;
 </script>
 
 <template>
-  <a v-if="visible && link" class="iucn-badge" :href="href" target="_blank" title="IUCN page">
+  <a
+    v-if="visible && link && birdlifeUrl"
+    class="iucn-badge"
+    :href="birdlifeUrl"
+    target="_blank"
+    title="BirdLife species factsheet"
+  >
     <img :src="src" :alt="category" />
   </a>
   <span v-else-if="visible" class="iucn-badge">

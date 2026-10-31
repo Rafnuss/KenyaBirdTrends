@@ -3,7 +3,7 @@ import AppIcon from "./AppIcon.vue";
 import { ref } from "vue";
 
 import logoPng from "../assets/pwa-30x30.png";
-import { state } from "../store";
+import { state, TAXONOMY_OPTIONS } from "../store";
 import { usePwaInstall } from "../composables/usePwaInstall";
 
 const { canInstall, promptInstall } = usePwaInstall();
@@ -55,14 +55,10 @@ const navOpen = ref(false);
         </ul>
 
         <div class="ms-auto d-flex">
-          <button
-            type="button"
-            class="btn btn-light"
-            title="Settings"
-            @click="state.settingsOpen = true"
-          >
-            <AppIcon name="gear" />
-          </button>
+          <label class="visually-hidden" for="taxonomy-select">Taxonomy</label>
+          <select id="taxonomy-select" v-model="state.taxonomySelected" class="form-select form-select-sm taxonomy-select" aria-label="Taxonomy">
+            <option v-for="t in TAXONOMY_OPTIONS" :key="t" :value="t">{{ t === "AviList" ? "AviList v2026" : t }}</option>
+          </select>
           <button
             v-if="canInstall"
             type="button"
@@ -81,5 +77,9 @@ const navOpen = ref(false);
 <style scoped>
 .app-navbar {
   border-bottom: 1px solid #e5e9ef;
+}
+.taxonomy-select {
+  width: auto;
+  max-width: 100%;
 }
 </style>
