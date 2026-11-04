@@ -3,7 +3,7 @@ import AppIcon from "./AppIcon.vue";
 import { ref } from "vue";
 
 import logoPng from "../assets/pwa-30x30.png";
-import { state, TAXONOMY_OPTIONS } from "../store";
+import { FOUND_LABEL, state, TAXONOMY_OPTIONS } from "../store";
 import { usePwaInstall } from "../composables/usePwaInstall";
 
 const { canInstall, promptInstall } = usePwaInstall();
@@ -42,14 +42,17 @@ const navOpen = ref(false);
 
       <div class="collapse navbar-collapse" :class="{ show: navOpen }">
         <ul class="navbar-nav">
-          <li v-for="m in ['Grid', 'Species']" :key="m" class="nav-item">
+          <li v-for="m in ['Grid', 'Species', 'Found']" :key="m" class="nav-item">
             <a
               class="nav-link"
-              :class="{ active: state.mode === m }"
+              :class="{ active: state.mode === m, 'nav-found': m === 'Found' }"
               href="#"
               @click.prevent="state.mode = m"
             >
-              {{ m }}
+              <template v-if="m === 'Found'">
+                {{ FOUND_LABEL }} <span class="badge rounded-pill nav-found-badge">new</span>
+              </template>
+              <template v-else>{{ m }}</template>
             </a>
           </li>
         </ul>
@@ -77,6 +80,21 @@ const navOpen = ref(false);
 <style scoped>
 .app-navbar {
   border-bottom: 1px solid #e5e9ef;
+}
+/* Lost & Found: the newest page, gently set apart from the plain links. */
+.navbar-nav .nav-link.nav-found {
+  color: #204e4a;
+  font-weight: 600;
+}
+.navbar-nav .nav-link.nav-found:hover {
+  color: #163936;
+}
+.nav-found-badge {
+  background: #fbe9dc;
+  color: #b4561a;
+  font-weight: 600;
+  font-size: 0.6rem;
+  vertical-align: 0.15em;
 }
 .taxonomy-select {
   width: auto;

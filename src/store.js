@@ -42,7 +42,10 @@ export const RED_LIST_OPTIONS = [
 
 export const TRAIT_OPTIONS = ["Endemic", "Afrotropical migrant", "Palearctic migrant", "Waterbird"];
 
-export const MODES = ["Intro", "Grid", "Species"];
+export const MODES = ["Intro", "Grid", "Species", "Found"];
+
+/** Display name of the "Found" mode; the page name is not final yet. */
+export const FOUND_LABEL = "Lost & Found";
 
 // [[north, east], [south, west]]
 export const KENYA_BOUNDS = [
@@ -101,6 +104,14 @@ export const state = reactive({
   traitsSelected: [],
 
   taxonomySelected: readStoredTaxonomy(),
+
+  /** Lost & Found asset (src/assets/found.json), loaded on first use. */
+  found: null,
+  foundTab: "Birders",
+  /** Category shown on the map and in the square lists: "t", "r" or "n". */
+  foundView: "t",
+  /** Period of the finds: "all" (since found_from) or a year, e.g. "2025". */
+  foundYear: "all",
 });
 
 function readStoredTaxonomy() {
@@ -182,6 +193,12 @@ export function syncUrl() {
 // --- actions ----------------------------------------------------------------
 
 export function toggleSquare(Sq) {
+  // Lost & Found works on one square at a time: "new" and "re-found" are per
+  // square, so they cannot simply be added up across squares.
+  if (state.mode === "Found") {
+    state.grid = state.grid.length === 1 && state.grid[0] === Sq ? [] : [Sq];
+    return;
+  }
   const i = state.grid.indexOf(Sq);
   if (i === -1) state.grid.push(Sq);
   else state.grid.splice(i, 1);
@@ -189,6 +206,21 @@ export function toggleSquare(Sq) {
 
 export function clearSquares() {
   state.grid = [];
+}
+
+// Arriving on Lost & Found with several squares (from Grid or a URL): keep the last one.
+watch(
+  () => [state.mode, state.grid.length],
+  () => {
+    if (state.mode === "Found" && state.grid.length > 1) state.grid = state.grid.slice(-1);
+  },
+  { immediate: true }
+);
+
+export async function loadFound() {
+  if (state.found) return;
+  const { default: found } = await import("./assets/found.json");
+  state.found = markRaw(found);
 }
 
 export async function loadCountyGeojson() {

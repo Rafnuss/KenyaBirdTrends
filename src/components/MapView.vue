@@ -6,6 +6,7 @@ import { markRaw, onBeforeUnmount, onMounted, shallowRef, useTemplateRef, watch 
 
 import MapLegend from "./MapLegend.vue";
 import { useCircleLayer } from "../composables/useCircleLayer";
+import { useFoundPlaces } from "../composables/useFoundPlaces";
 import { KENYA_BOUNDS, gridGeojson, loadCountyGeojson, mapData, state } from "../store";
 
 const TILE_TOKEN = "pk.eyJ1IjoicmFmbnVzcyIsImEiOiIzMVE1dnc0In0.3FNMKIlQ_afYktqki-6m0g";
@@ -34,6 +35,7 @@ let countyLayer = null;
 let syncingOverlays = false;
 
 const { attach } = useCircleLayer();
+const { attach: attachFoundPlaces } = useFoundPlaces();
 
 /**
  * Hosts <MapLegend> inside a Leaflet control.
@@ -110,6 +112,7 @@ onMounted(() => {
   leafletMap.on("locationfound", onLocationFound);
 
   attach(leafletMap);
+  attachFoundPlaces(leafletMap);
   new LegendControl().addTo(leafletMap);
   leafletMap.addControl(
     new GeoSearchControl({

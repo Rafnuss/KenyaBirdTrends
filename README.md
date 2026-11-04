@@ -20,6 +20,23 @@ _Selecting squares over Tsavo West allows you to then export a list of all speci
 - :computer: You can find the MATLAB code use to generate the maps and species list at [Rafnuss/KenyaAtlasComparison](https://github.com/Rafnuss/KenyaAtlasComparison).
 - :page_facing_up: The [associated publication](https://doi.org/10.1111/ddi.13935) is freely available
 
+## Lost & Found (in development)
+
+The third page lists, for every square, the **target species**: recorded before 2009 (in the old atlas, any period, or on eBird or Kenya Bird Map) but not in 2009–2023. It shows which targets have been **re-found** since 2024 and which species are **new** to the square (no record of any kind before 2024). Each category can be mapped. A leaderboard, per year or for the whole period, gives one point for each re-found or new species–square to everyone who recorded it on the first date since 2024; names link to eBird profiles and dates to checklists. The page name is set by `FOUND_LABEL` in `src/store.js`.
+
+The records come from the `bird-atlas` repository (`scripts/shared/latest_by_qdgc.py`; see `docs/kenyabirdtrend-pipeline.md` there). Its output is keyed by standard QDGC level-1 codes and eBird 2026 species, not by `Sq` or comparison concepts. This repository does the mapping:
+
+- **Squares:** every `grid.json` square is a QDGC level-1 cell. `src/utils/squares.js` derives `Sq ↔ qdgc` from `grid.json` and `map_data.json` (checked by `tests/squares.test.js`).
+- **Species:** eBird species are rolled up to comparison concepts through `sp_base.json` `ebird` codes. The 2026-11 review added 27 concepts and 15 members in KenyaAtlasComparison. A species without a concept would count as its own unit, and could only be "new".
+
+The rules live in `src/utils/foundData.js` and are tested in `tests/foundData.test.js`. Import a run with:
+
+```sh
+npm run import:found -- ../bird-atlas/data/prepared/latest_by_qdgc/<run-id>
+```
+
+This writes `src/assets/found.json` (about 1 MB), which is loaded only when the page is opened.
+
 ## Species distribution maps
 
 The download button generates a fresh PNG in the browser from the current comparison data. It uses Mapbox terrain tiles when available and falls back to a simplified map if they cannot be loaded. The historical `species_map/` PNGs are an archive and may contain outdated taxonomy or maps; they are not used by the site or included in its deployment artifact.
