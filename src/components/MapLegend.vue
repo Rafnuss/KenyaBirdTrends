@@ -2,6 +2,15 @@
 import AppIcon from "./AppIcon.vue";
 import LegendCircle from "./LegendCircle.vue";
 import { state } from "../store";
+import { FOUND_CATEGORY, foundScale, maxCounts } from "../composables/useFound";
+
+const foundGradient = () =>
+  `linear-gradient(to right, ${foundScale(state.foundView).colors(6).join(", ")})`;
+/** Tick labels on the square-root scale used by the map. */
+const foundTicks = () => {
+  const max = maxCounts.value[state.foundView];
+  return [0, 0.25, 0.5, 1].map((f) => Math.round(f * f * max));
+};
 
 const TRENDS = [
   {
@@ -50,7 +59,20 @@ const COVERAGE_HELP =
       @click="state.legend = false"
     ></button>
 
-    <div v-if="state.mode === 'Grid'" class="mb-1">
+    <div v-if="state.mode === 'Found'">
+      <b>Species {{ FOUND_CATEGORY[state.foundView].label }} per square</b>
+      <div class="found-gradient" :style="{ background: foundGradient() }"></div>
+      <div class="position-relative legend-scale found-ticks">
+        <span
+          v-for="(t, i) in foundTicks()"
+          :key="i"
+          :style="{ left: [0, 25, 50, 100][i] + '%' }"
+          >{{ t }}</span
+        >
+      </div>
+    </div>
+
+    <div v-else-if="state.mode === 'Grid'" class="mb-1">
       <b>Change in number of species</b>
       <div class="legend-gradient" style="width: 100%; height: 15px"></div>
       <div class="d-flex justify-content-between legend-scale">
@@ -72,7 +94,7 @@ const COVERAGE_HELP =
       </div>
     </div>
 
-    <div class="mb-1">
+    <div v-if="state.mode !== 'Found'" class="mb-1">
       <b>{{ state.mode === "Grid" ? "Change in effort" : "Confidence" }}</b>
       <AppIcon
         v-tooltip="state.mode === 'Grid' ? EFFORT_HELP : CONFIDENCE_HELP"
@@ -88,7 +110,7 @@ const COVERAGE_HELP =
       </div>
     </div>
 
-    <div>
+    <div v-if="state.mode !== 'Found'">
       <b>Coverage</b>
       <AppIcon v-tooltip="COVERAGE_HELP" name="question-circle-fill" class="help-icon" />
       <div class="d-flex align-items-center">
@@ -126,6 +148,24 @@ const COVERAGE_HELP =
 </template>
 
 <style scoped>
+.found-gradient {
+  width: 100%;
+  height: 15px;
+  border: 1px solid #ccc;
+}
+.found-ticks {
+  height: 1.1em;
+}
+.found-ticks span {
+  position: absolute;
+  transform: translateX(-50%);
+}
+.found-ticks span:first-child {
+  transform: none;
+}
+.found-ticks span:last-child {
+  transform: translateX(-100%);
+}
 .legend-scale {
   font-size: 9px;
 }

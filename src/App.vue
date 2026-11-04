@@ -1,5 +1,5 @@
 <script setup>
-import { useTemplateRef } from "vue";
+import { useTemplateRef, watch } from "vue";
 
 import "leaflet/dist/leaflet.css";
 import "leaflet-geosearch/assets/css/leaflet.css";
@@ -8,16 +8,26 @@ import "vue-multiselect/dist/vue-multiselect.min.css";
 import "./app.scss";
 
 import AppNavbar from "./components/AppNavbar.vue";
+import FoundPanel from "./components/FoundPanel.vue";
 import GridPanel from "./components/GridPanel.vue";
 import IntroPage from "./components/IntroPage.vue";
 import MapView from "./components/MapView.vue";
 import SpeciesPanel from "./components/SpeciesPanel.vue";
-import { restoreFromUrl, state, syncUrl } from "./store";
+import { loadFound, restoreFromUrl, state, syncUrl } from "./store";
 
 restoreFromUrl();
 syncUrl();
 
 const map = useTemplateRef("map");
+
+// The Lost & Found data (~1 MB) is only fetched when that page is opened.
+watch(
+  () => state.mode,
+  (mode) => {
+    if (mode === "Found") loadFound();
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
@@ -28,11 +38,13 @@ const map = useTemplateRef("map");
       v-if="state.mode === 'Intro'"
       @change-mode-grid="state.mode = 'Grid'"
       @change-mode-species="state.mode = 'Species'"
+      @change-mode-found="state.mode = 'Found'"
     />
 
     <div v-else class="row flex-grow-1 g-0">
       <div v-if="state.sidebar" class="col-md-6 col-lg-4 h-100-56 overflow-hidden">
         <GridPanel v-if="state.mode === 'Grid'" @locate="map?.startLocate()" />
+        <FoundPanel v-else-if="state.mode === 'Found'" @locate="map?.startLocate()" />
         <SpeciesPanel v-else />
       </div>
       <!-- `h-100-56` must be on the map column too: it is the only height

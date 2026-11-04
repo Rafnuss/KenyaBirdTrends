@@ -1,8 +1,10 @@
 import chroma from "chroma-js";
-import { circle as lCircle, layerGroup } from "leaflet";
+import { circle as lCircle, layerGroup, rectangle as lRectangle } from "leaflet";
 import { computed, watch } from "vue";
 
-import { mapData, state, toggleSquare } from "../store";
+import { gridGeojson, mapData, state, toggleSquare } from "../store";
+import { buildSquares } from "../utils/squares";
+import { foundScale, maxCounts, squareCounts } from "./useFound";
 
 const GRID_COLOR_SCALE = chroma.scale("RdYlGn").domain([-200, 200]);
 
@@ -23,11 +25,33 @@ const CORR_NORM = 0.7;
  */
 export const circleStyles = computed(() =>
   mapData
-    .filter((f) => !(f.properties.cov_old == "0" && f.properties.cov_new == 0))
+    // Lost & Found shows every square: one never surveyed can still hold new finds.
+    .filter(
+      (f) => state.mode === "Found" || !(f.properties.cov_old == "0" && f.properties.cov_new == 0)
+    )
     .map((f) => {
       const p = f.properties;
       const style = { fillOpacity: 0.9, visible: true, color: "#2e2e2e", weight: 1 };
       let sizeDir = 1;
+
+      if (state.mode === "Found") {
+        // Whole squares, so their limits show. Square root: a few squares
+        // have hundreds, most have tens.
+        const key = state.foundView;
+        const n = squareCounts.value[p.Sq]?.[key] ?? 0;
+        const selected = state.grid.includes(p.Sq);
+        style.shape = "square";
+        style.fillColor = n
+          ? foundScale(key)(Math.sqrt(n / maxCounts.value[key])).hex()
+          : "#ffffff";
+        // Empty squares stay nearly see-through; the rest fade when another is selected.
+        style.fillOpacity = !n ? 0.1 : state.grid.length && !selected ? 0.55 : 0.8;
+        style.color = selected ? "#111111" : "#5f6b73";
+        style.weight = selected ? 3 : 0.6;
+        style.opacity = 1;
+        style.selected = selected;
+        return { Sq: p.Sq, style };
+      }
 
       if (state.mode === "Grid") {
         sizeDir = -1;
@@ -87,15 +111,18 @@ export function useCircleLayer() {
   let group = null;
   /** @type {Map<string, import("leaflet").Circle>} */
   const circles = new Map();
+  /** @type {Map<string, import("leaflet").Rectangle>} */
+  const rects = new Map();
 
   function sync() {
     if (!group) return;
     const wanted = new Set();
+    const selected = [];
 
     for (const { Sq, style } of circleStyles.value) {
-      const layer = circles.get(Sq);
+      const layer = (style.shape === "square" ? rects : circles).get(Sq);
       if (!layer || !style.visible) continue;
-      wanted.add(Sq);
+      wanted.add(layer);
       // Add before styling: Leaflet only computes a layer's _pxBounds once it
       // is projected onto the map, and setRadius/redraw needs them.
       if (!group.hasLayer(layer)) group.addLayer(layer);
@@ -106,12 +133,15 @@ export function useCircleLayer() {
         fillColor: style.fillColor,
         fillOpacity: style.fillOpacity,
       });
-      layer.setRadius(style.radius);
+      if (style.radius != null) layer.setRadius(style.radius);
+      if (style.selected) selected.push(layer);
     }
 
-    for (const [Sq, layer] of circles) {
-      if (!wanted.has(Sq) && group.hasLayer(layer)) group.removeLayer(layer);
+    for (const layer of [...circles.values(), ...rects.values()]) {
+      if (!wanted.has(layer) && group.hasLayer(layer)) group.removeLayer(layer);
     }
+    // Shared edges: draw the selected outlines over their neighbours.
+    for (const layer of selected) layer.bringToFront();
   }
 
   function attach(map) {
@@ -123,9 +153,24 @@ export function useCircleLayer() {
         radius: 0,
       });
       layer.on("click", (e) => {
-        if (state.mode === "Grid") toggleSquare(e.target.options.Sq);
+        if (state.mode === "Grid" || state.mode === "Found") toggleSquare(e.target.options.Sq);
       });
       circles.set(feature.properties.Sq, layer);
+    }
+    rects.clear();
+    for (const { Sq, bounds } of buildSquares(gridGeojson, { features: mapData })) {
+      const [west, south, east, north] = bounds;
+      const layer = lRectangle(
+        [
+          [south, west],
+          [north, east],
+        ],
+        { Sq }
+      );
+      layer.on("click", () => {
+        if (state.mode === "Found") toggleSquare(Sq);
+      });
+      rects.set(Sq, layer);
     }
     sync();
   }

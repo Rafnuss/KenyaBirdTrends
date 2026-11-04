@@ -62,6 +62,20 @@
             </button>
           </div>
         </div>
+        <div class="card bg-light">
+          <div class="card-body">
+            <p class="text-muted mb-0">{{ FOUND_LABEL }}</p>
+            <span class="small">
+              Find the species recorded in each square before 2009 but not since, see who has
+              re-found them or added new species since 2024, and climb the leaderboard.
+            </span>
+          </div>
+          <div class="card-footer d-flex justify-content-center">
+            <button type="button" class="btn btn-secondary" @click="$emit('changeModeFound')">
+              Go to {{ FOUND_LABEL }}
+            </button>
+          </div>
+        </div>
       </div>
 
       <h2>Data sources</h2>
@@ -397,8 +411,9 @@ import AppIcon from "./AppIcon.vue";
 import { ref } from "vue";
 
 import BaseModal from "./BaseModal.vue";
+import { FOUND_LABEL } from "../store";
 
-defineEmits(["changeModeGrid", "changeModeSpecies"]);
+defineEmits(["changeModeGrid", "changeModeSpecies", "changeModeFound"]);
 
 const organisations = [
   { href: "https://tropical-biology.org/", src: "/logo_tba.png" },
