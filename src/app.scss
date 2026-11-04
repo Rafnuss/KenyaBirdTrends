@@ -6,9 +6,13 @@ $kept: #fee08b;
 $gained: #45aa59;
 //https://coolors.co/d73027-ffffbf-45aa59-204e4a-404e7c
 
-// Then import Bootstrap. bootstrap-vue-next ships no SCSS of its own; it
-// renders plain Bootstrap 5 markup.
-@import "bootstrap/scss/bootstrap";
+// Then load Bootstrap, overriding its $primary default. bootstrap-vue-next
+// ships no SCSS of its own; it renders plain Bootstrap 5 markup. Bootstrap's
+// own SCSS still uses @import internally; vite.config.js silences those
+// dependency warnings.
+@use "bootstrap/scss/bootstrap" with (
+  $primary: $primary
+);
 
 html,
 body {
