@@ -143,7 +143,17 @@ export function restoreFromUrl(search = window.location.search) {
   }
 
   const urlSpecies = qp.get("species");
-  const selected = urlSpecies && spBase.find((s) => s.avibase_id === urlSpecies || String(s.SEQ) === urlSpecies || String(s.atlas_seq ?? "").split("|").includes(urlSpecies) || (s.atlas_concepts ?? []).some((c) => c.avibase_id === urlSpecies));
+  const selected =
+    urlSpecies &&
+    spBase.find(
+      (s) =>
+        s.avibase_id === urlSpecies ||
+        String(s.SEQ) === urlSpecies ||
+        String(s.atlas_seq ?? "")
+          .split("|")
+          .includes(urlSpecies) ||
+        (s.atlas_concepts ?? []).some((c) => c.avibase_id === urlSpecies)
+    );
   if (selected) state.speciesId = selected.avibase_id;
 }
 
