@@ -99,6 +99,16 @@ export default defineConfig({
     }),
   ],
   base: "/",
+  css: {
+    preprocessorOptions: {
+      scss: {
+        // Bootstrap 5.3 still uses @import, global built-ins and the old
+        // if() syntax internally. Hide deprecation warnings that come from
+        // node_modules; our own stylesheets still report theirs.
+        quietDeps: true,
+      },
+    },
+  },
   test: {
     // store.js touches localStorage and window.location at import time.
     environment: "happy-dom",
